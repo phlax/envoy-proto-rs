@@ -1,0 +1,12 @@
+[package]
+name = "xtask"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+anyhow = "1"
+regex = "1"
+tempfile = "3"
+tonic-build = "0.12"
+walkdir = "2"
