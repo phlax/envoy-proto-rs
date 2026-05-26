@@ -1,0 +1,1 @@
+This repository contains generated Rust code derived from the Envoy API definitions in envoyproxy/envoy (api/) and envoyproxy/data-plane-api, as well as related proto dependencies (cncf/xds, protoc-gen-validate, and googleapis). These upstream sources are licensed under the Apache License, Version 2.0.

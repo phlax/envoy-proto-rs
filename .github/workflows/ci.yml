@@ -1,0 +1,65 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+    - uses: Swatinem/rust-cache@v2
+    - run: cargo build --workspace --release --locked
+    - run: cargo test --workspace --release --locked
+
+  check-regen:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: false
+    - uses: dtolnay/rust-toolchain@stable
+    - uses: arduino/setup-protoc@v3
+    - uses: Swatinem/rust-cache@v2
+    - run: cargo xtask check-regen
+
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt
+    - run: cargo fmt --all --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy
+    - uses: Swatinem/rust-cache@v2
+    - run: cargo clippy --workspace --all-targets -- -D warnings
+
+  version-sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check VERSION and Cargo.toml match
+      shell: bash
+      run: |
+        set -euo pipefail
+        expected="$(tr -d '\n' < VERSION)"
+        crate_version="$(sed -n 's/^version = "\(.*\)"/\1/p' crates/envoy-proto/Cargo.toml | head -n1)"
+        if [[ -z "$crate_version" ]]; then
+            echo "Could not read version from crates/envoy-proto/Cargo.toml"
+            exit 1
+        fi
+        if [[ "$crate_version" != "$expected" ]]; then
+            echo "VERSION mismatch: VERSION has '$expected' but crates/envoy-proto/Cargo.toml has '$crate_version'"
+            exit 1
+        fi
