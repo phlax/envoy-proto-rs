@@ -8,5 +8,5 @@ publish = false
 anyhow = "1"
 regex = "1"
 tempfile = "3"
-tonic-build = "0.13"
+tonic-build = "0.14"
 walkdir = "2"
