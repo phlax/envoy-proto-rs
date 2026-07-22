@@ -6,9 +6,10 @@
 ///
 /// .. attention::
 ///
-///    Use of this message type has been deprecated in favor of direct use of
-///    :ref:`Tracing.Http <envoy_v3_api_msg_config.trace.v3.Tracing.Http>`.
-#[derive(Clone, PartialEq, ::prost::Message)]
+///
+/// Use of this message type has been deprecated in favor of direct use of
+/// : ref:`Tracing.Http <envoy_v3_api_msg_config.trace.v3.Tracing.Http>`.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Tracing {
     /// Provides configuration for the HTTP tracer.
     #[prost(message, optional, tag = "1")]
@@ -18,11 +19,12 @@ pub struct Tracing {
 pub mod tracing {
     /// Configuration for an HTTP tracer provider used by Envoy.
     ///
+    ///
     /// The configuration is defined by the
-    /// :ref:`HttpConnectionManager.Tracing <envoy_v3_api_msg_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing>`
-    /// :ref:`provider <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing.provider>`
-    /// field.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    /// : ref:`HttpConnectionManager.Tracing <envoy_v3_api_msg_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing>`
+    /// : ref:`provider <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing.provider>`
+    ///   field.
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Http {
         /// The name of the HTTP trace driver to instantiate. The name must match a
         /// supported HTTP trace driver.
@@ -30,15 +32,15 @@ pub mod tracing {
         #[prost(string, tag = "1")]
         pub name: ::prost::alloc::string::String,
         /// Trace driver specific configuration which must be set according to the driver being instantiated.
-        /// \[#extension-category: envoy.tracers\]
+        /// \[\#extension-category: envoy.tracers\]
         #[prost(oneof = "http::ConfigType", tags = "3")]
         pub config_type: ::core::option::Option<http::ConfigType>,
     }
     /// Nested message and enum types in `Http`.
     pub mod http {
         /// Trace driver specific configuration which must be set according to the driver being instantiated.
-        /// \[#extension-category: envoy.tracers\]
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        /// \[\#extension-category: envoy.tracers\]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum ConfigType {
             #[prost(message, tag = "3")]
             TypedConfig(::prost_types::Any),
@@ -46,7 +48,7 @@ pub mod tracing {
     }
 }
 /// Configuration for the Remote Configuration feature.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DatadogRemoteConfig {
     /// Frequency at which new configuration updates are queried.
     /// If no value is provided, the default value is delegated to the Datadog tracing library.
@@ -54,8 +56,8 @@ pub struct DatadogRemoteConfig {
     pub polling_interval: ::core::option::Option<::prost_types::Duration>,
 }
 /// Configuration for the Datadog tracer.
-/// \[#extension: envoy.tracers.datadog\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// \[\#extension: envoy.tracers.datadog\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DatadogConfig {
     /// The cluster to use for submitting traces to the Datadog agent.
     #[prost(string, tag = "1")]
@@ -76,13 +78,11 @@ pub struct DatadogConfig {
     pub remote_config: ::core::option::Option<DatadogRemoteConfig>,
 }
 /// DynamicOtConfig was used to dynamically load a tracer from a shared library
-/// that implements the `OpenTracing dynamic loading API
-/// <<https://github.com/opentracing/opentracing-cpp>`_.>
-/// \[#not-implemented-hide:\]
+/// that implements the `OpenTracing dynamic loading API  <<https://github.com/opentracing/opentracing-cpp>`\_.>
+/// \[\#not-implemented-hide:\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DynamicOtConfig {
-    /// Dynamic library implementing the `OpenTracing API
-    /// <<https://github.com/opentracing/opentracing-cpp>`_.>
+    /// Dynamic library implementing the `OpenTracing API  <<https://github.com/opentracing/opentracing-cpp>`\_.>
     #[deprecated]
     #[prost(string, tag = "1")]
     pub library: ::prost::alloc::string::String,
@@ -93,19 +93,18 @@ pub struct DynamicOtConfig {
     pub config: ::core::option::Option<::prost_types::Struct>,
 }
 /// Configuration for the LightStep tracer.
-/// \[#extension: envoy.tracers.lightstep\]
-/// \[#not-implemented-hide:\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// \[\#extension: envoy.tracers.lightstep\]
+/// \[\#not-implemented-hide:\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LightstepConfig {
     /// The cluster manager cluster that hosts the LightStep collectors.
     #[prost(string, tag = "1")]
     pub collector_cluster: ::prost::alloc::string::String,
-    /// File containing the access token to the `LightStep
-    /// <<https://lightstep.com/>`_> API.
+    /// File containing the access token to the `LightStep  <<https://lightstep.com/>`\_> API.
     #[deprecated]
     #[prost(string, tag = "2")]
     pub access_token_file: ::prost::alloc::string::String,
-    /// Access token to the `LightStep <<https://lightstep.com/>`_> API.
+    /// Access token to the `LightStep <<https://lightstep.com/>`\_> API.
     #[prost(message, optional, tag = "4")]
     pub access_token: ::core::option::Option<super::super::core::v3::DataSource>,
     /// Propagation modes to use by LightStep's tracer.
@@ -158,25 +157,25 @@ pub mod lightstep_config {
     }
 }
 /// Configuration for the OpenTelemetry tracer.
-///   \[#extension: envoy.tracers.opentelemetry\]
-/// \[#next-free-field: 7\]
+/// \[\#extension: envoy.tracers.opentelemetry\]
+/// \[\#next-free-field: 7\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OpenTelemetryConfig {
     /// The upstream gRPC cluster that will receive OTLP traces.
     /// Note that the tracer drops traces if the server does not read data fast enough.
     /// This field can be left empty to disable reporting traces to the gRPC service.
-    /// Only one of ``grpc_service``, ``http_service`` may be used.
+    /// Only one of `grpc_service`, `http_service` may be used.
     #[prost(message, optional, tag = "1")]
     pub grpc_service: ::core::option::Option<super::super::core::v3::GrpcService>,
     /// The upstream HTTP cluster that will receive OTLP traces.
     /// This field can be left empty to disable reporting traces to the HTTP service.
-    /// Only one of ``grpc_service``, ``http_service`` may be used.
+    /// Only one of `grpc_service`, `http_service` may be used.
     ///
     /// .. note::
     ///
-    ///    The ``request_headers_to_add`` property in the OTLP HTTP exporter service supports
-    ///    substitution formatters. The formatters cannot access any HTTP or connection properties, but
-    ///    can load content such as environment variables or files or secrets.
+    /// The `request_headers_to_add` property in the OTLP HTTP exporter service supports
+    /// substitution formatters. The formatters cannot access any HTTP or connection properties, but
+    /// can load content such as environment variables or files or secrets.
     #[prost(message, optional, tag = "3")]
     pub http_service: ::core::option::Option<super::super::core::v3::HttpService>,
     /// The name for the service. This will be populated in the ResourceSpan Resource attributes.
@@ -184,15 +183,15 @@ pub struct OpenTelemetryConfig {
     #[prost(string, tag = "2")]
     pub service_name: ::prost::alloc::string::String,
     /// An ordered list of resource detectors
-    /// \[#extension-category: envoy.tracers.opentelemetry.resource_detectors\]
+    /// \[\#extension-category: envoy.tracers.opentelemetry.resource_detectors\]
     #[prost(message, repeated, tag = "4")]
     pub resource_detectors: ::prost::alloc::vec::Vec<super::super::core::v3::TypedExtensionConfig>,
     /// Specifies the sampler to be used by the OpenTelemetry tracer.
     /// The configured sampler implements the Sampler interface defined by the OpenTelemetry specification.
     /// This field can be left empty. In this case, the default Envoy sampling decision is used.
     ///
-    /// See: `OpenTelemetry sampler specification <<https://opentelemetry.io/docs/specs/otel/trace/sdk/#sampler>`_>
-    /// \[#extension-category: envoy.tracers.opentelemetry.samplers\]
+    /// See: `OpenTelemetry sampler specification <<https://opentelemetry.io/docs/specs/otel/trace/sdk/#sampler>`\_>
+    /// \[\#extension-category: envoy.tracers.opentelemetry.samplers\]
     #[prost(message, optional, tag = "5")]
     pub sampler: ::core::option::Option<super::super::core::v3::TypedExtensionConfig>,
     /// Envoy caches the span in memory when the OpenTelemetry backend service is temporarily unavailable.
@@ -208,12 +207,13 @@ pub struct TraceServiceConfig {
     #[prost(message, optional, tag = "1")]
     pub grpc_service: ::core::option::Option<super::super::core::v3::GrpcService>,
 }
+///
 /// Configuration for the SkyWalking tracer. Please note that if SkyWalking tracer is used as the
 /// provider of tracing, then
-/// :ref:`spawn_upstream_span <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing.spawn_upstream_span>`
-/// in the tracing config must be set to true to get the correct topology and tracing data. Moreover, SkyWalking
-/// Tracer does not support SkyWalking extension header (``sw8-x``) temporarily.
-/// \[#extension: envoy.tracers.skywalking\]
+/// : ref:`spawn_upstream_span <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing.spawn_upstream_span>`
+///   in the tracing config must be set to true to get the correct topology and tracing data. Moreover, SkyWalking
+///   Tracer does not support SkyWalking extension header (`sw8-x`) temporarily.
+///   \[\#extension: envoy.tracers.skywalking\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SkyWalkingConfig {
     /// SkyWalking collector service.
@@ -223,20 +223,21 @@ pub struct SkyWalkingConfig {
     pub client_config: ::core::option::Option<ClientConfig>,
 }
 /// Client config for SkyWalking tracer.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ClientConfig {
     /// Service name for SkyWalking tracer. If this field is empty, then local service cluster name
     /// that configured by :ref:`Bootstrap node <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.node>`
     /// message's :ref:`cluster <envoy_v3_api_field_config.core.v3.Node.cluster>` field or command line
     /// option :option:`--service-cluster` will be used. If both this field and local service cluster
-    /// name are empty, ``EnvoyProxy`` is used as the service name by default.
+    /// name are empty, `EnvoyProxy` is used as the service name by default.
     #[prost(string, tag = "1")]
     pub service_name: ::prost::alloc::string::String,
+    ///
     /// Service instance name for SkyWalking tracer. If this field is empty, then local service node
     /// that configured by :ref:`Bootstrap node <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.node>`
     /// message's :ref:`id <envoy_v3_api_field_config.core.v3.Node.id>` field or command line  option
-    /// :option:`--service-node` will be used. If both this field and local service node are empty,
-    /// ``EnvoyProxy`` is used as the instance name by default.
+    /// : option:`--service-node` will be used. If both this field and local service node are empty,
+    ///   `EnvoyProxy` is used as the instance name by default.
     #[prost(string, tag = "2")]
     pub instance_name: ::prost::alloc::string::String,
     /// Envoy caches the segment in memory when the SkyWalking backend service is temporarily unavailable.
@@ -247,7 +248,7 @@ pub struct ClientConfig {
     /// Authentication token config for SkyWalking. SkyWalking can use token authentication to secure
     /// that monitoring application data can be trusted. In current version, Token is considered as a
     /// simple string.
-    /// \[#comment:TODO(wbpcode): Get backend token through the SDS API.\]
+    /// \[\#comment:TODO(wbpcode): Get backend token through the SDS API.\]
     #[prost(oneof = "client_config::BackendTokenSpecifier", tags = "3")]
     pub backend_token_specifier: ::core::option::Option<client_config::BackendTokenSpecifier>,
 }
@@ -256,8 +257,8 @@ pub mod client_config {
     /// Authentication token config for SkyWalking. SkyWalking can use token authentication to secure
     /// that monitoring application data can be trusted. In current version, Token is considered as a
     /// simple string.
-    /// \[#comment:TODO(wbpcode): Get backend token through the SDS API.\]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    /// \[\#comment:TODO(wbpcode): Get backend token through the SDS API.\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum BackendTokenSpecifier {
         /// Inline authentication token string.
         #[prost(string, tag = "3")]
@@ -265,27 +266,31 @@ pub mod client_config {
     }
 }
 /// Configuration for the Zipkin tracer.
-/// \[#extension: envoy.tracers.zipkin\]
-/// \[#next-free-field: 11\]
+/// \[\#extension: envoy.tracers.zipkin\]
+/// \[\#next-free-field: 11\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ZipkinConfig {
     /// The cluster manager cluster that hosts the Zipkin collectors.
     ///
     /// .. note::
-    ///      This field will be deprecated in future releases in favor of
-    ///      :ref:`collector_service <envoy_v3_api_field_config.trace.v3.ZipkinConfig.collector_service>`.
+    /// This field will be deprecated in future releases in favor of
+    /// :ref:`collector_service <envoy_v3_api_field_config.trace.v3.ZipkinConfig.collector_service>`.
     ///
-    ///      Either this field or ``collector_service`` must be specified.
+    /// ```text
+    /// Either this field or ``collector_service`` must be specified.
+    /// ```
     #[prost(string, tag = "1")]
     pub collector_cluster: ::prost::alloc::string::String,
     /// The API endpoint of the Zipkin service where the spans will be sent. When
     /// using a standard Zipkin installation.
     ///
     /// .. note::
-    ///      This field will be deprecated in future releases in favor of
-    ///      :ref:`collector_service <envoy_v3_api_field_config.trace.v3.ZipkinConfig.collector_service>`.
+    /// This field will be deprecated in future releases in favor of
+    /// :ref:`collector_service <envoy_v3_api_field_config.trace.v3.ZipkinConfig.collector_service>`.
     ///
-    ///      Required when using ``collector_cluster``.
+    /// ```text
+    /// Required when using ``collector_cluster``.
+    /// ```
     #[prost(string, tag = "2")]
     pub collector_endpoint: ::prost::alloc::string::String,
     /// Determines whether a 128bit trace id will be used when creating a new
@@ -303,8 +308,8 @@ pub struct ZipkinConfig {
     /// that require a specific hostname. Defaults to :ref:`collector_cluster <envoy_v3_api_field_config.trace.v3.ZipkinConfig.collector_cluster>` above.
     ///
     /// .. note::
-    ///      This field will be deprecated in future releases in favor of
-    ///      :ref:`collector_service <envoy_v3_api_field_config.trace.v3.ZipkinConfig.collector_service>`.
+    /// This field will be deprecated in future releases in favor of
+    /// :ref:`collector_service <envoy_v3_api_field_config.trace.v3.ZipkinConfig.collector_service>`.
     #[prost(string, tag = "6")]
     pub collector_hostname: ::prost::alloc::string::String,
     /// If this is set to true, then Envoy will be treated as an independent hop in trace chain. A complete span pair will be created for a single
@@ -317,13 +322,14 @@ pub struct ZipkinConfig {
     ///
     /// .. attention::
     ///
-    ///    If this is set to true, then the
-    ///    :ref:`start_child_span of router <envoy_v3_api_field_extensions.filters.http.router.v3.Router.start_child_span>`
-    ///    SHOULD be set to true also to ensure the correctness of trace chain.
     ///
-    ///    Both this field and ``start_child_span`` are deprecated by the
-    ///    :ref:`spawn_upstream_span <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing.spawn_upstream_span>`.
-    ///    Please use that ``spawn_upstream_span`` field to control the span creation.
+    /// If this is set to true, then the
+    /// : ref:`start_child_span of router <envoy_v3_api_field_extensions.filters.http.router.v3.Router.start_child_span>`
+    ///   SHOULD be set to true also to ensure the correctness of trace chain.
+    ///
+    /// Both this field and `start_child_span` are deprecated by the
+    /// : ref:`spawn_upstream_span <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.Tracing.spawn_upstream_span>`.
+    ///   Please use that `spawn_upstream_span` field to control the span creation.
     #[deprecated]
     #[prost(bool, tag = "7")]
     pub split_spans_for_request: bool,
@@ -341,50 +347,49 @@ pub struct ZipkinConfig {
     ///
     /// Required fields when using collector_service:
     ///
-    /// * ``http_uri.cluster`` - Must be specified and non-empty
-    /// * ``http_uri.uri`` - Must be specified and non-empty
-    /// * ``http_uri.timeout`` - Optional
+    /// * `http_uri.cluster` - Must be specified and non-empty
+    /// * `http_uri.uri` - Must be specified and non-empty
+    /// * `http_uri.timeout` - Optional
     ///
     /// Full URI Support with Automatic Parsing:
     ///
-    /// The ``uri`` field supports both path-only and full URI formats:
+    /// The `uri` field supports both path-only and full URI formats:
     ///
     /// .. code-block:: yaml
     ///
-    ///    tracing:
-    ///      provider:
-    ///        name: envoy.tracers.zipkin
-    ///        typed_config:
-    ///          "@type": type.googleapis.com/envoy.config.trace.v3.ZipkinConfig
-    ///          collector_service:
-    ///            http_uri:
-    ///              # Full URI format - hostname and path are extracted automatically
-    ///              uri: "<https://zipkin-collector.example.com/api/v2/spans">
-    ///              cluster: zipkin
-    ///              timeout: 5s
-    ///            request_headers_to_add:
-    ///              - header:
-    ///                  key: "X-Custom-Token"
-    ///                  value: "your-custom-token"
-    ///              - header:
-    ///                  key: "X-Service-ID"
-    ///                  value: "your-service-id"
+    /// tracing:
+    /// provider:
+    /// name: envoy.tracers.zipkin
+    /// typed_config:
+    /// "@type": type.googleapis.com/envoy.config.trace.v3.ZipkinConfig
+    /// collector_service:
+    /// http_uri:
+    /// \# Full URI format - hostname and path are extracted automatically
+    /// uri: "<https://zipkin-collector.example.com/api/v2/spans">
+    /// cluster: zipkin
+    /// timeout: 5s
+    /// request_headers_to_add:
+    /// - header:
+    /// key: "X-Custom-Token"
+    /// value: "your-custom-token"
+    /// - header:
+    /// key: "X-Service-ID"
+    /// value: "your-service-id"
     ///
     /// URI Parsing Behavior:
     ///
-    /// * Full URI: ``"<https://zipkin-collector.example.com/api/v2/spans"``>
+    /// * Full URI: `"<https://zipkin-collector.example.com/api/v2/spans"`>
     ///
-    ///    * Hostname: ``zipkin-collector.example.com`` (sets HTTP ``Host`` header)
-    ///    * Path: ``/api/v2/spans`` (sets HTTP request path)
+    ///   * Hostname: `zipkin-collector.example.com` (sets HTTP `Host` header)
+    ///   * Path: `/api/v2/spans` (sets HTTP request path)
+    /// * Path only: `"/api/v2/spans"`
     ///
-    /// * Path only: ``"/api/v2/spans"``
-    ///
-    ///    * Hostname: Uses cluster name as fallback
-    ///    * Path: ``/api/v2/spans``
+    ///   * Hostname: Uses cluster name as fallback
+    ///   * Path: `/api/v2/spans`
     #[prost(message, optional, tag = "9")]
     pub collector_service: ::core::option::Option<super::super::core::v3::HttpService>,
     /// Determines whether trace IDs will include a timestamp in the first 4 bytes.
-    /// When enabled, trace IDs are generated with the format: [32-bit epoch seconds][32-bit random].
+    /// When enabled, trace IDs are generated with the format: \[32-bit epoch seconds\]\[32-bit random\].
     /// The default value is false, which results in fully random trace IDs.
     /// For 128-bit trace IDs, the timestamp is encoded in the high 32 bits of the high 64-bit word.
     #[prost(bool, tag = "10")]
@@ -399,9 +404,10 @@ pub mod zipkin_config {
         /// Use B3 headers only (default behavior).
         UseB3 = 0,
         /// Enable B3 and W3C dual header support:
-        /// - For downstream: Extract from B3 headers first, fallback to W3C traceparent if B3 is unavailable.
-        /// - For upstream: Inject both B3 and W3C traceparent headers.
-        /// When this option is NOT set, only B3 headers are used for both extraction and injection.
+        ///
+        /// * For downstream: Extract from B3 headers first, fallback to W3C traceparent if B3 is unavailable.
+        /// * For upstream: Inject both B3 and W3C traceparent headers.
+        ///   When this option is NOT set, only B3 headers are used for both extraction and injection.
         UseB3WithW3cPropagation = 1,
     }
     impl TraceContextOption {
@@ -429,18 +435,19 @@ pub mod zipkin_config {
     #[repr(i32)]
     pub enum CollectorEndpointVersion {
         /// Zipkin API v1, JSON over HTTP.
-        /// [#comment: The default implementation of Zipkin client before this field is added was only v1
+        /// \[\#comment: The default implementation of Zipkin client before this field is added was only v1
         /// and the way user configure this was by not explicitly specifying the version. Consequently,
         /// before this is added, the corresponding Zipkin collector expected to receive v1 payload.
         /// Hence the motivation of adding HTTP_JSON_V1 as the default is to avoid a breaking change when
         /// user upgrading Envoy with this change. Furthermore, we also immediately deprecate this field,
-        /// since in Zipkin realm this v1 version is considered to be not preferable anymore.]
+        /// since in Zipkin realm this v1 version is considered to be not preferable anymore.\]
+        #[deprecated]
         DeprecatedAndUnavailableDoNotUse = 0,
         /// Zipkin API v2, JSON over HTTP.
         HttpJson = 1,
         /// Zipkin API v2, protobuf over HTTP.
         HttpProto = 2,
-        /// \[#not-implemented-hide:\]
+        /// \[\#not-implemented-hide:\]
         Grpc = 3,
     }
     impl CollectorEndpointVersion {
@@ -450,6 +457,7 @@ pub mod zipkin_config {
         /// (if the ProtoBuf definition does not change) and safe for programmatic use.
         pub fn as_str_name(&self) -> &'static str {
             match self {
+                #[allow(deprecated)]
                 Self::DeprecatedAndUnavailableDoNotUse => "DEPRECATED_AND_UNAVAILABLE_DO_NOT_USE",
                 Self::HttpJson => "HTTP_JSON",
                 Self::HttpProto => "HTTP_PROTO",
@@ -459,9 +467,10 @@ pub mod zipkin_config {
         /// Creates an enum from field names used in the ProtoBuf definition.
         pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
             match value {
-                "DEPRECATED_AND_UNAVAILABLE_DO_NOT_USE" => {
-                    Some(Self::DeprecatedAndUnavailableDoNotUse)
-                }
+                "DEPRECATED_AND_UNAVAILABLE_DO_NOT_USE" => Some(
+                    #[allow(deprecated)]
+                    Self::DeprecatedAndUnavailableDoNotUse,
+                ),
                 "HTTP_JSON" => Some(Self::HttpJson),
                 "HTTP_PROTO" => Some(Self::HttpProto),
                 "GRPC" => Some(Self::Grpc),
@@ -470,7 +479,7 @@ pub mod zipkin_config {
         }
     }
 }
-/// \[#extension: envoy.tracers.xray\]
+/// \[\#extension: envoy.tracers.xray\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct XRayConfig {
     /// The UDP endpoint of the X-Ray Daemon where the spans will be sent.
@@ -482,13 +491,11 @@ pub struct XRayConfig {
     pub segment_name: ::prost::alloc::string::String,
     /// The location of a local custom sampling rules JSON file.
     /// For an example of the sampling rules see:
-    /// `X-Ray SDK documentation
-    /// <<https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-go-configuration.html#xray-sdk-go-configuration-sampling>`_>
+    /// `X-Ray SDK documentation  <<https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-go-configuration.html#xray-sdk-go-configuration-sampling>`\_>
     #[prost(message, optional, tag = "3")]
     pub sampling_rule_manifest: ::core::option::Option<super::super::core::v3::DataSource>,
     /// Optional custom fields to be added to each trace segment.
-    /// see: `X-Ray Segment Document documentation
-    /// <<https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html>`__>
+    /// see: `X-Ray Segment Document documentation  <<https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html>`\_\_>
     #[prost(message, optional, tag = "4")]
     pub segment_fields: ::core::option::Option<x_ray_config::SegmentFields>,
 }
@@ -500,7 +507,7 @@ pub mod x_ray_config {
         #[prost(string, tag = "1")]
         pub origin: ::prost::alloc::string::String,
         /// AWS resource metadata dictionary.
-        /// See: `X-Ray Segment Document documentation <<https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html#api-segmentdocuments-aws>`__>
+        /// See: `X-Ray Segment Document documentation <<https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html#api-segmentdocuments-aws>`\_\_>
         #[prost(message, optional, tag = "2")]
         pub aws: ::core::option::Option<::prost_types::Struct>,
     }

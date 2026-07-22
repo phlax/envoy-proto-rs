@@ -5,7 +5,7 @@
 ///
 /// .. code-block:: cpp
 ///
-///    \["authenticated": "false"\], \["remote_address": "10.0.0.1"\]
+/// \["authenticated": "false"\], \["remote_address": "10.0.0.1"\]
 ///
 /// What it does: Limits all unauthenticated traffic for the IP address 10.0.0.1. The
 /// configuration supplies a default limit for the *remote_address* key. If there is a desire to
@@ -14,27 +14,27 @@
 ///
 /// .. code-block:: cpp
 ///
-///    \["authenticated": "false"\], \["path": "/foo/bar"\]
+/// \["authenticated": "false"\], \["path": "/foo/bar"\]
 ///
 /// What it does: Limits all unauthenticated traffic globally for a specific path (or prefix if
 /// configured that way in the service).
 ///
 /// .. code-block:: cpp
 ///
-///    \["authenticated": "false"\], \["path": "/foo/bar"\], \["remote_address": "10.0.0.1"\]
+/// \["authenticated": "false"\], \["path": "/foo/bar"\], \["remote_address": "10.0.0.1"\]
 ///
 /// What it does: Limits unauthenticated traffic to a specific path for a specific IP address.
 /// Like (1) we can raise/block specific IP addresses if we want with an override configuration.
 ///
 /// .. code-block:: cpp
 ///
-///    \["authenticated": "true"\], \["client_id": "foo"\]
+/// \["authenticated": "true"\], \["client_id": "foo"\]
 ///
 /// What it does: Limits all traffic for an authenticated client "foo"
 ///
 /// .. code-block:: cpp
 ///
-///    \["authenticated": "true"\], \["client_id": "foo"\], \["path": "/foo/bar"\]
+/// \["authenticated": "true"\], \["client_id": "foo"\], \["path": "/foo/bar"\]
 ///
 /// What it does: Limits traffic to a specific path for an authenticated client "foo"
 ///
@@ -64,7 +64,7 @@ pub struct RateLimitDescriptor {
 }
 /// Nested message and enum types in `RateLimitDescriptor`.
 pub mod rate_limit_descriptor {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Entry {
         /// Descriptor key.
         #[prost(string, tag = "1")]
@@ -76,9 +76,8 @@ pub mod rate_limit_descriptor {
         pub value: ::prost::alloc::string::String,
     }
     /// Override rate limit to apply to this descriptor instead of the limit
-    /// configured in the rate limit service. See :ref:`rate limit override
-    /// <config_http_filters_rate_limit_rate_limit_override>` for more information.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    /// configured in the rate limit service. See :ref:`rate limit override  <config_http_filters_rate_limit_rate_limit_override>` for more information.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct RateLimitOverride {
         /// The number of requests per unit of time.
         #[prost(uint32, tag = "1")]
@@ -94,10 +93,9 @@ pub mod rate_limit_descriptor {
 /// Configuration used to enable local rate limiting.
 ///
 /// .. note::
-///    The ``LocalRateLimitDescriptor`` is used to configure a local rate limit rule with a token
-///    bucket algorithm. The ``RateLimitDescriptor`` is used to represent a list of symbols that
-///    are used to match against the rate limit rule.
-///
+/// The `LocalRateLimitDescriptor` is used to configure a local rate limit rule with a token
+/// bucket algorithm. The `RateLimitDescriptor` is used to represent a list of symbols that
+/// are used to match against the rate limit rule.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocalRateLimitDescriptor {
     /// Descriptor entries.
@@ -116,10 +114,9 @@ pub struct LocalRateLimitDescriptor {
 /// and the configuration. When the limiter refilling the token bucket, the share will be
 /// applied. By default, the token bucket will be shared evenly.
 ///
-/// See :ref:`local cluster name
-/// <envoy_v3_api_field_config.bootstrap.v3.ClusterManager.local_cluster_name>` for more context
+/// See :ref:`local cluster name  <envoy_v3_api_field_config.bootstrap.v3.ClusterManager.local_cluster_name>` for more context
 /// about local cluster.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LocalClusterRateLimit {}
 /// Defines the version of the standard to use for X-RateLimit headers.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -127,15 +124,15 @@ pub struct LocalClusterRateLimit {}
 pub enum XRateLimitHeadersRfcVersion {
     /// X-RateLimit headers disabled.
     Off = 0,
-    /// Use `draft RFC Version 03 <<https://tools.ietf.org/id/draft-polli-ratelimit-headers-03.html>`_> where 3 headers will be added:
+    /// Use `draft RFC Version 03 <<https://tools.ietf.org/id/draft-polli-ratelimit-headers-03.html>`\_> where 3 headers will be added:
     ///
-    /// * ``X-RateLimit-Limit`` - indicates the request-quota associated to the
-    ///    client in the current time-window followed by the description of the
-    ///    quota policy. The value is returned by the maximum tokens of the token bucket.
-    /// * ``X-RateLimit-Remaining`` - indicates the remaining requests in the
-    ///    current time-window. The value is returned by the remaining tokens in the token bucket.
-    /// * ``X-RateLimit-Reset`` - indicates the number of seconds until reset of
-    ///    the current time-window. The value is returned by the remaining fill interval of the token bucket.
+    /// * `X-RateLimit-Limit` - indicates the request-quota associated to the
+    ///   client in the current time-window followed by the description of the
+    ///   quota policy. The value is returned by the maximum tokens of the token bucket.
+    /// * `X-RateLimit-Remaining` - indicates the remaining requests in the
+    ///   current time-window. The value is returned by the remaining tokens in the token bucket.
+    /// * `X-RateLimit-Reset` - indicates the number of seconds until reset of
+    ///   the current time-window. The value is returned by the remaining fill interval of the token bucket.
     DraftVersion03 = 1,
 }
 impl XRateLimitHeadersRfcVersion {

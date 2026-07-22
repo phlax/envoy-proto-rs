@@ -23,7 +23,7 @@ pub struct ResourceName {
     #[prost(message, optional, tag = "2")]
     pub dynamic_parameter_constraints: ::core::option::Option<DynamicParameterConstraints>,
 }
-/// \[#not-implemented-hide:\]
+/// \[\#not-implemented-hide:\]
 /// An error associated with a specific resource name, returned to the
 /// client by the server.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -37,15 +37,15 @@ pub struct ResourceError {
 }
 /// A DiscoveryRequest requests a set of versioned resources of the same type for
 /// a given Envoy node on some API.
-/// \[#next-free-field: 8\]
+/// \[\#next-free-field: 8\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DiscoveryRequest {
-    /// The ``version_info`` provided in the request messages will be the ``version_info``
+    /// The `version_info` provided in the request messages will be the `version_info`
     /// received with the most recent successfully processed response or empty on
     /// the first request. It is expected that no new request is sent after a
     /// response is received until the Envoy instance is ready to ACK/NACK the new
     /// configuration. ACK/NACK takes place by returning the new API config version
-    /// as applied or the previous API config version respectively. Each ``type_url``
+    /// as applied or the previous API config version respectively. Each `type_url`
     /// (see below) has an independent version associated with it.
     #[prost(string, tag = "1")]
     pub version_info: ::prost::alloc::string::String,
@@ -54,48 +54,46 @@ pub struct DiscoveryRequest {
     pub node: ::core::option::Option<super::super::super::config::core::v3::Node>,
     /// List of resources to subscribe to, e.g. list of cluster names or a route
     /// configuration name. If this is empty, all resources for the API are
-    /// returned. LDS/CDS may have empty ``resource_names``, which will cause all
+    /// returned. LDS/CDS may have empty `resource_names`, which will cause all
     /// resources for the Envoy instance to be returned. The LDS and CDS responses
     /// will then imply a number of resources that need to be fetched via EDS/RDS,
-    /// which will be explicitly enumerated in ``resource_names``.
+    /// which will be explicitly enumerated in `resource_names`.
     #[prost(string, repeated, tag = "3")]
     pub resource_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// \[#not-implemented-hide:\]
-    /// Alternative to ``resource_names`` field that allows specifying dynamic
+    /// \[\#not-implemented-hide:\]
+    /// Alternative to `resource_names` field that allows specifying dynamic
     /// parameters along with each resource name. Clients that populate this
     /// field must be able to handle responses from the server where resources
     /// are wrapped in a Resource message.
     ///
     /// .. note::
-    ///    It is legal for a request to have some resources listed
-    ///    in ``resource_names`` and others in ``resource_locators``.
-    ///
+    /// It is legal for a request to have some resources listed
+    /// in `resource_names` and others in `resource_locators`.
     #[prost(message, repeated, tag = "7")]
     pub resource_locators: ::prost::alloc::vec::Vec<ResourceLocator>,
     /// Type of the resource that is being requested, e.g.
-    /// ``type.googleapis.com/envoy.api.v2.ClusterLoadAssignment``. This is implicit
+    /// `type.googleapis.com/envoy.api.v2.ClusterLoadAssignment`. This is implicit
     /// in requests made via singleton xDS APIs such as CDS, LDS, etc. but is
     /// required for ADS.
     #[prost(string, tag = "4")]
     pub type_url: ::prost::alloc::string::String,
-    /// nonce corresponding to ``DiscoveryResponse`` being ACK/NACKed. See above
-    /// discussion on ``version_info`` and the ``DiscoveryResponse`` nonce comment. This
+    /// nonce corresponding to `DiscoveryResponse` being ACK/NACKed. See above
+    /// discussion on `version_info` and the `DiscoveryResponse` nonce comment. This
     /// may be empty only if:
     ///
     /// * This is a non-persistent-stream xDS such as HTTP, or
     /// * The client has not yet accepted an update in this xDS stream (unlike
-    ///    delta, where it is populated only for new explicit ACKs).
-    ///
+    ///   delta, where it is populated only for new explicit ACKs).
     #[prost(string, tag = "5")]
     pub response_nonce: ::prost::alloc::string::String,
     /// This is populated when the previous :ref:`DiscoveryResponse <envoy_v3_api_msg_service.discovery.v3.DiscoveryResponse>`
-    /// failed to update configuration. The ``message`` field in ``error_details`` provides the Envoy
+    /// failed to update configuration. The `message` field in `error_details` provides the Envoy
     /// internal exception related to the failure. It is only intended for consumption during manual
     /// debugging, the string provided is not guaranteed to be stable across Envoy versions.
     #[prost(message, optional, tag = "6")]
     pub error_detail: ::core::option::Option<super::super::super::super::google::rpc::Status>,
 }
-/// \[#next-free-field: 8\]
+/// \[\#next-free-field: 8\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DiscoveryResponse {
     /// The version of the response data.
@@ -104,44 +102,42 @@ pub struct DiscoveryResponse {
     /// The response resources. These resources are typed and depend on the API being called.
     #[prost(message, repeated, tag = "2")]
     pub resources: ::prost::alloc::vec::Vec<::prost_types::Any>,
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     /// Canary is used to support two Envoy command line flags:
     ///
-    /// * ``--terminate-on-canary-transition-failure``. When set, Envoy is able to
-    ///    terminate if it detects that configuration is stuck at canary. Consider
-    ///    this example sequence of updates:
+    /// * `--terminate-on-canary-transition-failure`. When set, Envoy is able to
+    ///   terminate if it detects that configuration is stuck at canary. Consider
+    ///   this example sequence of updates:
     ///
-    ///    * Management server applies a canary config successfully.
-    ///    * Management server rolls back to a production config.
-    ///    * Envoy rejects the new production config.
+    ///   * Management server applies a canary config successfully.
+    ///   * Management server rolls back to a production config.
+    ///   * Envoy rejects the new production config.
+    ///   Since there is no sensible way to continue receiving configuration
+    ///   updates, Envoy will then terminate and apply production config from a
+    ///   clean slate.
     ///
-    ///    Since there is no sensible way to continue receiving configuration
-    ///    updates, Envoy will then terminate and apply production config from a
-    ///    clean slate.
-    ///
-    /// * ``--dry-run-canary``. When set, a canary response will never be applied, only
-    ///    validated via a dry run.
-    ///
+    /// * `--dry-run-canary`. When set, a canary response will never be applied, only
+    ///   validated via a dry run.
     #[prost(bool, tag = "3")]
     pub canary: bool,
     /// Type URL for resources. Identifies the xDS API when muxing over ADS.
-    /// Must be consistent with the ``type_url`` in the 'resources' repeated Any (if non-empty).
+    /// Must be consistent with the `type_url` in the 'resources' repeated Any (if non-empty).
     #[prost(string, tag = "4")]
     pub type_url: ::prost::alloc::string::String,
     /// For gRPC based subscriptions, the nonce provides a way to explicitly ack a
-    /// specific ``DiscoveryResponse`` in a following ``DiscoveryRequest``. Additional
+    /// specific `DiscoveryResponse` in a following `DiscoveryRequest`. Additional
     /// messages may have been sent by Envoy to the management server for the
-    /// previous version on the stream prior to this ``DiscoveryResponse``, that were
+    /// previous version on the stream prior to this `DiscoveryResponse`, that were
     /// unprocessed at response send time. The nonce allows the management server
-    /// to ignore any further ``DiscoveryRequests`` for the previous version until a
-    /// ``DiscoveryRequest`` bearing the nonce. The nonce is optional and is not
+    /// to ignore any further `DiscoveryRequests` for the previous version until a
+    /// `DiscoveryRequest` bearing the nonce. The nonce is optional and is not
     /// required for non-stream based xDS implementations.
     #[prost(string, tag = "5")]
     pub nonce: ::prost::alloc::string::String,
     /// The control plane instance that sent the response.
     #[prost(message, optional, tag = "6")]
     pub control_plane: ::core::option::Option<super::super::super::config::core::v3::ControlPlane>,
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     /// Errors associated with specific resources. Clients are expected to
     /// remember the most recent error for a given resource across responses;
     /// the error condition is not considered to be cleared until a response is
@@ -162,60 +158,60 @@ pub struct DiscoveryResponse {
 /// connected to it.
 ///
 /// In Delta xDS the nonce field is required and used to pair
-/// ``DeltaDiscoveryResponse`` to a ``DeltaDiscoveryRequest`` ACK or NACK.
-/// Optionally, a response message level ``system_version_info`` is present for
+/// `DeltaDiscoveryResponse` to a `DeltaDiscoveryRequest` ACK or NACK.
+/// Optionally, a response message level `system_version_info` is present for
 /// debugging purposes only.
 ///
-/// ``DeltaDiscoveryRequest`` plays two independent roles. Any ``DeltaDiscoveryRequest``
+/// `DeltaDiscoveryRequest` plays two independent roles. Any `DeltaDiscoveryRequest`
 /// can be either or both of:
 ///
 /// * Informing the server of what resources the client has gained/lost interest in
-///    (using ``resource_names_subscribe`` and ``resource_names_unsubscribe``), or
-/// * (N)ACKing an earlier resource update from the server (using ``response_nonce``,
-///    with presence of ``error_detail`` making it a NACK).
+///   (using `resource_names_subscribe` and `resource_names_unsubscribe`), or
+/// * (N)ACKing an earlier resource update from the server (using `response_nonce`,
+///   with presence of `error_detail` making it a NACK).
 ///
-/// Additionally, the first message (for a given ``type_url``) of a reconnected gRPC stream
+/// Additionally, the first message (for a given `type_url`) of a reconnected gRPC stream
 /// has a third role: informing the server of the resources (and their versions)
-/// that the client already possesses, using the ``initial_resource_versions`` field.
+/// that the client already possesses, using the `initial_resource_versions` field.
 ///
 /// As with state-of-the-world, when multiple resource types are multiplexed (ADS),
-/// all requests/acknowledgments/updates are logically walled off by ``type_url``:
+/// all requests/acknowledgments/updates are logically walled off by `type_url`:
 /// a Cluster ACK exists in a completely separate world from a prior Route NACK.
-/// In particular, ``initial_resource_versions`` being sent at the "start" of every
-/// gRPC stream actually entails a message for each ``type_url``, each with its own
-/// ``initial_resource_versions``.
-/// \[#next-free-field: 10\]
+/// In particular, `initial_resource_versions` being sent at the "start" of every
+/// gRPC stream actually entails a message for each `type_url`, each with its own
+/// `initial_resource_versions`.
+/// \[\#next-free-field: 10\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeltaDiscoveryRequest {
     /// The node making the request.
     #[prost(message, optional, tag = "1")]
     pub node: ::core::option::Option<super::super::super::config::core::v3::Node>,
     /// Type of the resource that is being requested, e.g.
-    /// ``type.googleapis.com/envoy.api.v2.ClusterLoadAssignment``. This does not need to be set if
-    /// resources are only referenced via ``xds_resource_subscribe`` and
-    /// ``xds_resources_unsubscribe``.
+    /// `type.googleapis.com/envoy.api.v2.ClusterLoadAssignment`. This does not need to be set if
+    /// resources are only referenced via `xds_resource_subscribe` and
+    /// `xds_resources_unsubscribe`.
     #[prost(string, tag = "2")]
     pub type_url: ::prost::alloc::string::String,
     /// DeltaDiscoveryRequests allow the client to add or remove individual
     /// resources to the set of tracked resources in the context of a stream.
-    /// All resource names in the ``resource_names_subscribe`` list are added to the
-    /// set of tracked resources and all resource names in the ``resource_names_unsubscribe``
+    /// All resource names in the `resource_names_subscribe` list are added to the
+    /// set of tracked resources and all resource names in the `resource_names_unsubscribe`
     /// list are removed from the set of tracked resources.
     ///
-    /// *Unlike* state-of-the-world xDS, an empty ``resource_names_subscribe`` or
-    /// ``resource_names_unsubscribe`` list simply means that no resources are to be
+    /// *Unlike* state-of-the-world xDS, an empty `resource_names_subscribe` or
+    /// `resource_names_unsubscribe` list simply means that no resources are to be
     /// added or removed to the resource list.
     /// *Like* state-of-the-world xDS, the server must send updates for all tracked
     /// resources, but can also send updates for resources the client has not subscribed to.
     ///
     /// .. note::
-    ///    The server must respond with all resources listed in ``resource_names_subscribe``,
-    ///    even if it believes the client has the most recent version of them. The reason:
-    ///    the client may have dropped them, but then regained interest before it had a chance
-    ///    to send the unsubscribe message. See DeltaSubscriptionStateTest.RemoveThenAdd.
+    /// The server must respond with all resources listed in `resource_names_subscribe`,
+    /// even if it believes the client has the most recent version of them. The reason:
+    /// the client may have dropped them, but then regained interest before it had a chance
+    /// to send the unsubscribe message. See DeltaSubscriptionStateTest.RemoveThenAdd.
     ///
-    /// These two fields can be set in any ``DeltaDiscoveryRequest``, including ACKs
-    /// and ``initial_resource_versions``.
+    /// These two fields can be set in any `DeltaDiscoveryRequest`, including ACKs
+    /// and `initial_resource_versions`.
     ///
     /// A list of Resource names to add to the list of tracked resources.
     #[prost(string, repeated, tag = "3")]
@@ -223,24 +219,22 @@ pub struct DeltaDiscoveryRequest {
     /// A list of Resource names to remove from the list of tracked resources.
     #[prost(string, repeated, tag = "4")]
     pub resource_names_unsubscribe: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// \[#not-implemented-hide:\]
-    /// Alternative to ``resource_names_subscribe`` field that allows specifying dynamic parameters
+    /// \[\#not-implemented-hide:\]
+    /// Alternative to `resource_names_subscribe` field that allows specifying dynamic parameters
     /// along with each resource name.
     ///
     /// .. note::
-    ///    It is legal for a request to have some resources listed
-    ///    in ``resource_names_subscribe`` and others in ``resource_locators_subscribe``.
-    ///
+    /// It is legal for a request to have some resources listed
+    /// in `resource_names_subscribe` and others in `resource_locators_subscribe`.
     #[prost(message, repeated, tag = "8")]
     pub resource_locators_subscribe: ::prost::alloc::vec::Vec<ResourceLocator>,
-    /// \[#not-implemented-hide:\]
-    /// Alternative to ``resource_names_unsubscribe`` field that allows specifying dynamic parameters
+    /// \[\#not-implemented-hide:\]
+    /// Alternative to `resource_names_unsubscribe` field that allows specifying dynamic parameters
     /// along with each resource name.
     ///
     /// .. note::
-    ///    It is legal for a request to have some resources listed
-    ///    in ``resource_names_unsubscribe`` and others in ``resource_locators_unsubscribe``.
-    ///
+    /// It is legal for a request to have some resources listed
+    /// in `resource_names_unsubscribe` and others in `resource_locators_unsubscribe`.
     #[prost(message, repeated, tag = "9")]
     pub resource_locators_unsubscribe: ::prost::alloc::vec::Vec<ResourceLocator>,
     /// Informs the server of the versions of the resources the xDS client knows of, to enable the
@@ -248,74 +242,74 @@ pub struct DeltaDiscoveryRequest {
     /// It will not be populated:
     ///
     /// * In the very first stream of a session, since the client will not yet have any resources.
-    /// * In any message after the first in a stream (for a given ``type_url``), since the server will
-    ///    already be correctly tracking the client's state.
+    /// * In any message after the first in a stream (for a given `type_url`), since the server will
+    ///   already be correctly tracking the client's state.
     ///
-    /// (In ADS, the first message ``of each type_url`` of a reconnected stream populates this map.)
+    /// (In ADS, the first message `of each type_url` of a reconnected stream populates this map.)
     /// The map's keys are names of xDS resources known to the xDS client.
     /// The map's values are opaque resource versions.
     #[prost(map = "string, string", tag = "5")]
     pub initial_resource_versions:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
-    /// When the ``DeltaDiscoveryRequest`` is a ACK or NACK message in response
-    /// to a previous ``DeltaDiscoveryResponse``, the ``response_nonce`` must be the
-    /// nonce in the ``DeltaDiscoveryResponse``.
-    /// Otherwise (unlike in ``DiscoveryRequest``) ``response_nonce`` must be omitted.
+    /// When the `DeltaDiscoveryRequest` is a ACK or NACK message in response
+    /// to a previous `DeltaDiscoveryResponse`, the `response_nonce` must be the
+    /// nonce in the `DeltaDiscoveryResponse`.
+    /// Otherwise (unlike in `DiscoveryRequest`) `response_nonce` must be omitted.
     #[prost(string, tag = "6")]
     pub response_nonce: ::prost::alloc::string::String,
     /// This is populated when the previous :ref:`DiscoveryResponse <envoy_v3_api_msg_service.discovery.v3.DiscoveryResponse>`
-    /// failed to update configuration. The ``message`` field in ``error_details``
+    /// failed to update configuration. The `message` field in `error_details`
     /// provides the Envoy internal exception related to the failure.
     #[prost(message, optional, tag = "7")]
     pub error_detail: ::core::option::Option<super::super::super::super::google::rpc::Status>,
 }
-/// \[#next-free-field: 10\]
+/// \[\#next-free-field: 10\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeltaDiscoveryResponse {
     /// The version of the response data (used for debugging).
     #[prost(string, tag = "1")]
     pub system_version_info: ::prost::alloc::string::String,
     /// The response resources. These are typed resources, whose types must match
-    /// the ``type_url`` field.
+    /// the `type_url` field.
     #[prost(message, repeated, tag = "2")]
     pub resources: ::prost::alloc::vec::Vec<Resource>,
     /// Type URL for resources. Identifies the xDS API when muxing over ADS.
-    /// Must be consistent with the ``type_url`` in the Any within 'resources' if 'resources' is non-empty.
+    /// Must be consistent with the `type_url` in the Any within 'resources' if 'resources' is non-empty.
     #[prost(string, tag = "4")]
     pub type_url: ::prost::alloc::string::String,
     /// Resource names of resources that have been deleted and to be removed from the xDS Client.
     /// Removed resources for missing resources can be ignored.
     #[prost(string, repeated, tag = "6")]
     pub removed_resources: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// Alternative to ``removed_resources`` that allows specifying which variant of
+    /// Alternative to `removed_resources` that allows specifying which variant of
     /// a resource is being removed. This variant must be used for any resource
     /// for which dynamic parameter constraints were sent to the client.
     #[prost(message, repeated, tag = "8")]
     pub removed_resource_names: ::prost::alloc::vec::Vec<ResourceName>,
-    /// The nonce provides a way for ``DeltaDiscoveryRequests`` to uniquely
-    /// reference a ``DeltaDiscoveryResponse`` when (N)ACKing. The nonce is required.
+    /// The nonce provides a way for `DeltaDiscoveryRequests` to uniquely
+    /// reference a `DeltaDiscoveryResponse` when (N)ACKing. The nonce is required.
     #[prost(string, tag = "5")]
     pub nonce: ::prost::alloc::string::String,
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     /// The control plane instance that sent the response.
     #[prost(message, optional, tag = "7")]
     pub control_plane: ::core::option::Option<super::super::super::config::core::v3::ControlPlane>,
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     /// Errors associated with specific resources.
     ///
     /// .. note::
-    ///    A resource in this field with a status of NOT_FOUND should be treated the same as
-    ///    a resource listed in the ``removed_resources`` or ``removed_resource_names`` fields.
-    ///
+    /// A resource in this field with a status of NOT_FOUND should be treated the same as
+    /// a resource listed in the `removed_resources` or `removed_resource_names` fields.
     #[prost(message, repeated, tag = "9")]
     pub resource_errors: ::prost::alloc::vec::Vec<ResourceError>,
 }
+///
 /// A set of dynamic parameter constraints associated with a variant of an individual xDS resource.
 /// These constraints determine whether the resource matches a subscription based on the set of
 /// dynamic parameters in the subscription, as specified in the
-/// :ref:`ResourceLocator.dynamic_parameters <envoy_v3_api_field_service.discovery.v3.ResourceLocator.dynamic_parameters>`
-/// field. This allows xDS implementations (clients, servers, and caching proxies) to determine
-/// which variant of a resource is appropriate for a given client.
+/// : ref:`ResourceLocator.dynamic_parameters <envoy_v3_api_field_service.discovery.v3.ResourceLocator.dynamic_parameters>`
+///   field. This allows xDS implementations (clients, servers, and caching proxies) to determine
+///   which variant of a resource is appropriate for a given client.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DynamicParameterConstraints {
     #[prost(oneof = "dynamic_parameter_constraints::Type", tags = "1, 2, 3, 4")]
@@ -324,7 +318,7 @@ pub struct DynamicParameterConstraints {
 /// Nested message and enum types in `DynamicParameterConstraints`.
 pub mod dynamic_parameter_constraints {
     /// A single constraint for a given key.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct SingleConstraint {
         /// The key to match against.
         #[prost(string, tag = "1")]
@@ -334,9 +328,9 @@ pub mod dynamic_parameter_constraints {
     }
     /// Nested message and enum types in `SingleConstraint`.
     pub mod single_constraint {
-        #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
         pub struct Exists {}
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum ConstraintType {
             /// Matches this exact value.
             #[prost(string, tag = "2")]
@@ -371,17 +365,17 @@ pub mod dynamic_parameter_constraints {
         NotConstraints(::prost::alloc::boxed::Box<super::DynamicParameterConstraints>),
     }
 }
-/// \[#next-free-field: 10\]
+/// \[\#next-free-field: 10\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Resource {
     /// The resource's name, to distinguish it from others of the same type of resource.
-    /// Only one of ``name`` or ``resource_name`` may be set.
+    /// Only one of `name` or `resource_name` may be set.
     #[prost(string, tag = "3")]
     pub name: ::prost::alloc::string::String,
-    /// Alternative to the ``name`` field, to be used when the server supports
+    /// Alternative to the `name` field, to be used when the server supports
     /// multiple variants of the named resource that are differentiated by
     /// dynamic parameter constraints.
-    /// Only one of ``name`` or ``resource_name`` may be set.
+    /// Only one of `name` or `resource_name` may be set.
     #[prost(message, optional, tag = "8")]
     pub resource_name: ::core::option::Option<ResourceName>,
     /// The aliases are a list of other names that this resource can go by.
@@ -400,7 +394,7 @@ pub struct Resource {
     /// configuration for the resource will be removed.
     ///
     /// The TTL can be refreshed or changed by sending a response that doesn't change the resource
-    /// version. In this case the ``resource`` field does not need to be populated, which allows for
+    /// version. In this case the `resource` field does not need to be populated, which allows for
     /// light-weight "heartbeat" updates to keep a resource with a TTL alive.
     ///
     /// The TTL feature is meant to support configurations that should be removed in the event of
@@ -410,7 +404,7 @@ pub struct Resource {
     #[prost(message, optional, tag = "6")]
     pub ttl: ::core::option::Option<::prost_types::Duration>,
     /// Cache control properties for the resource.
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     #[prost(message, optional, tag = "7")]
     pub cache_control: ::core::option::Option<resource::CacheControl>,
     /// The Metadata field can be used to provide additional information for the resource.
@@ -421,22 +415,21 @@ pub struct Resource {
 /// Nested message and enum types in `Resource`.
 pub mod resource {
     /// Cache control properties for the resource.
-    /// \[#not-implemented-hide:\]
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    /// \[\#not-implemented-hide:\]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct CacheControl {
         /// If true, xDS proxies may not cache this resource.
         ///
         /// .. note::
-        ///    This does not apply to clients other than xDS proxies, which must cache resources
-        ///    for their own use, regardless of the value of this field.
-        ///
+        /// This does not apply to clients other than xDS proxies, which must cache resources
+        /// for their own use, regardless of the value of this field.
         #[prost(bool, tag = "1")]
         pub do_not_cache: bool,
     }
 }
-/// \[#not-implemented-hide:\] Not configuration. Workaround c++ protobuf issue with importing
+/// \[\#not-implemented-hide:\] Not configuration. Workaround c++ protobuf issue with importing
 /// services: <https://github.com/google/protobuf/issues/4221>
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct AdsDummy {}
 /// Generated client implementations.
 pub mod aggregated_discovery_service_client {
@@ -534,7 +527,7 @@ pub mod aggregated_discovery_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.service.discovery.v3.AggregatedDiscoveryService/StreamAggregatedResources",
             );
@@ -555,7 +548,7 @@ pub mod aggregated_discovery_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.service.discovery.v3.AggregatedDiscoveryService/DeltaAggregatedResources",
             );
@@ -722,7 +715,7 @@ pub mod aggregated_discovery_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = StreamAggregatedResourcesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,
@@ -776,7 +769,7 @@ pub mod aggregated_discovery_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = DeltaAggregatedResourcesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,

@@ -5,14 +5,13 @@
 /// do matching or routing.
 ///
 /// .. note::
-///    The codec can currently only be used in the sidecar mode. And to ensure the codec works
-///    properly, please make sure the following conditions are met:
+/// The codec can currently only be used in the sidecar mode. And to ensure the codec works
+/// properly, please make sure the following conditions are met:
 ///
-///    1. The generic proxy must be configured with a wildcard route that matches all traffic.
-///    2. The target cluster must be configured as a original destination cluster.
-///    3. The :ref:`bind_upstream_connection
-///       <envoy_v3_api_field_extensions.filters.network.generic_proxy.router.v3.Router.bind_upstream_connection>`
-///       of generic proxy router must be set to true to ensure same upstream connection is used
-///       for all traffic from same downstream connection.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+/// 1. The generic proxy must be configured with a wildcard route that matches all traffic.
+/// 1. The target cluster must be configured as a original destination cluster.
+/// 1. The :ref:`bind_upstream_connection <envoy_v3_api_field_extensions.filters.network.generic_proxy.router.v3.Router.bind_upstream_connection>`
+///    of generic proxy router must be set to true to ensure same upstream connection is used
+///    for all traffic from same downstream connection.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct KafkaCodecConfig {}

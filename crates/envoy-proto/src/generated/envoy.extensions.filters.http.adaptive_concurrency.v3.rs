@@ -17,7 +17,7 @@ pub struct GradientControllerConfig {
 pub mod gradient_controller_config {
     /// Parameters controlling the periodic recalculation of the concurrency limit from sampled request
     /// latencies.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct ConcurrencyLimitCalculationParams {
         /// The allowed upper-bound on the calculated concurrency limit. Defaults to 1000.
         #[prost(message, optional, tag = "2")]
@@ -27,7 +27,7 @@ pub mod gradient_controller_config {
         pub concurrency_update_interval: ::core::option::Option<::prost_types::Duration>,
     }
     /// Parameters controlling the periodic minRTT recalculation.
-    /// \[#next-free-field: 7\]
+    /// \[\#next-free-field: 7\]
     #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MinimumRttCalculationParams {
         /// The time interval between recalculating the minimum request round-trip time. Has to be
@@ -76,7 +76,7 @@ pub struct AdaptiveConcurrency {
     /// Defaults to 503 (Service Unavailable).
     ///
     /// .. note::
-    ///    If this is set to < 400, 503 will be used instead.
+    /// If this is set to \< 400, 503 will be used instead.
     #[prost(message, optional, tag = "3")]
     pub concurrency_limit_exceeded_status:
         ::core::option::Option<super::super::super::super::super::r#type::v3::HttpStatus>,

@@ -25,7 +25,7 @@ pub struct DnsTable {
 /// Nested message and enum types in `DnsTable`.
 pub mod dns_table {
     /// This message contains a list of IP addresses returned for a query for a known name
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct AddressList {
         /// This field contains a well formed IP address that is returned in the answer for a
         /// name query. The address field can be an IPv4 or IPv6 address. Address family
@@ -36,14 +36,14 @@ pub mod dns_table {
         pub address: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     }
     /// Specify the service protocol using a numeric or string value
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct DnsServiceProtocol {
         #[prost(oneof = "dns_service_protocol::ProtocolConfig", tags = "1, 2")]
         pub protocol_config: ::core::option::Option<dns_service_protocol::ProtocolConfig>,
     }
     /// Nested message and enum types in `DnsServiceProtocol`.
     pub mod dns_service_protocol {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum ProtocolConfig {
             /// Specify the protocol number for the service. Envoy will try to resolve the number to
             /// the protocol name. For example, 6 will resolve to "tcp". Refer to:
@@ -57,8 +57,8 @@ pub mod dns_table {
         }
     }
     /// Specify the target for a given DNS service
-    /// \[#next-free-field: 6\]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    /// \[\#next-free-field: 6\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct DnsServiceTarget {
         /// The priority of the service record target
         #[prost(uint32, tag = "3")]
@@ -78,7 +78,7 @@ pub mod dns_table {
     /// Nested message and enum types in `DnsServiceTarget`.
     pub mod dns_service_target {
         /// Specify the name of the endpoint for the Service. The name is a hostname or a cluster
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum EndpointType {
             /// Use a resolvable hostname as the endpoint for a service.
             #[prost(string, tag = "1")]
@@ -133,13 +133,13 @@ pub mod dns_table {
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct DnsVirtualDomain {
         /// A domain name for which Envoy will respond to query requests.
-        /// Wildcard records are supported on the first label only, e.g. ``*.example.com`` or ``*.subdomain.example.com``.
-        /// Names such as ``*example.com``, ``subdomain.*.example.com``, ``*subdomain.example.com``, etc
-        /// are not valid wildcard names and asterisk will be interpreted as a literal ``*`` character.
-        /// Wildcard records match subdomains on any levels, e.g. ``*.example.com`` will match
-        /// ``foo.example.com``, ``bar.foo.example.com``, ``baz.bar.foo.example.com``, etc. In case there are multiple
+        /// Wildcard records are supported on the first label only, e.g. `*.example.com` or `*.subdomain.example.com`.
+        /// Names such as `*example.com`, `subdomain.*.example.com`, `*subdomain.example.com`, etc
+        /// are not valid wildcard names and asterisk will be interpreted as a literal `*` character.
+        /// Wildcard records match subdomains on any levels, e.g. `*.example.com` will match
+        /// `foo.example.com`, `bar.foo.example.com`, `baz.bar.foo.example.com`, etc. In case there are multiple
         /// wildcard records, the longest wildcard match will be used, e.g. if there are wildcard records for
-        /// ``*.example.com`` and ``*.foo.example.com`` and the query is for ``bar.foo.example.com``, the latter will be used.
+        /// `*.example.com` and `*.foo.example.com` and the query is for `bar.foo.example.com`, the latter will be used.
         /// Specific records will always take precedence over wildcard records.
         #[prost(string, tag = "1")]
         pub name: ::prost::alloc::string::String,

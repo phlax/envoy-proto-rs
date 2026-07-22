@@ -3,23 +3,23 @@
 ///
 /// The validator performs comprehensive HTTP header validation including:
 ///
-/// #. HTTP/1 header map validity according to `RFC 7230 section 3.2 <<https://datatracker.ietf.org/doc/html/rfc7230#section-3.2>`_.>
-/// #. Syntax of HTTP/1 request target URI and response status.
-/// #. HTTP/2 header map validity according to `RFC 7540 section 8.1.2 <<https://datatracker.ietf.org/doc/html/rfc7540#section-8.1.2>`_.>
-/// #. Syntax of HTTP/2 pseudo headers.
-/// #. HTTP/3 header map validity according to `RFC 9114 section 4.3  <<https://www.rfc-editor.org/rfc/rfc9114.html>`_.>
-/// #. Syntax of HTTP/3 pseudo headers.
-/// #. Syntax of Content-Length and Transfer-Encoding.
-/// #. Validation of HTTP/1 requests with both ``Content-Length`` and ``Transfer-Encoding`` headers.
-/// #. Normalization of the URI path according to `Normalization and Comparison <<https://datatracker.ietf.org/doc/html/rfc3986#section-6>`_>
-///     without `case normalization <<https://datatracker.ietf.org/doc/html/rfc3986#section-6.2.2.1>`_.>
+/// \#. HTTP/1 header map validity according to `RFC 7230 section 3.2 <<https://datatracker.ietf.org/doc/html/rfc7230#section-3.2>`*.>
+/// \#. Syntax of HTTP/1 request target URI and response status.
+/// \#. HTTP/2 header map validity according to `RFC 7540 section 8.1.2 <<https://datatracker.ietf.org/doc/html/rfc7540#section-8.1.2>`*.>
+/// \#. Syntax of HTTP/2 pseudo headers.
+/// \#. HTTP/3 header map validity according to `RFC 9114 section 4.3  <<https://www.rfc-editor.org/rfc/rfc9114.html>`*.>
+/// \#. Syntax of HTTP/3 pseudo headers.
+/// \#. Syntax of Content-Length and Transfer-Encoding.
+/// \#. Validation of HTTP/1 requests with both `Content-Length` and `Transfer-Encoding` headers.
+/// \#. Normalization of the URI path according to `Normalization and Comparison <<https://datatracker.ietf.org/doc/html/rfc3986#section-6>`*>
+/// without `case normalization <<https://datatracker.ietf.org/doc/html/rfc3986#section-6.2.2.1>`\_.>
 ///
 /// This validator ensures that HTTP traffic processed by Envoy conforms to established
 /// standards and helps prevent issues caused by malformed headers or invalid HTTP syntax.
 ///
-/// \[#comment:TODO(yanavlasov): Put #extension: envoy.http.header_validators.envoy_default after it is not hidden any more\]
-/// \[#next-free-field: 6\]
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+/// \[\#comment:TODO(yanavlasov): Put #extension: envoy.http.header_validators.envoy_default after it is not hidden any more\]
+/// \[\#next-free-field: 6\]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HeaderValidatorConfig {
     /// HTTP/1 protocol specific options.
     /// These settings control HTTP/1 specific validation behaviors.
@@ -28,20 +28,18 @@ pub struct HeaderValidatorConfig {
         ::core::option::Option<header_validator_config::Http1ProtocolOptions>,
     /// The URI path normalization options.
     ///
-    /// By default Envoy normalizes URI path using the default values of the :ref:`UriPathNormalizationOptions
-    /// <envoy_v3_api_msg_extensions.http.header_validators.envoy_default.v3.HeaderValidatorConfig.UriPathNormalizationOptions>`.
-    /// URI path transformations specified by the ``uri_path_normalization_options`` configuration can be applied to a portion
-    /// of requests by setting the ``envoy_default_header_validator.uri_path_transformations`` runtime value.
+    /// By default Envoy normalizes URI path using the default values of the :ref:`UriPathNormalizationOptions  <envoy_v3_api_msg_extensions.http.header_validators.envoy_default.v3.HeaderValidatorConfig.UriPathNormalizationOptions>`.
+    /// URI path transformations specified by the `uri_path_normalization_options` configuration can be applied to a portion
+    /// of requests by setting the `envoy_default_header_validator.uri_path_transformations` runtime value.
     ///
     /// .. attention::
     ///
-    ///    Disabling path normalization may lead to path confusion vulnerabilities in access control or incorrect service
-    ///    selection.
-    ///
+    /// Disabling path normalization may lead to path confusion vulnerabilities in access control or incorrect service
+    /// selection.
     #[prost(message, optional, tag = "2")]
     pub uri_path_normalization_options:
         ::core::option::Option<header_validator_config::UriPathNormalizationOptions>,
-    /// Restrict HTTP methods to these defined in the `RFC 7231 section 4.1 <<https://datatracker.ietf.org/doc/html/rfc7231#section-4.1>`_.>
+    /// Restrict HTTP methods to these defined in the `RFC 7231 section 4.1 <<https://datatracker.ietf.org/doc/html/rfc7231#section-4.1>`\_.>
     ///
     /// Envoy will respond with 400 to requests with disallowed methods.
     /// By default methods with arbitrary names are accepted.
@@ -52,7 +50,7 @@ pub struct HeaderValidatorConfig {
     pub restrict_http_methods: bool,
     /// Action to take when a client request with a header name containing underscore characters is received.
     ///
-    /// If this setting is not specified, the value defaults to ``ALLOW``.
+    /// If this setting is not specified, the value defaults to `ALLOW`.
     ///
     /// This setting provides security control over headers with underscores, which can be a source
     /// of security issues when different systems interpret underscores and hyphens differently.
@@ -64,7 +62,7 @@ pub struct HeaderValidatorConfig {
     /// Allow requests with fragment in URL path and strip the fragment before request processing.
     ///
     /// By default Envoy rejects requests with fragment in URL path. When this option is enabled,
-    /// the fragment portion (everything after ``#``) will be removed from the path before
+    /// the fragment portion (everything after `#`) will be removed from the path before
     /// further processing.
     ///
     /// Fragments are typically used by client-side applications and should not normally
@@ -79,7 +77,7 @@ pub mod header_validator_config {
     /// These options control how Envoy processes and normalizes incoming request URI paths
     /// to ensure consistent behavior and security. Path normalization helps prevent
     /// path traversal attacks and ensures that equivalent paths are handled consistently.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct UriPathNormalizationOptions {
         /// Should paths be normalized according to RFC 3986?
         ///
@@ -88,37 +86,37 @@ pub mod header_validator_config {
         /// Envoy will respond with 400 to requests with malformed paths that fail path normalization.
         /// The default behavior is to normalize the path.
         ///
+        ///
         /// This value may be overridden by the runtime variable
-        /// :ref:`http_connection_manager.normalize_path<config_http_conn_man_runtime_normalize_path>`.
-        /// See `Normalization and Comparison <<https://datatracker.ietf.org/doc/html/rfc3986#section-6>`_>
-        /// for details of normalization.
+        /// : ref:`http_connection_manager.normalize_path<config_http_conn_man_runtime_normalize_path>`.
+        ///   See `Normalization and Comparison <<https://datatracker.ietf.org/doc/html/rfc3986#section-6>`\_>
+        ///   for details of normalization.
+        ///
         ///
         /// .. note::
         ///
-        ///    Envoy does not perform
-        ///    `case normalization <<https://datatracker.ietf.org/doc/html/rfc3986#section-6.2.2.1>`_.>
-        ///    URI path normalization can be applied to a portion of requests by setting the
-        ///    ``envoy_default_header_validator.path_normalization`` runtime value.
-        ///
+        /// Envoy does not perform
+        /// `case normalization <<https://datatracker.ietf.org/doc/html/rfc3986#section-6.2.2.1>`\_.>
+        /// URI path normalization can be applied to a portion of requests by setting the
+        /// `envoy_default_header_validator.path_normalization` runtime value.
         #[prost(bool, tag = "1")]
         pub skip_path_normalization: bool,
         /// Determines if adjacent slashes in the path are merged into one.
         ///
         /// This operation overwrites the original request URI path and the new path is used for processing of
         /// the request by HTTP filters and proxied to the upstream service.
-        /// Setting this option to ``true`` will cause incoming requests with path ``//dir///file`` to not match against
-        /// route with ``prefix`` match set to ``/dir``. Defaults to ``false``.
+        /// Setting this option to `true` will cause incoming requests with path `//dir///file` to not match against
+        /// route with `prefix` match set to `/dir`. Defaults to `false`.
         ///
         /// .. note::
         ///
-        ///    Slash merging is not part of the
-        ///    `HTTP spec <<https://datatracker.ietf.org/doc/html/rfc3986>`_> and is provided for convenience.
-        ///    Merging of slashes in URI path can be applied to a portion of requests by setting the
-        ///    ``envoy_default_header_validator.merge_slashes`` runtime value.
-        ///
+        /// Slash merging is not part of the
+        /// `HTTP spec <<https://datatracker.ietf.org/doc/html/rfc3986>`\_> and is provided for convenience.
+        /// Merging of slashes in URI path can be applied to a portion of requests by setting the
+        /// `envoy_default_header_validator.merge_slashes` runtime value.
         #[prost(bool, tag = "2")]
         pub skip_merging_slashes: bool,
-        /// The action to take when request URL path contains escaped slash sequences (``%2F``, ``%2f``, ``%5C`` and ``%5c``).
+        /// The action to take when request URL path contains escaped slash sequences (`%2F`, `%2f`, `%5C` and `%5c`).
         ///
         /// This operation may overwrite the original request URI path and the new path is used for processing of
         /// the request by HTTP filters and proxied to the upstream service.
@@ -133,7 +131,7 @@ pub mod header_validator_config {
     }
     /// Nested message and enum types in `UriPathNormalizationOptions`.
     pub mod uri_path_normalization_options {
-        /// Determines the action for requests that contain ``%2F``, ``%2f``, ``%5C`` or ``%5c`` sequences in the URI path.
+        /// Determines the action for requests that contain `%2F`, `%2f`, `%5C` or `%5c` sequences in the URI path.
         /// This operation occurs before URL normalization and the merge slashes transformations if they were enabled.
         ///
         /// Escaped slash sequences in URLs can be used for path confusion attacks, so proper handling
@@ -144,41 +142,39 @@ pub mod header_validator_config {
         #[repr(i32)]
         pub enum PathWithEscapedSlashesAction {
             /// Default behavior specific to implementation (i.e. Envoy) of this configuration option.
-            /// Envoy, by default, takes the ``KEEP_UNCHANGED`` action.
+            /// Envoy, by default, takes the `KEEP_UNCHANGED` action.
             ///
             /// .. note::
             ///
-            ///    The implementation may change the default behavior at-will.
-            ///
+            /// The implementation may change the default behavior at-will.
             ImplementationSpecificDefault = 0,
             /// Keep escaped slashes unchanged in the URI path.
             /// This preserves the original request path without any modifications to escaped sequences.
             KeepUnchanged = 1,
-            /// Reject client request with the 400 status. gRPC requests will be rejected with the ``INTERNAL`` (13) error code.
+            /// Reject client request with the 400 status. gRPC requests will be rejected with the `INTERNAL` (13) error code.
             /// The :ref:`httpN.downstream_rq_failed_path_normalization <config_http_conn_man_stats_per_codec>` counter is incremented for each rejected request.
             ///
             /// This is the safest option when security is a primary concern, as it prevents any potential
             /// path confusion attacks by rejecting requests with escaped slashes entirely.
             RejectRequest = 2,
-            /// Unescape ``%2F`` and ``%5C`` sequences and redirect the request to the new path if these sequences were present.
+            /// Unescape `%2F` and `%5C` sequences and redirect the request to the new path if these sequences were present.
             /// The redirect occurs after path normalization and merge slashes transformations if they were configured.
             ///
             /// .. note::
             ///
-            ///    gRPC requests will be rejected with the ``INTERNAL`` (13) error code.
-            ///    This option minimizes possibility of path confusion exploits by forcing request with unescaped slashes to
-            ///    traverse all parties: downstream client, intermediate proxies, Envoy and upstream server.
+            /// gRPC requests will be rejected with the `INTERNAL` (13) error code.
+            /// This option minimizes possibility of path confusion exploits by forcing request with unescaped slashes to
+            /// traverse all parties: downstream client, intermediate proxies, Envoy and upstream server.
             ///
             /// The :ref:`httpN.downstream_rq_redirected_with_normalized_path <config_http_conn_man_stats_per_codec>` counter is incremented for each
             /// redirected request.
             UnescapeAndRedirect = 3,
-            /// Unescape ``%2F`` and ``%5C`` sequences.
+            /// Unescape `%2F` and `%5C` sequences.
             ///
             /// .. attention::
             ///
-            ///    This option should not be enabled if intermediaries perform path based access control as
-            ///    it may lead to path confusion vulnerabilities.
-            ///
+            /// This option should not be enabled if intermediaries perform path based access control as
+            /// it may lead to path confusion vulnerabilities.
             UnescapeAndForward = 4,
         }
         impl PathWithEscapedSlashesAction {
@@ -212,19 +208,18 @@ pub mod header_validator_config {
     ///
     /// These options control how Envoy handles HTTP/1 specific behaviors and edge cases
     /// that may not apply to HTTP/2 or HTTP/3 protocols.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Http1ProtocolOptions {
-        /// Allows Envoy to process HTTP/1 requests/responses with both ``Content-Length`` and ``Transfer-Encoding``
+        /// Allows Envoy to process HTTP/1 requests/responses with both `Content-Length` and `Transfer-Encoding`
         /// headers set. By default such messages are rejected, but if option is enabled - Envoy will
-        /// remove the ``Content-Length`` header and process the message.
+        /// remove the `Content-Length` header and process the message.
         ///
-        /// See `RFC7230, sec. 3.3.3 <<https://datatracker.ietf.org/doc/html/rfc7230#section-3.3.3>`_> for details.
+        /// See `RFC7230, sec. 3.3.3 <<https://datatracker.ietf.org/doc/html/rfc7230#section-3.3.3>`\_> for details.
         ///
         /// .. attention::
         ///
-        ///    Enabling this option might lead to request smuggling vulnerabilities, especially if traffic
-        ///    is proxied via multiple layers of proxies.
-        ///
+        /// Enabling this option might lead to request smuggling vulnerabilities, especially if traffic
+        /// is proxied via multiple layers of proxies.
         #[prost(bool, tag = "1")]
         pub allow_chunked_length: bool,
     }
@@ -232,7 +227,7 @@ pub mod header_validator_config {
     /// characters.
     ///
     /// Underscore character is allowed in header names by RFC-7230, and this behavior is implemented
-    /// as a security measure due to systems that treat ``_`` and ``-`` as interchangeable. Envoy by
+    /// as a security measure due to systems that treat `_` and `-` as interchangeable. Envoy by
     /// default allows client request headers with underscore characters.
     ///
     /// This setting provides control over how to handle such headers for security and compatibility reasons.
@@ -241,15 +236,17 @@ pub mod header_validator_config {
     pub enum HeadersWithUnderscoresAction {
         /// Allow headers with underscores. This is the default behavior.
         Allow = 0,
+        ///
         /// Reject client request. HTTP/1 requests are rejected with the 400 status. HTTP/2 requests
         /// end with the stream reset. The
-        /// :ref:`httpN.requests_rejected_with_underscores_in_headers <config_http_conn_man_stats_per_codec>` counter
-        /// is incremented for each rejected request.
+        /// : ref:`httpN.requests_rejected_with_underscores_in_headers <config_http_conn_man_stats_per_codec>` counter
+        ///   is incremented for each rejected request.
         RejectRequest = 1,
+        ///
         /// Drop the client header with name containing underscores. The header is dropped before the filter chain is
         /// invoked and as such filters will not see dropped headers. The
-        /// :ref:`httpN.dropped_headers_with_underscores <config_http_conn_man_stats_per_codec>` is incremented for
-        /// each dropped header.
+        /// : ref:`httpN.dropped_headers_with_underscores <config_http_conn_man_stats_per_codec>` is incremented for
+        ///   each dropped header.
         DropHeader = 2,
     }
     impl HeadersWithUnderscoresAction {

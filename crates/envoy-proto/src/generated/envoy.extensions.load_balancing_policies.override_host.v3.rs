@@ -6,45 +6,47 @@
 /// <https://github.com/kubernetes-sigs/gateway-api-inference-extension/tree/main/docs/proposals/004-endpoint-picker-protocol>
 /// can provide hosts for serving a request using Override Host load balancing policy.
 ///
-/// This policy extracts selected override hosts from a list of ``OverrideHostSource`` (request headers, metadata, etc.).
+/// This policy extracts selected override hosts from a list of `OverrideHostSource` (request headers, metadata, etc.).
 ///
-/// The override host source must specify at least one host in ``IP:Port`` format or multiple hosts in ``IP:Port,IP:Port,...``
-/// format. For example ``10.0.0.5:8080`` or ``\[2600:4040:5204::1574:24ae\]:80``. The IPv6 address is enclosed in square brackets.
+/// The override host source must specify at least one host in `IP:Port` format or multiple hosts in `IP:Port,IP:Port,...`
+/// format. For example `10.0.0.5:8080` or `\[2600:4040:5204::1574:24ae\]:80`. The IPv6 address is enclosed in square brackets.
 ///
-/// For specific example, to support k8s gateway inference extensions, which uses the ``x-gateway-destination-endpoint``
+/// For specific example, to support k8s gateway inference extensions, which uses the `x-gateway-destination-endpoint`
 /// header or metadata value under the "envoy.lb" key for selected hosts, the Override Host load balancing policy should be
 /// configured in the following way:
 ///
 /// .. code-block:: yaml
 ///
-///     override_host_sources:
-///     - header: "x-gateway-destination-endpoint"
-///     - metadata:
-///         key: "envoy.lb"
-///         path:
-///         - key: "x-gateway-destination-endpoint"
+/// ```text
+/// override_host_sources:
+/// - header: "x-gateway-destination-endpoint"
+/// - metadata:
+///     key: "envoy.lb"
+///     path:
+///     - key: "x-gateway-destination-endpoint"
+/// ```
 ///
 /// If no valid host in the override host list, then the specified fallback load balancing policy is used. This allows load
 /// balancing to degrade to a a built in policy (i.e. Round Robin) in case external endpoint picker fails.
 ///
-/// In addition to specifying ``override_host_sources``, the policy can be configured to inform downstream filters
-/// of the selected endpoint through dynamic metadata or response headers through ``selected_endpoint_key``:
+/// In addition to specifying `override_host_sources`, the policy can be configured to inform downstream filters
+/// of the selected endpoint through dynamic metadata or response headers through `selected_endpoint_key`:
 ///
 /// .. code-block:: yaml
 ///
-///     override_host_sources:
-///     - metadata:
-///         key: "envoy.lb"
-///         path:
-///         - key: "x-gateway-destination-endpoint"
-///     selected_host_key:
-///       key: "envoy.lb"
-///       path:
-///       - key: "x-gateway-destination-endpoint-served"
+/// ```text
+/// override_host_sources:
+/// - metadata:
+///     key: "envoy.lb"
+///     path:
+///     - key: "x-gateway-destination-endpoint"
+/// selected_host_key:
+///   key: "envoy.lb"
+///   path:
+///   - key: "x-gateway-destination-endpoint-served"
+/// ```
 ///
-/// See the :ref:`load balancing architecture
-/// overview<arch_overview_load_balancing_types>` for more information.
-///
+/// See the :ref:`load balancing architecture  overview<arch_overview_load_balancing_types>` for more information.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OverrideHost {
     /// A list of sources to get host addresses from. The host sources are searched in the order

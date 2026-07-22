@@ -7,8 +7,8 @@ pub struct PayloadToMetadata {
 }
 /// Nested message and enum types in `PayloadToMetadata`.
 pub mod payload_to_metadata {
-    /// \[#next-free-field: 6\]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    /// \[\#next-free-field: 6\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct KeyValuePair {
         /// The namespace — if this is empty, the filter's namespace will be used.
         #[prost(string, tag = "1")]
@@ -24,7 +24,7 @@ pub mod payload_to_metadata {
     }
     /// Nested message and enum types in `KeyValuePair`.
     pub mod key_value_pair {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum ValueType {
             /// The value to pair with the given key.
             ///
@@ -45,7 +45,7 @@ pub mod payload_to_metadata {
         }
     }
     /// A Rule defines what metadata to apply when a field is present or missing.
-    /// \[#next-free-field: 6\]
+    /// \[\#next-free-field: 6\]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Rule {
         /// Specifies that a match will be performed on the value of a field.
@@ -65,7 +65,7 @@ pub mod payload_to_metadata {
     }
     /// Nested message and enum types in `Rule`.
     pub mod rule {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum MatchSpecifier {
             /// If specified, the route must exactly match the request method name. As a special case,
             /// an empty string matches any request method name.

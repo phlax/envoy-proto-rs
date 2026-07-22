@@ -12,24 +12,24 @@ pub struct DnsFilterConfig {
     /// Client context configuration controls Envoy's behavior when it must use external
     /// resolvers to answer a query. This object is optional and if omitted instructs
     /// the filter to resolve queries from the data in the server_config.
-    /// Also, if ``client_config`` is omitted, here is the Envoy's behavior to create DNS resolver:
+    /// Also, if `client_config` is omitted, here is the Envoy's behavior to create DNS resolver:
     ///
     /// 1. If :ref:`typed_dns_resolver_config <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.typed_dns_resolver_config>`
-    /// is not empty, uses it.
+    ///    is not empty, uses it.
     ///
-    /// 2. Otherwise, uses the default c-ares DNS resolver.
-    ///
+    /// 1. Otherwise, uses the default c-ares DNS resolver.
     #[prost(message, optional, tag = "3")]
     pub client_config: ::core::option::Option<dns_filter_config::ClientContextConfig>,
     /// Configuration for :ref:`access logs <arch_overview_access_logs>`
     /// emitted by the DNS filter for each DNS query received.
     /// Supports custom format commands for DNS-specific attributes:
-    /// - ``QUERY_NAME``: The DNS query name being resolved
-    /// - ``QUERY_TYPE``: The DNS query type (A, AAAA, SRV, etc.)
-    /// - ``QUERY_CLASS``: The DNS query class
-    /// - ``ANSWER_COUNT``: Number of answers in the response
-    /// - ``RESPONSE_CODE``: DNS response code
-    /// - ``PARSE_STATUS``: Whether the query was successfully parsed
+    ///
+    /// * `QUERY_NAME`: The DNS query name being resolved
+    /// * `QUERY_TYPE`: The DNS query type (A, AAAA, SRV, etc.)
+    /// * `QUERY_CLASS`: The DNS query class
+    /// * `ANSWER_COUNT`: Number of answers in the response
+    /// * `RESPONSE_CODE`: DNS response code
+    /// * `PARSE_STATUS`: Whether the query was successfully parsed
     #[prost(message, repeated, tag = "4")]
     pub access_log: ::prost::alloc::vec::Vec<
         super::super::super::super::super::config::accesslog::v3::AccessLog,
@@ -68,7 +68,7 @@ pub mod dns_filter_config {
     /// and forwarding configuration for Envoy to make DNS requests to other
     /// resolvers
     ///
-    /// \[#next-free-field: 6\]
+    /// \[\#next-free-field: 6\]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct ClientContextConfig {
         /// Sets the maximum time we will wait for the upstream query to complete
@@ -85,31 +85,33 @@ pub mod dns_filter_config {
         /// Control planes that need to simultaneously support Envoy 1.18.x and
         /// Envoy 1.19.x should avoid Envoy 1.19.0 and 1.19.1.
         ///
-        /// \[#not-implemented-hide:\]
+        /// \[\#not-implemented-hide:\]
         #[deprecated]
         #[prost(message, repeated, tag = "2")]
         pub upstream_resolvers: ::prost::alloc::vec::Vec<
             super::super::super::super::super::super::config::core::v3::Address,
         >,
+        ///
         /// DNS resolution configuration which includes the underlying dns resolver addresses and options.
         /// This field is deprecated in favor of
-        /// :ref:`typed_dns_resolver_config <envoy_v3_api_field_extensions.filters.udp.dns_filter.v3.DnsFilterConfig.ClientContextConfig.typed_dns_resolver_config>`.
+        /// : ref:`typed_dns_resolver_config <envoy_v3_api_field_extensions.filters.udp.dns_filter.v3.DnsFilterConfig.ClientContextConfig.typed_dns_resolver_config>`.
         #[deprecated]
         #[prost(message, optional, tag = "5")]
         pub dns_resolution_config: ::core::option::Option<
             super::super::super::super::super::super::config::core::v3::DnsResolutionConfig,
         >,
+        ///
         /// DNS resolver type configuration extension. This extension can be used to configure c-ares, apple,
         /// or any other DNS resolver types and the related parameters.
         /// For example, an object of
-        /// :ref:`CaresDnsResolverConfig <envoy_v3_api_msg_extensions.network.dns_resolver.cares.v3.CaresDnsResolverConfig>`
-        /// can be packed into this ``typed_dns_resolver_config``. This configuration replaces the
-        /// :ref:`dns_resolution_config <envoy_v3_api_field_extensions.filters.udp.dns_filter.v3.DnsFilterConfig.ClientContextConfig.dns_resolution_config>`
-        /// configuration.
-        /// During the transition period when both ``dns_resolution_config`` and ``typed_dns_resolver_config`` exists,
-        /// when ``typed_dns_resolver_config`` is in place, Envoy will use it and ignore ``dns_resolution_config``.
-        /// When ``typed_dns_resolver_config`` is missing, the default behavior is in place.
-        /// \[#extension-category: envoy.network.dns_resolver\]
+        /// : ref:`CaresDnsResolverConfig <envoy_v3_api_msg_extensions.network.dns_resolver.cares.v3.CaresDnsResolverConfig>`
+        ///   can be packed into this `typed_dns_resolver_config`. This configuration replaces the
+        /// : ref:`dns_resolution_config <envoy_v3_api_field_extensions.filters.udp.dns_filter.v3.DnsFilterConfig.ClientContextConfig.dns_resolution_config>`
+        ///   configuration.
+        ///   During the transition period when both `dns_resolution_config` and `typed_dns_resolver_config` exists,
+        ///   when `typed_dns_resolver_config` is in place, Envoy will use it and ignore `dns_resolution_config`.
+        ///   When `typed_dns_resolver_config` is missing, the default behavior is in place.
+        ///   \[\#extension-category: envoy.network.dns_resolver\]
         #[prost(message, optional, tag = "4")]
         pub typed_dns_resolver_config: ::core::option::Option<
             super::super::super::super::super::super::config::core::v3::TypedExtensionConfig,

@@ -4,59 +4,65 @@
 /// If the server does not support these protocol configurations, it may choose to close the gRPC
 /// stream. If the server supports these protocol configurations, it should respond based on the
 /// API specifications.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ProtocolConfiguration {
+    ///
     /// Specifies the filter configuration
-    /// :ref:`request_body_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ProcessingMode.request_body_mode>`.
+    /// : ref:`request_body_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ProcessingMode.request_body_mode>`.
     #[prost(
         enumeration = "super::super::super::extensions::filters::http::ext_proc::v3::processing_mode::BodySendMode",
         tag = "1"
     )]
     pub request_body_mode: i32,
+    ///
     /// Specifies the filter configuration
-    /// :ref:`response_body_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ProcessingMode.response_body_mode>`.
+    /// : ref:`response_body_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ProcessingMode.response_body_mode>`.
     #[prost(
         enumeration = "super::super::super::extensions::filters::http::ext_proc::v3::processing_mode::BodySendMode",
         tag = "2"
     )]
     pub response_body_mode: i32,
+    ///
     /// Specifies the filter configuration
-    /// :ref:`send_body_without_waiting_for_header_response <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.send_body_without_waiting_for_header_response>`.
-    /// If the client is waiting for a header response from the server, setting to ``true`` means the
-    /// client will send the body to the server as it arrives. Setting to ``false`` means the client
-    /// will buffer the arrived data and not send it to the server immediately.
+    /// : ref:`send_body_without_waiting_for_header_response <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.send_body_without_waiting_for_header_response>`.
+    ///   If the client is waiting for a header response from the server, setting to `true` means the
+    ///   client will send the body to the server as it arrives. Setting to `false` means the client
+    ///   will buffer the arrived data and not send it to the server immediately.
     #[prost(bool, tag = "3")]
     pub send_body_without_waiting_for_header_response: bool,
 }
 /// This represents the different types of messages that the data plane can send
 /// to an external processing server.
-/// \[#next-free-field: 12\]
+/// \[\#next-free-field: 12\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProcessingRequest {
     /// Dynamic metadata associated with the request.
     #[prost(message, optional, tag = "8")]
     pub metadata_context: ::core::option::Option<super::super::super::config::core::v3::Metadata>,
-    /// The values of properties selected by the ``request_attributes``
-    /// or ``response_attributes`` list in the configuration. Each entry
+    ///
+    /// The values of properties selected by the `request_attributes`
+    /// or `response_attributes` list in the configuration. Each entry
     /// in the list is populated from the standard
-    /// :ref:`attributes <arch_overview_attributes>` supported in the data plane.
+    /// : ref:`attributes <arch_overview_attributes>` supported in the data plane.
     #[prost(map = "string, message", tag = "9")]
     pub attributes:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
+    ///
     /// Specifies whether the filter that sent this request is running in
-    /// :ref:`observability_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.observability_mode>`.
+    /// : ref:`observability_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.observability_mode>`.
     ///
-    /// * A value of ``false`` indicates that the server must respond to this message by either
-    ///    sending back a matching ``ProcessingResponse`` message, or by closing the stream.
-    /// * A value of ``true`` indicates that the server should not respond to this message, as any
-    ///    responses will be ignored. However, it may still close the stream to indicate that no more
-    ///    messages are needed.
     ///
-    /// Defaults to ``false``.
+    /// * A value of `false` indicates that the server must respond to this message by either
+    ///   sending back a matching `ProcessingResponse` message, or by closing the stream.
+    /// * A value of `true` indicates that the server should not respond to this message, as any
+    ///   responses will be ignored. However, it may still close the stream to indicate that no more
+    ///   messages are needed.
+    ///
+    /// Defaults to `false`.
     #[prost(bool, tag = "10")]
     pub observability_mode: bool,
     /// Specify the filter protocol configurations to be sent to the server.
-    /// ``protocol_config`` is only encoded in the first ``ProcessingRequest`` message from the client to the server.
+    /// `protocol_config` is only encoded in the first `ProcessingRequest` message from the client to the server.
     #[prost(message, optional, tag = "11")]
     pub protocol_config: ::core::option::Option<ProtocolConfiguration>,
     /// Each request message will include one of the following sub-messages. Which
@@ -73,49 +79,52 @@ pub mod processing_request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Request {
         /// Information about the HTTP request headers, as well as peer info and additional
-        /// properties. Unless ``observability_mode`` is ``true``, the server must send back a
-        /// ``HeaderResponse`` message, an ``ImmediateResponse`` message, or close the stream.
+        /// properties. Unless `observability_mode` is `true`, the server must send back a
+        /// `HeaderResponse` message, an `ImmediateResponse` message, or close the stream.
         #[prost(message, tag = "2")]
         RequestHeaders(super::HttpHeaders),
         /// Information about the HTTP response headers, as well as peer info and additional
-        /// properties. Unless ``observability_mode`` is ``true``, the server must send back a
-        /// ``HeaderResponse`` message or close the stream.
+        /// properties. Unless `observability_mode` is `true`, the server must send back a
+        /// `HeaderResponse` message or close the stream.
         #[prost(message, tag = "3")]
         ResponseHeaders(super::HttpHeaders),
-        /// A chunk of the HTTP request body. Unless ``observability_mode`` is ``true``, the server must
-        /// send back a ``BodyResponse`` message, an ``ImmediateResponse`` message, or close the stream.
+        /// A chunk of the HTTP request body. Unless `observability_mode` is `true`, the server must
+        /// send back a `BodyResponse` message, an `ImmediateResponse` message, or close the stream.
         #[prost(message, tag = "4")]
         RequestBody(super::HttpBody),
-        /// A chunk of the HTTP response body. Unless ``observability_mode`` is ``true``, the server must
-        /// send back a ``BodyResponse`` message or close the stream.
+        /// A chunk of the HTTP response body. Unless `observability_mode` is `true`, the server must
+        /// send back a `BodyResponse` message or close the stream.
         #[prost(message, tag = "5")]
         ResponseBody(super::HttpBody),
-        /// The HTTP trailers for the request path. Unless ``observability_mode`` is ``true``, the server
-        /// must send back a ``TrailerResponse`` message or close the stream.
+        /// The HTTP trailers for the request path. Unless `observability_mode` is `true`, the server
+        /// must send back a `TrailerResponse` message or close the stream.
         ///
-        /// This message is only sent if the trailers processing mode is set to ``SEND`` and
+        /// This message is only sent if the trailers processing mode is set to `SEND` and
         /// the original downstream request has trailers.
         #[prost(message, tag = "6")]
         RequestTrailers(super::HttpTrailers),
-        /// The HTTP trailers for the response path. Unless ``observability_mode`` is ``true``, the server
-        /// must send back a ``TrailerResponse`` message or close the stream.
+        /// The HTTP trailers for the response path. Unless `observability_mode` is `true`, the server
+        /// must send back a `TrailerResponse` message or close the stream.
         ///
-        /// This message is only sent if the trailers processing mode is set to ``SEND`` and
+        /// This message is only sent if the trailers processing mode is set to `SEND` and
         /// the original upstream response has trailers.
         #[prost(message, tag = "7")]
         ResponseTrailers(super::HttpTrailers),
     }
 }
 /// This represents the different types of messages the server may send back to the data plane
-/// when the ``observability_mode`` field in the received ``ProcessingRequest`` is set to ``false``.
+/// when the `observability_mode` field in the received `ProcessingRequest` is set to `false`.
 ///
-/// * If the corresponding ``BodySendMode`` in the
-///    :ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
-///    is not set to ``FULL_DUPLEX_STREAMED``, then for every received ``ProcessingRequest``,
-///    the server must send back exactly one ``ProcessingResponse`` message.
-/// * If it is set to ``FULL_DUPLEX_STREAMED``, the server must follow the API defined
-///    for this mode to send the ``ProcessingResponse`` messages.
-/// \[#next-free-field: 13\]
+/// *
+///   If the corresponding `BodySendMode` in the
+///   : ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
+///     is not set to `FULL_DUPLEX_STREAMED`, then for every received `ProcessingRequest`,
+///     the server must send back exactly one `ProcessingResponse` message.
+///
+///
+/// * If it is set to `FULL_DUPLEX_STREAMED`, the server must follow the API defined
+///   for this mode to send the `ProcessingResponse` messages.
+///   \[\#next-free-field: 13\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProcessingResponse {
     /// Optional metadata that will be emitted as dynamic metadata to be consumed by
@@ -127,19 +136,20 @@ pub struct ProcessingResponse {
     /// particular request/response only. Servers may use this to intelligently control how requests
     /// are processed based on the headers and other metadata that they see.
     ///
+    ///
     /// This field is only applicable when servers are responding to the header requests. If it is set
     /// in the response to the body or trailer requests, it will be ignored by the data plane.
     /// It is also ignored by the data plane when the ext_proc filter config
-    /// :ref:`allow_mode_override <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.allow_mode_override>`
-    /// is set to ``false``, or
-    /// :ref:`send_body_without_waiting_for_header_response <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.send_body_without_waiting_for_header_response>`
-    /// is set to ``true``.
+    /// : ref:`allow_mode_override <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.allow_mode_override>`
+    ///   is set to `false`, or
+    /// : ref:`send_body_without_waiting_for_header_response <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.send_body_without_waiting_for_header_response>`
+    ///   is set to `true`.
     #[prost(message, optional, tag = "9")]
     pub mode_override: ::core::option::Option<
         super::super::super::extensions::filters::http::ext_proc::v3::ProcessingMode,
     >,
-    /// \[#not-implemented-hide:\]
-    /// Used only in ``FULL_DUPLEX_STREAMED`` and ``GRPC`` body send modes.
+    /// \[\#not-implemented-hide:\]
+    /// Used only in `FULL_DUPLEX_STREAMED` and `GRPC` body send modes.
     /// Instructs the data plane to stop sending body data and to send a
     /// half-close on the ext_proc stream. The ext_proc server should then echo
     /// back all subsequent body contents as-is until it sees the client's
@@ -151,18 +161,19 @@ pub struct ProcessingResponse {
     /// client had already sent before it saw the ext_proc stream termination.
     #[prost(bool, tag = "12")]
     pub request_drain: bool,
+    ///
     /// When the ext_proc server receives a request message and needs more time to process it, it
-    /// sends back a ``ProcessingResponse`` message with a new timeout value. When the data plane
+    /// sends back a `ProcessingResponse` message with a new timeout value. When the data plane
     /// receives this response message, it ignores other fields in the response, stops the original
     /// timer (which has the timeout value specified in
-    /// :ref:`message_timeout <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.message_timeout>`),
-    /// and starts a new timer with this ``override_message_timeout`` value while keeping the data
-    /// plane ext_proc filter state machine intact.
+    /// : ref:`message_timeout <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.message_timeout>`),
+    ///   and starts a new timer with this `override_message_timeout` value while keeping the data
+    ///   plane ext_proc filter state machine intact.
     ///
-    /// The value must be >= 1ms and <=
-    /// :ref:`max_message_timeout <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.max_message_timeout>`.
-    /// Such a message can be sent at most once in a particular data plane ext_proc filter processing
-    /// state. To enable this API, ``max_message_timeout`` must be set to a value >= 1ms.
+    /// The value must be >= 1ms and \<=
+    /// : ref:`max_message_timeout <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.max_message_timeout>`.
+    ///   Such a message can be sent at most once in a particular data plane ext_proc filter processing
+    ///   state. To enable this API, `max_message_timeout` must be set to a value >= 1ms.
     #[prost(message, optional, tag = "10")]
     pub override_message_timeout: ::core::option::Option<::prost_types::Duration>,
     /// The response type that is sent by the server.
@@ -178,52 +189,53 @@ pub mod processing_response {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Response {
         /// The server must send back this message in response to a message with the
-        /// ``request_headers`` field set.
+        /// `request_headers` field set.
         #[prost(message, tag = "1")]
         RequestHeaders(super::HeadersResponse),
         /// The server must send back this message in response to a message with the
-        /// ``response_headers`` field set.
+        /// `response_headers` field set.
         #[prost(message, tag = "2")]
         ResponseHeaders(super::HeadersResponse),
         /// The server must send back this message in response to a message with
-        /// the ``request_body`` field set.
+        /// the `request_body` field set.
         #[prost(message, tag = "3")]
         RequestBody(super::BodyResponse),
         /// The server must send back this message in response to a message with
-        /// the ``response_body`` field set.
+        /// the `response_body` field set.
         #[prost(message, tag = "4")]
         ResponseBody(super::BodyResponse),
         /// The server must send back this message in response to a message with
-        /// the ``request_trailers`` field set.
+        /// the `request_trailers` field set.
         #[prost(message, tag = "5")]
         RequestTrailers(super::TrailersResponse),
         /// The server must send back this message in response to a message with
-        /// the ``response_trailers`` field set.
+        /// the `response_trailers` field set.
         #[prost(message, tag = "6")]
         ResponseTrailers(super::TrailersResponse),
         /// If specified, attempt to create a locally generated response, send it
         /// downstream, and stop processing additional filters and ignore any
         /// additional messages received from the remote server for this request or
         /// response. If a response has already started -- for example, if this
-        /// message is sent response to a ``response_body`` message -- then
+        /// message is sent response to a `response_body` message -- then
         /// this will either ship the reply directly to the downstream codec,
         /// or reset the stream.
         #[prost(message, tag = "7")]
         ImmediateResponse(super::ImmediateResponse),
+        ///
         /// The server sends back this message to initiate or continue local response streaming.
-        /// The server must initiate local response streaming with the ``headers_response`` in response
-        /// to a ``ProcessingRequest`` with the ``request_headers`` only.
-        /// The server may follow up with multiple messages containing ``body_response``. The server must
-        /// indicate end of stream by setting ``end_of_stream`` to ``true`` in the ``headers_response``
-        /// or ``body_response`` message or by sending a ``trailers_response`` message.
-        /// The client may send a ``request_body`` or ``request_trailers`` to the server depending on
+        /// The server must initiate local response streaming with the `headers_response` in response
+        /// to a `ProcessingRequest` with the `request_headers` only.
+        /// The server may follow up with multiple messages containing `body_response`. The server must
+        /// indicate end of stream by setting `end_of_stream` to `true` in the `headers_response`
+        /// or `body_response` message or by sending a `trailers_response` message.
+        /// The client may send a `request_body` or `request_trailers` to the server depending on
         /// configuration.
-        /// The streaming local response can only be sent when the ``request_header_mode`` in the filter
-        /// :ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
-        /// is set to ``SEND``. The ext_proc server should not send ``StreamedImmediateResponse`` if it
-        /// did not observe request headers, as it will result in a race with the upstream server
-        /// response and reset of the client request.
-        /// Presently only the ``FULL_DUPLEX_STREAMED`` or ``NONE`` body modes are supported.
+        /// The streaming local response can only be sent when the `request_header_mode` in the filter
+        /// : ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
+        ///   is set to `SEND`. The ext_proc server should not send `StreamedImmediateResponse` if it
+        ///   did not observe request headers, as it will result in a race with the upstream server
+        ///   response and reset of the client request.
+        ///   Presently only the `FULL_DUPLEX_STREAMED` or `NONE` body modes are supported.
         #[prost(message, tag = "11")]
         StreamedImmediateResponse(super::StreamedImmediateResponse),
     }
@@ -232,45 +244,47 @@ pub mod processing_response {
 /// are first received.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HttpHeaders {
+    ///
     /// The HTTP request headers. All header keys will be lower-cased, because HTTP header keys are
     /// case-insensitive. The header value is encoded in the
-    /// :ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
+    /// : ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
     #[prost(message, optional, tag = "1")]
     pub headers: ::core::option::Option<super::super::super::config::core::v3::HeaderMap>,
-    /// \[#not-implemented-hide:\]
+    ///
+    /// \[\#not-implemented-hide:\]
     /// This field is deprecated and not implemented. Attributes will be sent in the top-level
-    /// :ref:`attributes <envoy_v3_api_field_service.ext_proc.v3.ProcessingRequest.attributes>` field.
+    /// : ref:`attributes <envoy_v3_api_field_service.ext_proc.v3.ProcessingRequest.attributes>` field.
     #[prost(map = "string, message", tag = "2")]
     pub attributes:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
-    /// If ``true``, then there is no message body associated with this request or response.
+    /// If `true`, then there is no message body associated with this request or response.
     #[prost(bool, tag = "3")]
     pub end_of_stream: bool,
 }
 /// This message is sent to the external server when the HTTP request and response bodies are
 /// received.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HttpBody {
     /// The contents of the body in the HTTP request/response. Note that in streaming mode multiple
-    /// ``HttpBody`` messages may be sent.
+    /// `HttpBody` messages may be sent.
     ///
-    /// In ``GRPC`` body send mode, a separate ``HttpBody`` message will be sent for each message in
+    /// In `GRPC` body send mode, a separate `HttpBody` message will be sent for each message in
     /// the gRPC stream.
     #[prost(bytes = "vec", tag = "1")]
     pub body: ::prost::alloc::vec::Vec<u8>,
-    /// If ``true``, this will be the last ``HttpBody`` message that will be sent and no trailers
+    /// If `true`, this will be the last `HttpBody` message that will be sent and no trailers
     /// will be sent for the current request/response.
     #[prost(bool, tag = "2")]
     pub end_of_stream: bool,
-    /// This field is used in ``GRPC`` body send mode when ``end_of_stream`` is ``true`` and ``body``
+    /// This field is used in `GRPC` body send mode when `end_of_stream` is `true` and `body`
     /// is empty. Those values would normally indicate an empty message on the stream with the
     /// end-of-stream bit set. However, if the half-close happens after the last message on the stream
-    /// was already sent, then this field will be ``true`` to indicate an end-of-stream with *no*
+    /// was already sent, then this field will be `true` to indicate an end-of-stream with *no*
     /// message (as opposed to an empty message).
     #[prost(bool, tag = "3")]
     pub end_of_stream_without_message: bool,
-    /// This field is used in ``GRPC`` body send mode to indicate whether the message is compressed.
-    /// This will never be set to ``true`` by gRPC but may be set to ``true`` by a proxy like Envoy.
+    /// This field is used in `GRPC` body send mode to indicate whether the message is compressed.
+    /// This will never be set to `true` by gRPC but may be set to `true` by a proxy like Envoy.
     #[prost(bool, tag = "4")]
     pub grpc_message_compressed: bool,
 }
@@ -278,12 +292,13 @@ pub struct HttpBody {
 /// response trailers are received.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HttpTrailers {
+    ///
     /// The header value is encoded in the
-    /// :ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
+    /// : ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
     #[prost(message, optional, tag = "1")]
     pub trailers: ::core::option::Option<super::super::super::config::core::v3::HeaderMap>,
 }
-/// This message is sent by the external server to the data plane after ``HttpHeaders`` was
+/// This message is sent by the external server to the data plane after `HttpHeaders` was
 /// sent to it.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HeadersResponse {
@@ -292,7 +307,7 @@ pub struct HeadersResponse {
     #[prost(message, optional, tag = "1")]
     pub response: ::core::option::Option<CommonResponse>,
 }
-/// This message is sent by the external server to the data plane after ``HttpBody`` was
+/// This message is sent by the external server to the data plane after `HttpBody` was
 /// sent to it.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BodyResponse {
@@ -301,7 +316,7 @@ pub struct BodyResponse {
     #[prost(message, optional, tag = "1")]
     pub response: ::core::option::Option<CommonResponse>,
 }
-/// This message is sent by the external server to the data plane after ``HttpTrailers`` was
+/// This message is sent by the external server to the data plane after `HttpTrailers` was
 /// sent to it.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TrailersResponse {
@@ -310,11 +325,11 @@ pub struct TrailersResponse {
     #[prost(message, optional, tag = "1")]
     pub header_mutation: ::core::option::Option<HeaderMutation>,
 }
-/// This message is sent by the external server to the data plane after ``HttpHeaders`` to initiate
+/// This message is sent by the external server to the data plane after `HttpHeaders` to initiate
 /// local response streaming. The server may follow up with multiple messages containing
-/// ``body_response``. The server must indicate end of stream by setting ``end_of_stream`` to
-/// ``true`` in the ``headers_response`` or ``body_response`` message or by sending a
-/// ``trailers_response`` message.
+/// `body_response`. The server must indicate end of stream by setting `end_of_stream` to
+/// `true` in the `headers_response` or `body_response` message or by sending a
+/// `trailers_response` message.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamedImmediateResponse {
     #[prost(oneof = "streamed_immediate_response::Response", tags = "1, 2, 3")]
@@ -324,7 +339,7 @@ pub struct StreamedImmediateResponse {
 pub mod streamed_immediate_response {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Response {
-        /// Response headers to be sent downstream. The ``:status`` header must be set.
+        /// Response headers to be sent downstream. The `:status` header must be set.
         #[prost(message, tag = "1")]
         HeadersResponse(super::HttpHeaders),
         /// Response body to be sent downstream.
@@ -336,7 +351,7 @@ pub mod streamed_immediate_response {
     }
 }
 /// This message contains common fields between header and body responses.
-/// \[#next-free-field: 6\]
+/// \[\#next-free-field: 6\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CommonResponse {
     /// If set, provide additional direction on how the data plane should
@@ -344,24 +359,26 @@ pub struct CommonResponse {
     #[prost(enumeration = "common_response::ResponseStatus", tag = "1")]
     pub status: i32,
     /// Instructions on how to manipulate the headers. When responding to an
-    /// ``HttpBody`` request, header mutations will only take effect if the current processing mode
-    /// for the body is ``BUFFERED``.
+    /// `HttpBody` request, header mutations will only take effect if the current processing mode
+    /// for the body is `BUFFERED`.
     #[prost(message, optional, tag = "2")]
     pub header_mutation: ::core::option::Option<HeaderMutation>,
+    ///
     /// Replace the body of the last message sent to the remote server on this stream. If responding
-    /// to an ``HttpBody`` request, simply replace or clear the body chunk that was sent with that
-    /// request. Body mutations may take effect in response either to ``header`` or ``body`` messages.
-    /// When it is in response to ``header`` messages, it only takes effect if the
-    /// :ref:`status <envoy_v3_api_field_service.ext_proc.v3.CommonResponse.status>`
-    /// is set to ``CONTINUE_AND_REPLACE``.
+    /// to an `HttpBody` request, simply replace or clear the body chunk that was sent with that
+    /// request. Body mutations may take effect in response either to `header` or `body` messages.
+    /// When it is in response to `header` messages, it only takes effect if the
+    /// : ref:`status <envoy_v3_api_field_service.ext_proc.v3.CommonResponse.status>`
+    ///   is set to `CONTINUE_AND_REPLACE`.
     #[prost(message, optional, tag = "3")]
     pub body_mutation: ::core::option::Option<BodyMutation>,
-    /// \[#not-implemented-hide:\]
+    ///
+    /// \[\#not-implemented-hide:\]
     /// Add new trailers to the message. This may be used when responding to either an
-    /// ``HttpHeaders`` or ``HttpBody`` message, but only if this message is returned
-    /// along with the ``CONTINUE_AND_REPLACE`` status.
+    /// `HttpHeaders` or `HttpBody` message, but only if this message is returned
+    /// along with the `CONTINUE_AND_REPLACE` status.
     /// The header value is encoded in the
-    /// :ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
+    /// : ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
     #[prost(message, optional, tag = "4")]
     pub trailers: ::core::option::Option<super::super::super::config::core::v3::HeaderMap>,
     /// Clear the route cache for the current client request. This is necessary
@@ -386,7 +403,7 @@ pub mod common_response {
         /// further messages for this request or response even if the processing
         /// mode is configured to do so.
         ///
-        /// When used in response to a ``request_headers`` or ``response_headers`` message,
+        /// When used in response to a `request_headers` or `response_headers` message,
         /// this status makes it possible to either completely replace the body
         /// while discarding the original body, or to add a body to a message that
         /// formerly did not have one.
@@ -394,7 +411,7 @@ pub mod common_response {
         /// In other words, this response makes it possible to turn an HTTP GET
         /// into a POST, PUT, or PATCH.
         ///
-        /// Not supported if the body send mode is ``GRPC``.
+        /// Not supported if the body send mode is `GRPC`.
         ContinueAndReplace = 1,
     }
     impl ResponseStatus {
@@ -422,30 +439,30 @@ pub mod common_response {
 /// downstream, stop processing additional filters, and ignore any additional messages received
 /// from the remote server for this request or response. If a response has already started, then
 /// this will either ship the reply directly to the downstream codec, or reset the stream.
-/// \[#next-free-field: 6\]
+/// \[\#next-free-field: 6\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ImmediateResponse {
     /// The response code to return.
     #[prost(message, optional, tag = "1")]
     pub status: ::core::option::Option<super::super::super::r#type::v3::HttpStatus>,
-    /// Apply changes to the default headers, which will include ``content-type``.
+    /// Apply changes to the default headers, which will include `content-type`.
     #[prost(message, optional, tag = "2")]
     pub headers: ::core::option::Option<HeaderMutation>,
     /// The message body to return with the response which is sent using the
-    /// ``text/plain`` content type, or encoded in the ``grpc-message`` header.
+    /// `text/plain` content type, or encoded in the `grpc-message` header.
     #[prost(bytes = "vec", tag = "3")]
     pub body: ::prost::alloc::vec::Vec<u8>,
     /// If set, then include a gRPC status trailer.
     #[prost(message, optional, tag = "4")]
     pub grpc_status: ::core::option::Option<GrpcStatus>,
     /// A string detailing why this local reply was sent, which may be included
-    /// in log and debug output (e.g., this populates the ``%RESPONSE_CODE_DETAILS%``
+    /// in log and debug output (e.g., this populates the `%RESPONSE_CODE_DETAILS%`
     /// command operator field for use in access logging).
     #[prost(string, tag = "5")]
     pub details: ::prost::alloc::string::String,
 }
-/// This message specifies a gRPC status for an ``ImmediateResponse`` message.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+/// This message specifies a gRPC status for an `ImmediateResponse` message.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GrpcStatus {
     /// The actual gRPC status.
     #[prost(uint32, tag = "1")]
@@ -455,50 +472,53 @@ pub struct GrpcStatus {
 /// headers.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HeaderMutation {
+    ///
     /// Add or replace HTTP headers. Attempts to set the value of
-    /// any ``x-envoy`` header, and attempts to set the ``:method``,
-    /// ``:authority``, ``:scheme``, or ``host`` headers will be ignored.
+    /// any `x-envoy` header, and attempts to set the `:method`,
+    /// `:authority`, `:scheme`, or `host` headers will be ignored.
     /// The header value is encoded in the
-    /// :ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
+    /// : ref:`raw_value <envoy_v3_api_field_config.core.v3.HeaderValue.raw_value>` field.
     #[prost(message, repeated, tag = "1")]
     pub set_headers:
         ::prost::alloc::vec::Vec<super::super::super::config::core::v3::HeaderValueOption>,
     /// Remove these HTTP headers. Attempts to remove system headers --
-    /// any header starting with ``:``, plus ``host`` -- will be ignored.
+    /// any header starting with `:`, plus `host` -- will be ignored.
     #[prost(string, repeated, tag = "2")]
     pub remove_headers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-/// The body response message corresponding to ``FULL_DUPLEX_STREAMED`` or ``GRPC`` body modes.
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// The body response message corresponding to `FULL_DUPLEX_STREAMED` or `GRPC` body modes.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct StreamedBodyResponse {
-    /// In ``FULL_DUPLEX_STREAMED`` body send mode, contains the body response chunk that will be
-    /// passed to the upstream/downstream by the data plane. In ``GRPC`` body send mode, contains
+    /// In `FULL_DUPLEX_STREAMED` body send mode, contains the body response chunk that will be
+    /// passed to the upstream/downstream by the data plane. In `GRPC` body send mode, contains
     /// a serialized gRPC message to be passed to the upstream/downstream by the data plane.
     #[prost(bytes = "vec", tag = "1")]
     pub body: ::prost::alloc::vec::Vec<u8>,
-    /// The server sets this flag to ``true`` if it has received a body request with
-    /// :ref:`end_of_stream <envoy_v3_api_field_service.ext_proc.v3.HttpBody.end_of_stream>` set to
-    /// ``true``, and this is the last chunk of body responses.
     ///
-    /// Note that in ``GRPC`` body send mode, this allows the ext_proc server to tell the data plane
+    /// The server sets this flag to `true` if it has received a body request with
+    /// : ref:`end_of_stream <envoy_v3_api_field_service.ext_proc.v3.HttpBody.end_of_stream>` set to
+    ///   `true`, and this is the last chunk of body responses.
+    ///
+    ///
+    /// Note that in `GRPC` body send mode, this allows the ext_proc server to tell the data plane
     /// to send a half close after a client message, which will result in discarding any other
     /// messages sent by the client application.
     #[prost(bool, tag = "2")]
     pub end_of_stream: bool,
-    /// This field is used in ``GRPC`` body send mode when ``end_of_stream`` is ``true`` and ``body``
+    /// This field is used in `GRPC` body send mode when `end_of_stream` is `true` and `body`
     /// is empty. Those values would normally indicate an empty message on the stream with the
     /// end-of-stream bit set. However, if the half-close happens after the last message on the stream
-    /// was already sent, then this field will be ``true`` to indicate an end-of-stream with *no*
+    /// was already sent, then this field will be `true` to indicate an end-of-stream with *no*
     /// message (as opposed to an empty message).
     #[prost(bool, tag = "3")]
     pub end_of_stream_without_message: bool,
-    /// This field is used in ``GRPC`` body send mode to indicate whether the message is compressed.
-    /// This will never be set to ``true`` by gRPC but may be set to ``true`` by a proxy like Envoy.
+    /// This field is used in `GRPC` body send mode to indicate whether the message is compressed.
+    /// This will never be set to `true` by gRPC but may be set to `true` by a proxy like Envoy.
     #[prost(bool, tag = "4")]
     pub grpc_message_compressed: bool,
 }
 /// This message specifies the body mutation the server sends to the data plane.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BodyMutation {
     /// The type of mutation for the body.
     #[prost(oneof = "body_mutation::Mutation", tags = "1, 2, 3")]
@@ -507,23 +527,26 @@ pub struct BodyMutation {
 /// Nested message and enum types in `BodyMutation`.
 pub mod body_mutation {
     /// The type of mutation for the body.
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum Mutation {
+        ///
         /// The entire body to replace.
-        /// Should only be used when the corresponding ``BodySendMode`` in the
-        /// :ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
-        /// is not set to ``FULL_DUPLEX_STREAMED`` or ``GRPC``.
+        /// Should only be used when the corresponding `BodySendMode` in the
+        /// : ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
+        ///   is not set to `FULL_DUPLEX_STREAMED` or `GRPC`.
         #[prost(bytes, tag = "1")]
         Body(::prost::alloc::vec::Vec<u8>),
+        ///
         /// Clear the corresponding body chunk. Should only be used when the corresponding
-        /// ``BodySendMode`` in the
-        /// :ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
-        /// is not set to ``FULL_DUPLEX_STREAMED`` or ``GRPC``.
+        /// `BodySendMode` in the
+        /// : ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
+        ///   is not set to `FULL_DUPLEX_STREAMED` or `GRPC`.
         #[prost(bool, tag = "2")]
         ClearBody(bool),
-        /// Must be used when the corresponding ``BodySendMode`` in the
-        /// :ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
-        /// is set to ``FULL_DUPLEX_STREAMED`` or ``GRPC``.
+        ///
+        /// Must be used when the corresponding `BodySendMode` in the
+        /// : ref:`processing_mode <envoy_v3_api_field_extensions.filters.http.ext_proc.v3.ExternalProcessor.processing_mode>`
+        ///   is set to `FULL_DUPLEX_STREAMED` or `GRPC`.
         #[prost(message, tag = "3")]
         StreamedResponse(super::StreamedBodyResponse),
     }
@@ -543,20 +566,20 @@ pub mod external_processor_client {
     /// The overall external processing protocol works like this:
     ///
     /// 1. The data plane sends to the service information about the HTTP request.
-    /// 2. The service sends back a ``ProcessingResponse`` message that directs the data plane to either
-    ///    stop processing, continue without it, or send it the next chunk of the message body.
-    /// 3. If so requested, the data plane sends the server the message body in chunks, or the entire
-    ///    body at once. In either case, the server may send back a ``ProcessingResponse`` for each
-    ///    message it receives, or wait for a certain amount of body chunks to be received before
-    ///    streaming back the ``ProcessingResponse`` messages.
-    /// 4. If so requested, the data plane sends the server the HTTP trailers, and the server sends back
-    ///    a ``ProcessingResponse``.
-    /// 5. At this point, request processing is done, and we pick up again at step 1 when the data plane
-    ///    receives a response from the upstream server.
-    /// 6. At any point above, if the server closes the gRPC stream cleanly, then the data plane
-    ///    proceeds without consulting the server.
-    /// 7. At any point above, if the server closes the gRPC stream with an error, then the data plane
-    ///    returns a ``500`` error to the client, unless the filter was configured to ignore errors.
+    /// 1. The service sends back a `ProcessingResponse` message that directs the data plane to either
+    ///   stop processing, continue without it, or send it the next chunk of the message body.
+    /// 1. If so requested, the data plane sends the server the message body in chunks, or the entire
+    ///   body at once. In either case, the server may send back a `ProcessingResponse` for each
+    ///   message it receives, or wait for a certain amount of body chunks to be received before
+    ///   streaming back the `ProcessingResponse` messages.
+    /// 1. If so requested, the data plane sends the server the HTTP trailers, and the server sends back
+    ///   a `ProcessingResponse`.
+    /// 1. At this point, request processing is done, and we pick up again at step 1 when the data plane
+    ///   receives a response from the upstream server.
+    /// 1. At any point above, if the server closes the gRPC stream cleanly, then the data plane
+    ///   proceeds without consulting the server.
+    /// 1. At any point above, if the server closes the gRPC stream with an error, then the data plane
+    ///   returns a `500` error to the client, unless the filter was configured to ignore errors.
     ///
     /// In other words, the process is a request/response conversation, but using a gRPC stream to make
     /// it easier for the server to maintain state.
@@ -630,7 +653,7 @@ pub mod external_processor_client {
         }
         /// This begins the bidirectional stream that the data plane will use to
         /// give the server control over what the filter does. The actual
-        /// protocol is described by the ``ProcessingRequest`` and ``ProcessingResponse``
+        /// protocol is described by the `ProcessingRequest` and `ProcessingResponse`
         /// messages below.
         pub async fn process(
             &mut self,
@@ -642,7 +665,7 @@ pub mod external_processor_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.service.ext_proc.v3.ExternalProcessor/Process",
             );
@@ -675,7 +698,7 @@ pub mod external_processor_server {
             + 'static;
         /// This begins the bidirectional stream that the data plane will use to
         /// give the server control over what the filter does. The actual
-        /// protocol is described by the ``ProcessingRequest`` and ``ProcessingResponse``
+        /// protocol is described by the `ProcessingRequest` and `ProcessingResponse`
         /// messages below.
         async fn process(
             &self,
@@ -686,20 +709,20 @@ pub mod external_processor_server {
     /// The overall external processing protocol works like this:
     ///
     /// 1. The data plane sends to the service information about the HTTP request.
-    /// 2. The service sends back a ``ProcessingResponse`` message that directs the data plane to either
-    ///    stop processing, continue without it, or send it the next chunk of the message body.
-    /// 3. If so requested, the data plane sends the server the message body in chunks, or the entire
-    ///    body at once. In either case, the server may send back a ``ProcessingResponse`` for each
-    ///    message it receives, or wait for a certain amount of body chunks to be received before
-    ///    streaming back the ``ProcessingResponse`` messages.
-    /// 4. If so requested, the data plane sends the server the HTTP trailers, and the server sends back
-    ///    a ``ProcessingResponse``.
-    /// 5. At this point, request processing is done, and we pick up again at step 1 when the data plane
-    ///    receives a response from the upstream server.
-    /// 6. At any point above, if the server closes the gRPC stream cleanly, then the data plane
-    ///    proceeds without consulting the server.
-    /// 7. At any point above, if the server closes the gRPC stream with an error, then the data plane
-    ///    returns a ``500`` error to the client, unless the filter was configured to ignore errors.
+    /// 1. The service sends back a `ProcessingResponse` message that directs the data plane to either
+    ///   stop processing, continue without it, or send it the next chunk of the message body.
+    /// 1. If so requested, the data plane sends the server the message body in chunks, or the entire
+    ///   body at once. In either case, the server may send back a `ProcessingResponse` for each
+    ///   message it receives, or wait for a certain amount of body chunks to be received before
+    ///   streaming back the `ProcessingResponse` messages.
+    /// 1. If so requested, the data plane sends the server the HTTP trailers, and the server sends back
+    ///   a `ProcessingResponse`.
+    /// 1. At this point, request processing is done, and we pick up again at step 1 when the data plane
+    ///   receives a response from the upstream server.
+    /// 1. At any point above, if the server closes the gRPC stream cleanly, then the data plane
+    ///   proceeds without consulting the server.
+    /// 1. At any point above, if the server closes the gRPC stream with an error, then the data plane
+    ///   returns a `500` error to the client, unless the filter was configured to ignore errors.
     ///
     /// In other words, the process is a request/response conversation, but using a gRPC stream to make
     /// it easier for the server to maintain state.
@@ -805,7 +828,7 @@ pub mod external_processor_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = ProcessSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,

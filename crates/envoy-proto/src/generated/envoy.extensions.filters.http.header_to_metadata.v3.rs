@@ -8,12 +8,12 @@ pub struct Config {
     #[prost(message, repeated, tag = "2")]
     pub response_rules: ::prost::alloc::vec::Vec<config::Rule>,
     /// Optional prefix to use when emitting filter statistics. When configured,
-    /// statistics are emitted with the prefix ``http_filter_name.<stat_prefix>``.
+    /// statistics are emitted with the prefix `http_filter_name.<stat_prefix>`.
     ///
     /// This emits statistics such as:
     ///
-    /// - ``http_filter_name.my_header_converter.rules_processed``
-    /// - ``http_filter_name.my_header_converter.metadata_added``
+    /// * `http_filter_name.my_header_converter.rules_processed`
+    /// * `http_filter_name.my_header_converter.metadata_added`
     ///
     /// If not configured, no statistics are emitted.
     #[prost(string, tag = "3")]
@@ -21,8 +21,8 @@ pub struct Config {
 }
 /// Nested message and enum types in `Config`.
 pub mod config {
-    /// \[#next-free-field: 7\]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    /// \[\#next-free-field: 7\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct KeyValuePair {
         /// The namespace — if this is empty, the filter's namespace will be used.
         #[prost(string, tag = "1")]
@@ -32,9 +32,11 @@ pub mod config {
         pub key: ::prost::alloc::string::String,
         /// The value to pair with the given key.
         ///
+        ///
         /// When used for a
-        /// :ref:`on_header_present <envoy_v3_api_field_extensions.filters.http.header_to_metadata.v3.Config.Rule.on_header_present>`
-        /// case, if value is non-empty it'll be used instead of the header value. If both are empty, no metadata is added.
+        /// : ref:`on_header_present <envoy_v3_api_field_extensions.filters.http.header_to_metadata.v3.Config.Rule.on_header_present>`
+        ///   case, if value is non-empty it'll be used instead of the header value. If both are empty, no metadata is added.
+        ///
         ///
         /// When used for a :ref:`on_header_missing <envoy_v3_api_field_extensions.filters.http.header_to_metadata.v3.Config.Rule.on_header_missing>`
         /// case, a non-empty value must be provided otherwise no metadata is added.
@@ -47,8 +49,7 @@ pub mod config {
         ///
         /// .. note::
         ///
-        ///    If the ``value`` field is non-empty this field should be empty.
-        ///
+        /// If the `value` field is non-empty this field should be empty.
         #[prost(message, optional, tag = "6")]
         pub regex_value_rewrite: ::core::option::Option<
             super::super::super::super::super::super::r#type::matcher::v3::RegexMatchAndSubstitute,
@@ -62,8 +63,8 @@ pub mod config {
         pub encode: i32,
     }
     /// A Rule defines what metadata to apply when a header is present or missing.
-    /// \[#next-free-field: 6\]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    /// \[\#next-free-field: 6\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Rule {
         /// Specifies that a match will be performed on the value of a header or a cookie.
         ///
@@ -73,15 +74,15 @@ pub mod config {
         /// The cookie to be extracted.
         #[prost(string, tag = "5")]
         pub cookie: ::prost::alloc::string::String,
-        /// If the header or cookie is present, apply this metadata ``KeyValuePair``.
+        /// If the header or cookie is present, apply this metadata `KeyValuePair`.
         ///
-        /// If the value in the ``KeyValuePair`` is non-empty, it'll be used instead
+        /// If the value in the `KeyValuePair` is non-empty, it'll be used instead
         /// of the header or cookie value.
         #[prost(message, optional, tag = "2")]
         pub on_header_present: ::core::option::Option<KeyValuePair>,
-        /// If the header or cookie is not present, apply this metadata ``KeyValuePair``.
+        /// If the header or cookie is not present, apply this metadata `KeyValuePair`.
         ///
-        /// The value in the ``KeyValuePair`` must be set, since it'll be used in lieu
+        /// The value in the `KeyValuePair` must be set, since it'll be used in lieu
         /// of the missing header or cookie value.
         #[prost(message, optional, tag = "3")]
         pub on_header_missing: ::core::option::Option<KeyValuePair>,
@@ -98,8 +99,7 @@ pub mod config {
     pub enum ValueType {
         String = 0,
         Number = 1,
-        /// The value is a serialized `protobuf.Value
-        /// <<https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto#L62>`_.>
+        /// The value is a serialized `protobuf.Value  <<https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto#L62>`\_.>
         ProtobufValue = 2,
     }
     impl ValueType {
@@ -130,13 +130,12 @@ pub mod config {
     pub enum ValueEncode {
         /// No encoding is applied.
         None = 0,
-        /// The value is encoded in `Base64 <<https://tools.ietf.org/html/rfc4648#section-4>`_.>
+        /// The value is encoded in `Base64 <<https://tools.ietf.org/html/rfc4648#section-4>`\_.>
         ///
         /// .. note::
         ///
-        ///    This is mostly used for ``STRING`` and ``PROTOBUF_VALUE`` to escape the
-        ///    non-ASCII characters in the header.
-        ///
+        /// This is mostly used for `STRING` and `PROTOBUF_VALUE` to escape the
+        /// non-ASCII characters in the header.
         Base64 = 1,
     }
     impl ValueEncode {

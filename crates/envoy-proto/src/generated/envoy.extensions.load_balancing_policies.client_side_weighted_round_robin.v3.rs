@@ -12,19 +12,18 @@
 /// regardless of result. Only failed queries count toward eps. A config
 /// parameter error_utilization_penalty controls the penalty to adjust endpoint
 /// weights using eps and qps. The weight of a given endpoint is computed as:
-/// ``qps / (utilization + eps/qps * error_utilization_penalty)``.
+/// `qps / (utilization + eps/qps * error_utilization_penalty)`.
 ///
 /// Note that Envoy will forward the ORCA response headers/trailers from the upstream
 /// cluster to the downstream client. This means that if the downstream client is also
-/// configured to use ``client_side_weighted_round_robin`` it will load balance against
+/// configured to use `client_side_weighted_round_robin` it will load balance against
 /// Envoy based on upstream weights. This can happen when Envoy is used as a reverse proxy.
 /// To avoid this issue you can configure the :ref:`header_mutation filter  <envoy_v3_api_msg_extensions.filters.http.header_mutation.v3.HeaderMutation>` to remove
 /// the ORCA payload from the response headers/trailers.
 ///
-/// See the :ref:`load balancing architecture
-/// overview<arch_overview_load_balancing_types>` for more information.
+/// See the :ref:`load balancing architecture  overview<arch_overview_load_balancing_types>` for more information.
 ///
-/// \[#next-free-field: 9\]
+/// \[\#next-free-field: 9\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClientSideWeightedRoundRobin {
     /// Whether to enable out-of-band utilization reporting collection from
@@ -62,7 +61,7 @@ pub struct ClientSideWeightedRoundRobin {
     pub error_utilization_penalty: ::core::option::Option<f32>,
     /// By default, endpoint weight is computed based on the :ref:`application_utilization <envoy_v3_api_field_.xds.data.orca.v3.OrcaLoadReport.application_utilization>` field reported by the endpoint.
     /// If that field is not set, then utilization will instead be computed by taking the max of the values of the metrics specified here.
-    /// For map fields in the ORCA proto, the string will be of the form ``<map_field_name>.<map_key>``. For example, the string ``named_metrics.foo`` will mean to look for the key ``foo`` in the ORCA :ref:`named_metrics <envoy_v3_api_field_.xds.data.orca.v3.OrcaLoadReport.named_metrics>` field.
+    /// For map fields in the ORCA proto, the string will be of the form `<map_field_name>.<map_key>`. For example, the string `named_metrics.foo` will mean to look for the key `foo` in the ORCA :ref:`named_metrics <envoy_v3_api_field_.xds.data.orca.v3.OrcaLoadReport.named_metrics>` field.
     /// If none of the specified metrics are present in the load report, then :ref:`cpu_utilization <envoy_v3_api_field_.xds.data.orca.v3.OrcaLoadReport.cpu_utilization>` is used instead.
     #[prost(string, repeated, tag = "7")]
     pub metric_names_for_computing_utilization:

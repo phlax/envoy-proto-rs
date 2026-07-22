@@ -8,68 +8,71 @@
 /// Main functionalities:
 ///
 /// 1. Transcoding: Converts JSON-RPC request payload to HTTP REST request, and maps JSON response
-///     back to JSON-RPC.
-/// 2. Session negotiation: Handles MCP connection prerequisites.
+///    back to JSON-RPC.
+/// 1. Session negotiation: Handles MCP connection prerequisites.
 ///
-/// The core logic transforms "tools/call" request into HTTP request following the ``HttpRule``
+/// The core logic transforms "tools/call" request into HTTP request following the `HttpRule`
 /// specification.
 ///
 /// Example 1: GET request with path and query parameters
 ///
 /// .. code-block:: text
 ///
-///    tools: {
-///      name: "getResource"
-///      http_rule: {
-///        get: "/v1/projects/{project_id}/resources/{resource_id}"
-///        // body is omitted for GET
-///      }
-///    }
-///    If tools/call params are:
-///    { "name": "getResource", "arguments": {"project_id": "foo", "resource_id": "res-789", "view": "FULL"} }
-///    Translation:
-///    - Method: GET
-///    - URL: /v1/projects/foo/resources/res-789?view=FULL
-///      (Arguments not matching path templates become query parameters.)
+/// tools: {
+/// name: "getResource"
+/// http_rule: {
+/// get: "/v1/projects/{project_id}/resources/{resource_id}"
+/// // body is omitted for GET
+/// }
+/// }
+/// If tools/call params are:
+/// { "name": "getResource", "arguments": {"project_id": "foo", "resource_id": "res-789", "view": "FULL"} }
+/// Translation:
+///
+/// * Method: GET
+/// * URL: /v1/projects/foo/resources/res-789?view=FULL
+///   (Arguments not matching path templates become query parameters.)
 ///
 /// Example 2: POST request with wildcard body
 ///
 /// .. code-block:: text
 ///
-///    tools: {
-///      name: "createResource"
-///      http_rule: {
-///        post: "/v1/projects/{project_id}/resources"
-///        body: "*"
-///      }
-///    }
-///    If tools/call params are:
-///    { "name": "createResource", "arguments": {"project_id": "foo", "resource_id": "res-456", "payload": { "data": "some value" }} }
-///    Translation:
-///    - Method: POST
-///    - URL: /v1/projects/foo/resources
-///    - Body: {"resource_id": "res-456", "payload": { "data": "some value" }}
-///      (Arguments not used in the path form the body, as per body: "*".)
+/// tools: {
+/// name: "createResource"
+/// http_rule: {
+/// post: "/v1/projects/{project_id}/resources"
+/// body: "\*"
+/// }
+/// }
+/// If tools/call params are:
+/// { "name": "createResource", "arguments": {"project_id": "foo", "resource_id": "res-456", "payload": { "data": "some value" }} }
+/// Translation:
+///
+/// * Method: POST
+/// * URL: /v1/projects/foo/resources
+/// * Body: {"resource_id": "res-456", "payload": { "data": "some value" }}
+///   (Arguments not used in the path form the body, as per body: "\*".)
 ///
 /// Example 3: PUT request with a specific field as body
 ///
 /// .. code-block:: text
 ///
-///    tools: {
-///      name: "updateResource"
-///      http_rule: {
-///        put: "/v1/projects/{project_id}"
-///        body: "payload"
-///      }
-///    }
-///    If tools/call params are:
-///    { "name": "updateResource", "arguments": {"project_id": "foo", "resource_id": "res-456", "payload": { "data": "updated value" }} }
-///    Translation:
-///    - Method: PUT
-///    - URL: /v1/projects/foo?resource_id=res-456
-///    - Body: {"data": "updated value"}
-///      (Only the "payload" field from arguments is used as the body. Other arguments not in the
-///      path, like 'resource_id', become query parameters.)
+/// tools: {
+/// name: "updateResource"
+/// http_rule: {
+/// put: "/v1/projects/{project_id}"
+/// body: "payload"
+/// }
+/// }
+/// If tools/call params are:
+/// { "name": "updateResource", "arguments": {"project_id": "foo", "resource_id": "res-456", "payload": { "data": "updated value" }} }
+/// Translation:
+///
+/// * Method: PUT
+/// * URL: /v1/projects/foo?resource_id=res-456
+/// * Body: {"data": "updated value"}
+///   (Only the "payload" field from arguments is used as the body. Other arguments not in the
+///   path, like 'resource_id', become query parameters.)
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct McpJsonRestBridge {
     /// General server information.
@@ -80,32 +83,32 @@ pub struct McpJsonRestBridge {
     pub tool_config: ::core::option::Option<ServerToolConfig>,
 }
 /// Configuration for the server metadata.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ServerInfo {
-    /// \[#not-implemented-hide:\]
-    /// \[#comment:TODO(guoyilin42): Implement supported_protocol_versions\]
+    /// \[\#not-implemented-hide:\]
+    /// \[\#comment:TODO(guoyilin42): Implement supported_protocol_versions\]
     /// Lists the MCP protocol versions supported by this MCP endpoint.
     ///
-    /// - If provided: The extension enforces version negotiation according to the MCP specification:
-    ///    <https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle#version-negotiation>
-    /// - If not provided: The extension accepts any version sent by the client during negotiation and
-    ///    skips validation of the mcp-protocol-version header on subsequent requests.
+    /// * If provided: The extension enforces version negotiation according to the MCP specification:
+    ///   <https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle#version-negotiation>
+    /// * If not provided: The extension accepts any version sent by the client during negotiation and
+    ///   skips validation of the mcp-protocol-version header on subsequent requests.
     ///
     /// Example values: \["2025-11-25", "2025-06-18"\]
     #[prost(string, repeated, tag = "1")]
     pub supported_protocol_versions: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// \[#not-implemented-hide:\]
-    /// \[#comment:TODO(guoyilin42): Implement description\]
+    /// \[\#not-implemented-hide:\]
+    /// \[\#comment:TODO(guoyilin42): Implement description\]
     /// Optional description of the server.
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
-    /// The fallback protocol version to use if the client does not provide the ``mcp-protocol-version`` header.
+    /// The fallback protocol version to use if the client does not provide the `mcp-protocol-version` header.
     ///
-    /// - If provided: The extension uses this version as the fallback protocol version.
-    /// - If not provided: The extension uses the fallback protocol version defined in the latest MCP
-    ///    specification. For example, the current latest 2025-11-25 specification designates "2025-03-26"
-    ///    as the fallback protocol version.
-    ///    See <https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#protocol-version-header>
+    /// * If provided: The extension uses this version as the fallback protocol version.
+    /// * If not provided: The extension uses the fallback protocol version defined in the latest MCP
+    ///   specification. For example, the current latest 2025-11-25 specification designates "2025-03-26"
+    ///   as the fallback protocol version.
+    ///   See <https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#protocol-version-header>
     #[prost(message, optional, tag = "3")]
     pub fallback_protocol_version: ::core::option::Option<::prost::alloc::string::String>,
 }
@@ -115,8 +118,8 @@ pub struct ServerToolConfig {
     /// List of MCP tools configurations.
     #[prost(message, repeated, tag = "1")]
     pub tools: ::prost::alloc::vec::Vec<ToolConfig>,
-    /// \[#not-implemented-hide:\]
-    /// \[#comment:TODO(guoyilin42): Implement list_changed\]
+    /// \[\#not-implemented-hide:\]
+    /// \[\#comment:TODO(guoyilin42): Implement list_changed\]
     /// Whether this server supports notifications for changes to the tool list.
     #[prost(bool, tag = "2")]
     pub list_changed: bool,
@@ -124,17 +127,17 @@ pub struct ServerToolConfig {
     ///
     /// Note: tools/list should be mapped to a GET request with an empty body.
     ///
-    /// - If provided: The extension transcodes the request and forwards it down the filter chain.
-    ///    The response (whether from an upstream backend, a configured ``direct_response``, or another
-    ///    extension) MUST be a JSON body strictly matching the MCP ``ListToolsResult`` schema.
-    ///    Ref: <https://modelcontextprotocol.io/specification/2025-11-25/schema#listtoolsresult>
-    /// - If not provided: The ``tools/list`` request is passed through. This allows subsequent
-    ///    extension or the backend itself to handle the tools/list request if they support it.
+    /// * If provided: The extension transcodes the request and forwards it down the filter chain.
+    ///   The response (whether from an upstream backend, a configured `direct_response`, or another
+    ///   extension) MUST be a JSON body strictly matching the MCP `ListToolsResult` schema.
+    ///   Ref: <https://modelcontextprotocol.io/specification/2025-11-25/schema#listtoolsresult>
+    /// * If not provided: The `tools/list` request is passed through. This allows subsequent
+    ///   extension or the backend itself to handle the tools/list request if they support it.
     #[prost(message, optional, tag = "3")]
     pub tool_list_http_rule: ::core::option::Option<HttpRule>,
 }
 /// Configuration for a specific MCP tool.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ToolConfig {
     /// Name of the tool.
     #[prost(string, tag = "1")]
@@ -148,19 +151,19 @@ pub struct ToolConfig {
 ///
 /// Mapping Rules:
 ///
-/// 1. Path: Fields defined in the path template (e.g., ``/v1/resources/{id}``) are extracted from
-///     arguments and placed in the URL.
-/// 2. Body: Determined by the ``body`` field.
-///     - If "*": All arguments not used in the path become the HTTP JSON body.
-///     - If specify a field: Only that specific argument becomes the HTTP JSON body.
-///     - If empty: No body is sent.
-/// 3. Query: Any leaf arguments not mapped to Path or Body are added as URL query parameters.
-/// \[#next-free-field: 7\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// 1. Path: Fields defined in the path template (e.g., `/v1/resources/{id}`) are extracted from
+///    arguments and placed in the URL.
+/// 1. Body: Determined by the `body` field.
+///    * If "\*": All arguments not used in the path become the HTTP JSON body.
+///    * If specify a field: Only that specific argument becomes the HTTP JSON body.
+///    * If empty: No body is sent.
+/// 1. Query: Any leaf arguments not mapped to Path or Body are added as URL query parameters.
+///    \[\#next-free-field: 7\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HttpRule {
     /// Determines the HTTP method and the URL path template.
     ///
-    /// Path templating uses curly braces ``{}`` to mark a section of the URL path as replaceable.
+    /// Path templating uses curly braces `{}` to mark a section of the URL path as replaceable.
     /// Each template variable MUST correspond to a field in the JSON-RPC "arguments".
     /// Use dot-notation to access fields within nested objects (e.g., "user.id" maps the value of the
     /// "id" field inside "user").
@@ -186,10 +189,10 @@ pub struct HttpRule {
     pub patch: ::prost::alloc::string::String,
     /// The name of the request field whose value is mapped to the HTTP request body.
     ///
-    /// - If "*": All fields not bound by the path template are mapped to the request body.
-    /// - If specify a field: This specific field is mapped to the body. Uses dot-notation for nested
-    ///    fields (e.g., "user.data" maps the value of the "data" field inside "user").
-    /// - If omitted: There is no HTTP request body; fields not in the path become query parameters.
+    /// * If "\*": All fields not bound by the path template are mapped to the request body.
+    /// * If specify a field: This specific field is mapped to the body. Uses dot-notation for nested
+    ///   fields (e.g., "user.data" maps the value of the "data" field inside "user").
+    /// * If omitted: There is no HTTP request body; fields not in the path become query parameters.
     #[prost(string, tag = "6")]
     pub body: ::prost::alloc::string::String,
 }

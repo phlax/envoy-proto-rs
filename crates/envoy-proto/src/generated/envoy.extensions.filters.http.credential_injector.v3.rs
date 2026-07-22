@@ -3,8 +3,8 @@
 /// they can be requested through the OAuth2 client credential grant. The credentials obtained are then injected into the Authorization header
 /// of the proxied HTTP requests, utilizing either the Basic or Bearer scheme.
 ///
-/// If the credential is not present or there was a failure injecting the credential, the request will fail with ``401 Unauthorized`` unless
-/// ``allow_request_without_credential`` is set to ``true``.
+/// If the credential is not present or there was a failure injecting the credential, the request will fail with `401 Unauthorized` unless
+/// `allow_request_without_credential` is set to `true`.
 ///
 /// Notice: This filter is intended to be used for workload authentication, which means that the identity associated with the inserted credential
 /// is considered as the identity of the workload behind the envoy proxy(in this case, envoy is typically deployed as a sidecar alongside that
@@ -14,28 +14,29 @@
 ///
 /// .. code-block:: yaml
 ///
-///   overwrite: true
-///   credential:
-///     name: generic_credential
-///     typed_config:
-///       "@type": type.googleapis.com/envoy.extensions.http.injected_credentials.generic.v3.Generic
-///       credential:
-///         name: credential
-///         sds_config:
-///           path_config_source:
-///             path: credential.yaml
-///       header: Authorization
+/// overwrite: true
+/// credential:
+/// name: generic_credential
+/// typed_config:
+/// "@type": type.googleapis.com/envoy.extensions.http.injected_credentials.generic.v3.Generic
+/// credential:
+/// name: credential
+/// sds_config:
+/// path_config_source:
+/// path: credential.yaml
+/// header: Authorization
 ///
 /// credential.yaml for Basic Auth:
 ///
 /// .. code-block:: yaml
 ///
-///   resources:
-///   - "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.Secret"
-///     name: credential
-///     generic_secret:
-///       secret:
-///         inline_string: "Basic base64EncodedUsernamePassword"
+/// resources:
+///
+/// * "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.Secret"
+///   name: credential
+///   generic_secret:
+///   secret:
+///   inline_string: "Basic base64EncodedUsernamePassword"
 ///
 /// It can also be configured to inject a Bearer token into the proxied requests.
 ///
@@ -43,14 +44,14 @@
 ///
 /// .. code-block:: yaml
 ///
-///   resources:
-///   - "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.Secret"
-///     name: credential
-///     generic_secret:
-///       secret:
-///         inline_string: "Bearer myToken"
+/// resources:
 ///
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// * "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.Secret"
+///   name: credential
+///   generic_secret:
+///   secret:
+///   inline_string: "Bearer myToken"
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CredentialInjector {
     /// Whether to overwrite the value or not if the injected headers already exist.
     /// Value defaults to false.
@@ -59,13 +60,13 @@ pub struct CredentialInjector {
     /// Whether to send the request to upstream if the credential is not present or if the credential injection
     /// to the request fails.
     ///
-    /// By default, a request will fail with ``401 Unauthorized`` if the
+    /// By default, a request will fail with `401 Unauthorized` if the
     /// credential is not present or the injection of the credential to the request fails.
     /// If set to true, the request will be sent to upstream without the credential.
     #[prost(bool, tag = "2")]
     pub allow_request_without_credential: bool,
     /// The credential to inject into the proxied requests
-    /// \[#extension-category: envoy.http.injected_credentials\]
+    /// \[\#extension-category: envoy.http.injected_credentials\]
     #[prost(message, optional, tag = "3")]
     pub credential: ::core::option::Option<
         super::super::super::super::super::config::core::v3::TypedExtensionConfig,

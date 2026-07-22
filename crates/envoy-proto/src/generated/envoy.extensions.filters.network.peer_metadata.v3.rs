@@ -4,7 +4,7 @@
 /// peer metadata from TCP Proxy filter state (baggage header from HBONE CONNECT
 /// response) and injects it as a data preamble to be consumed by the upstream
 /// filter.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Config {
     /// Filter state key under which the baggage value encoding the proxy workload
     /// is stored. The upstream filter that populates the baggage header in the
@@ -16,5 +16,5 @@ pub struct Config {
 /// that communicate over HBONE. It consumes and removes the metadata preamble
 /// injected by the downstream filter and populates filter state for use by
 /// Istio telemetry filters.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UpstreamConfig {}

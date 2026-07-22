@@ -3,13 +3,13 @@
 /// fetch security token from an OAuth 2.0 authorization server.
 /// See <https://tools.ietf.org/html/draft-ietf-oauth-token-exchange-16> and
 /// <https://github.com/grpc/grpc/pull/19587.>
-/// \[#not-implemented-hide:\]
-/// \[#next-free-field: 10\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// \[\#not-implemented-hide:\]
+/// \[\#next-free-field: 10\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct StsServiceCredentials {
     /// URI of the token exchange service that handles token exchange requests.
-    /// [#comment:TODO(asraa): Add URI validation when implemented. Tracked by
-    /// <https://github.com/bufbuild/protoc-gen-validate/issues/303]>
+    /// \[\#comment:TODO(asraa): Add URI validation when implemented. Tracked by
+    /// <https://github.com/bufbuild/protoc-gen-validate/issues/303\]>
     #[prost(string, tag = "1")]
     pub token_exchange_service_uri: ::prost::alloc::string::String,
     /// Location of the target service or resource where the client

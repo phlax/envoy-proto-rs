@@ -18,7 +18,7 @@ pub struct TraServiceConfig {
     #[prost(message, optional, tag = "3")]
     pub timeout: ::core::option::Option<::prost_types::Duration>,
 }
-/// \[#next-free-field: 7\]
+/// \[\#next-free-field: 7\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraServiceRequest {
     #[prost(string, tag = "1")]
@@ -42,7 +42,7 @@ pub mod tra_service_request {
         SubscribeRequest(super::SubscribeRequest),
     }
 }
-/// \[#next-free-field: 9\]
+/// \[\#next-free-field: 9\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraServiceResponse {
     #[prost(string, tag = "1")]
@@ -79,7 +79,7 @@ pub struct CreateRequest {
     pub context:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateRequest {
@@ -90,7 +90,7 @@ pub struct UpdateRequest {
     pub context:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UpdateResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RetrieveRequest {
@@ -114,9 +114,9 @@ pub struct DeleteRequest {
     pub context:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DeleteResponse {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SubscribeRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SubscribeResponse {
@@ -211,7 +211,7 @@ pub mod tra_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.extensions.filters.network.sip_proxy.tra.v3alpha.TraService/Create",
             );
@@ -230,7 +230,7 @@ pub mod tra_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.extensions.filters.network.sip_proxy.tra.v3alpha.TraService/Update",
             );
@@ -249,7 +249,7 @@ pub mod tra_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.extensions.filters.network.sip_proxy.tra.v3alpha.TraService/Retrieve",
             );
@@ -268,7 +268,7 @@ pub mod tra_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.extensions.filters.network.sip_proxy.tra.v3alpha.TraService/Delete",
             );
@@ -289,7 +289,7 @@ pub mod tra_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.extensions.filters.network.sip_proxy.tra.v3alpha.TraService/Subscribe",
             );
@@ -437,7 +437,7 @@ pub mod tra_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = CreateSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,
@@ -475,7 +475,7 @@ pub mod tra_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = UpdateSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,
@@ -513,7 +513,7 @@ pub mod tra_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = RetrieveSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,
@@ -551,7 +551,7 @@ pub mod tra_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = DeleteSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,
@@ -594,7 +594,7 @@ pub mod tra_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = SubscribeSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,
