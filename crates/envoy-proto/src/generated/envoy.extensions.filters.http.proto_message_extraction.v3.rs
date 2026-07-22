@@ -8,8 +8,8 @@ pub struct ProtoMessageExtractionConfig {
     pub mode: i32,
     /// Specify the message extraction info.
     /// The key is the fully qualified gRPC method name.
-    /// ``${package}.${Service}.${Method}``, like
-    /// ``endpoints.examples.bookstore.BookStore.GetShelf``
+    /// `${package}.${Service}.${Method}`, like
+    /// `endpoints.examples.bookstore.BookStore.GetShelf`
     ///
     /// The value is the message extraction information for individual gRPC
     /// methods.
@@ -55,10 +55,10 @@ pub mod proto_message_extraction_config {
         }
     }
     /// The proto descriptor set binary for the gRPC services.
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum DescriptorSet {
-        /// It could be passed by a local file through ``Datasource.filename`` or
-        /// embedded in the ``Datasource.inline_bytes``.
+        /// It could be passed by a local file through `Datasource.filename` or
+        /// embedded in the `Datasource.inline_bytes`.
         #[prost(message, tag = "1")]
         DataSource(super::super::super::super::super::super::config::core::v3::DataSource),
         /// Unimplemented, the key of proto descriptor TypedMetadata.

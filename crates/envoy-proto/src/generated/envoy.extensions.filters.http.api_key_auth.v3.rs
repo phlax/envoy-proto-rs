@@ -2,21 +2,22 @@
 /// API Key HTTP authentication.
 ///
 /// For example, the following configuration configures the filter to authenticate the clients using
-/// the API key from the header ``X-API-KEY``. And only the clients with the key ``real-key`` are
+/// the API key from the header `X-API-KEY`. And only the clients with the key `real-key` are
 /// considered as authenticated. The client information is configured to be forwarded
-/// in the header ``x-client-id``.
+/// in the header `x-client-id`.
 ///
 /// .. code-block:: yaml
 ///
-///     credentials:
-///     - key: real-key
-///       client: user
-///     key_sources:
-///      - header: "X-API-KEY"
-///     forwarding:
-///       header: "x-client-id"
-///       hide_credentials: false
-///
+/// ```text
+/// credentials:
+/// - key: real-key
+///   client: user
+/// key_sources:
+/// - header: "X-API-KEY"
+/// forwarding:
+///   header: "x-client-id"
+///   hide_credentials: false
+/// ```
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ApiKeyAuth {
     /// The credentials that are used to authenticate the clients.
@@ -43,18 +44,17 @@ pub struct ApiKeyAuthPerRoute {
     #[prost(message, repeated, tag = "2")]
     pub key_sources: ::prost::alloc::vec::Vec<KeySource>,
     /// A list of clients that are allowed to access the route or vhost. The clients listed here
-    /// should be subset of the clients listed in the ``credentials`` to provide authorization control
+    /// should be subset of the clients listed in the `credentials` to provide authorization control
     /// after the authentication is successful. If the list is empty, then all authenticated clients
     /// are allowed. This provides very limited but simple authorization. If more complex authorization
     /// is required, then use the :ref:`HTTP RBAC filter <config_http_filters_rbac>` instead.
     ///
     /// .. note::
-    ///    Setting this field and ``credentials`` at the same configuration entry is not an error but
-    ///    also makes no much sense because they provide similar functionality. Please only use
-    ///    one of them at same configuration entry except for the case that you want to share the same
-    ///    credentials list across multiple routes but still use different allowed clients for each
-    ///    route.
-    ///
+    /// Setting this field and `credentials` at the same configuration entry is not an error but
+    /// also makes no much sense because they provide similar functionality. Please only use
+    /// one of them at same configuration entry except for the case that you want to share the same
+    /// credentials list across multiple routes but still use different allowed clients for each
+    /// route.
     #[prost(string, repeated, tag = "3")]
     pub allowed_clients: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Optional configuration to control what information should be propagated to upstream services.
@@ -64,7 +64,7 @@ pub struct ApiKeyAuthPerRoute {
     pub forwarding: ::core::option::Option<Forwarding>,
 }
 /// Single credential entry that contains the API key and the related client id.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Credential {
     /// The value of the unique API key.
     #[prost(string, tag = "1")]
@@ -73,28 +73,28 @@ pub struct Credential {
     #[prost(string, tag = "2")]
     pub client: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct KeySource {
     /// The header name to fetch the key. If multiple header values are present, the first one will be
     /// used. If the header value starts with 'Bearer ', this prefix will be stripped to get the
     /// key value.
     ///
-    /// If set, takes precedence over ``query`` and ``cookie``.
+    /// If set, takes precedence over `query` and `cookie`.
     #[prost(string, tag = "1")]
     pub header: ::prost::alloc::string::String,
     /// The query parameter name to fetch the key. If multiple query values are present, the first one
     /// will be used.
     ///
-    /// The field will be used if ``header`` is not set. If set, takes precedence over ``cookie``.
+    /// The field will be used if `header` is not set. If set, takes precedence over `cookie`.
     #[prost(string, tag = "2")]
     pub query: ::prost::alloc::string::String,
     /// The cookie name to fetch the key.
     ///
-    /// The field will be used if the ``header`` and ``query`` are not set.
+    /// The field will be used if the `header` and `query` are not set.
     #[prost(string, tag = "3")]
     pub cookie: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Forwarding {
     /// The header name in which to store the client information. If this field is non-empty,
     /// the client string associated with the matched credential will be injected into
@@ -103,7 +103,7 @@ pub struct Forwarding {
     pub header: ::prost::alloc::string::String,
     /// If true, remove the API key from the request before forwarding upstream.
     ///
-    /// This applies to all configured key sources: ``header``, ``query``, and ``cookie``.
+    /// This applies to all configured key sources: `header`, `query`, and `cookie`.
     #[prost(bool, tag = "2")]
     pub hide_credentials: bool,
 }

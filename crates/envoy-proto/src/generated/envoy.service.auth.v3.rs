@@ -3,9 +3,9 @@
 /// For example, the size of an HTTP request, or the status code of an HTTP response.
 ///
 /// Each attribute has a type and a name, which is logically defined as a proto message field
-/// of the ``AttributeContext``. The ``AttributeContext`` is a collection of individual attributes
+/// of the `AttributeContext`. The `AttributeContext` is a collection of individual attributes
 /// supported by Envoy authorization system.
-/// [#comment: The following items are left out of this proto
+/// \[\#comment: The following items are left out of this proto
 /// Request.Auth field for JWTs
 /// Request.Api for api management
 /// Origin peer that originated the request
@@ -13,10 +13,11 @@
 /// request_context return values to inject back into the filter chain
 /// peer.claims -- from X.509 extensions
 /// Configuration
-/// - field mask to send
-/// - which return values from request_context are copied back
-/// - which return values are copied into request_headers]
-/// \[#next-free-field: 14\]
+///
+/// * field mask to send
+/// * which return values from request_context are copied back
+/// * which return values are copied into request_headers\]
+///   \[\#next-free-field: 14\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AttributeContext {
     /// The source of a network activity, such as starting a TCP connection.
@@ -60,9 +61,9 @@ pub struct AttributeContext {
 pub mod attribute_context {
     /// This message defines attributes for a node that handles a network request.
     /// The node can be either a service or an application that sends, forwards,
-    /// or receives the request. Service peers should fill in the ``service``,
-    /// ``principal``, and ``labels`` as appropriate.
-    /// \[#next-free-field: 6\]
+    /// or receives the request. Service peers should fill in the `service`,
+    /// `principal`, and `labels` as appropriate.
+    /// \[\#next-free-field: 6\]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Peer {
         /// The address of the peer, this is typically the IP address.
@@ -70,8 +71,7 @@ pub mod attribute_context {
         #[prost(message, optional, tag = "1")]
         pub address: ::core::option::Option<super::super::super::super::config::core::v3::Address>,
         /// The canonical service name of the peer.
-        /// It should be set to :ref:`the HTTP x-envoy-downstream-service-cluster
-        /// <config_http_conn_man_headers_downstream-service-cluster>`
+        /// It should be set to :ref:`the HTTP x-envoy-downstream-service-cluster  <config_http_conn_man_headers_downstream-service-cluster>`
         /// If a more trusted source of the service name is available through mTLS/secure naming, it
         /// should be used.
         #[prost(string, tag = "2")]
@@ -87,13 +87,13 @@ pub mod attribute_context {
         /// The authenticated identity of this peer.
         /// For example, the identity associated with the workload such as a service account.
         /// If an X.509 certificate is used to assert the identity this field should be sourced from
-        /// ``URI Subject Alternative Names``, ``DNS Subject Alternate Names`` or ``Subject`` in that order.
+        /// `URI Subject Alternative Names`, `DNS Subject Alternate Names` or `Subject` in that order.
         /// The primary identity should be the principal. The principal format is issuer specific.
         ///
         /// Examples:
         ///
-        /// - SPIFFE format is ``spiffe://trust-domain/path``.
-        /// - Google account format is ``<https://accounts.google.com/{userid}``.>
+        /// * SPIFFE format is `spiffe://trust-domain/path`.
+        /// * Google account format is `<https://accounts.google.com/{userid}`.>
         #[prost(string, tag = "4")]
         pub principal: ::prost::alloc::string::String,
         /// The X.509 certificate used to authenticate the identify of this peer.
@@ -113,7 +113,7 @@ pub mod attribute_context {
     }
     /// This message defines attributes for an HTTP request.
     /// HTTP/1.x, HTTP/2, gRPC are all considered as HTTP requests.
-    /// \[#next-free-field: 14\]
+    /// \[\#next-free-field: 14\]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct HttpRequest {
         /// The unique ID for a request, which can be propagated to downstream
@@ -122,37 +122,41 @@ pub mod attribute_context {
         /// For HTTP requests, it should be X-Request-ID or equivalent.
         #[prost(string, tag = "1")]
         pub id: ::prost::alloc::string::String,
-        /// The HTTP request method, such as ``GET``, ``POST``.
+        /// The HTTP request method, such as `GET`, `POST`.
         #[prost(string, tag = "2")]
         pub method: ::prost::alloc::string::String,
+        ///
         /// The HTTP request headers. If multiple headers share the same key, they
         /// must be merged according to the HTTP spec. All header keys must be
         /// lower-cased, because HTTP header keys are case-insensitive.
         /// Header value is encoded as UTF-8 string. Non-UTF-8 characters will be replaced by "!".
         /// This field will not be set if
-        /// :ref:`encode_raw_headers <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.encode_raw_headers>`
-        /// is set to true.
+        /// : ref:`encode_raw_headers <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.encode_raw_headers>`
+        ///   is set to true.
         #[prost(map = "string, string", tag = "3")]
         pub headers: ::std::collections::HashMap<
             ::prost::alloc::string::String,
             ::prost::alloc::string::String,
         >,
+        ///
         /// A list of the raw HTTP request headers. This is used instead of
-        /// :ref:`headers <envoy_v3_api_field_service.auth.v3.AttributeContext.HttpRequest.headers>` when
-        /// :ref:`encode_raw_headers <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.encode_raw_headers>`
-        /// is set to true.
+        /// : ref:`headers <envoy_v3_api_field_service.auth.v3.AttributeContext.HttpRequest.headers>` when
+        /// : ref:`encode_raw_headers <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.encode_raw_headers>`
+        ///   is set to true.
         ///
-        /// Note that this is not actually a map type. ``header_map`` contains a single repeated field
-        /// ``headers``.
         ///
-        /// Here, only the ``key`` and ``raw_value`` fields will be populated for each HeaderValue, and
+        /// Note that this is not actually a map type. `header_map` contains a single repeated field
+        /// `headers`.
+        ///
+        ///
+        /// Here, only the `key` and `raw_value` fields will be populated for each HeaderValue, and
         /// that is only when
-        /// :ref:`encode_raw_headers <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.encode_raw_headers>`
-        /// is set to true.
+        /// : ref:`encode_raw_headers <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.encode_raw_headers>`
+        ///   is set to true.
         ///
         /// Also, unlike the
-        /// :ref:`headers <envoy_v3_api_field_service.auth.v3.AttributeContext.HttpRequest.headers>`
-        /// field, headers with the same key are not combined into a single comma separated header.
+        /// : ref:`headers <envoy_v3_api_field_service.auth.v3.AttributeContext.HttpRequest.headers>`
+        ///   field, headers with the same key are not combined into a single comma separated header.
         #[prost(message, optional, tag = "13")]
         pub header_map:
             ::core::option::Option<super::super::super::super::config::core::v3::HeaderMap>,
@@ -160,14 +164,14 @@ pub mod attribute_context {
         /// the URL path and query-string. No decoding is performed.
         #[prost(string, tag = "4")]
         pub path: ::prost::alloc::string::String,
-        /// The HTTP request ``Host`` or ``:authority`` header value.
+        /// The HTTP request `Host` or `:authority` header value.
         #[prost(string, tag = "5")]
         pub host: ::prost::alloc::string::String,
-        /// The HTTP URL scheme, such as ``http`` and ``https``.
+        /// The HTTP URL scheme, such as `http` and `https`.
         #[prost(string, tag = "6")]
         pub scheme: ::prost::alloc::string::String,
         /// This field is always empty, and exists for compatibility reasons. The HTTP URL query is
-        /// included in ``path`` field.
+        /// included in `path` field.
         #[prost(string, tag = "7")]
         pub query: ::prost::alloc::string::String,
         /// This field is always empty, and exists for compatibility reasons. The URL fragment is
@@ -186,15 +190,16 @@ pub mod attribute_context {
         /// The HTTP request body.
         #[prost(string, tag = "11")]
         pub body: ::prost::alloc::string::String,
+        ///
         /// The HTTP request body in bytes. This is used instead of
-        /// :ref:`body <envoy_v3_api_field_service.auth.v3.AttributeContext.HttpRequest.body>` when
-        /// :ref:`pack_as_bytes <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.BufferSettings.pack_as_bytes>`
-        /// is set to true.
+        /// : ref:`body <envoy_v3_api_field_service.auth.v3.AttributeContext.HttpRequest.body>` when
+        /// : ref:`pack_as_bytes <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.BufferSettings.pack_as_bytes>`
+        ///   is set to true.
         #[prost(bytes = "vec", tag = "12")]
         pub raw_body: ::prost::alloc::vec::Vec<u8>,
     }
     /// This message defines attributes for the underlying TLS session.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct TlsSession {
         /// SNI used for TLS session.
         #[prost(string, tag = "1")]
@@ -211,7 +216,7 @@ pub struct CheckRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeniedHttpResponse {
     /// This field allows the authorization service to send an HTTP response status code to the
-    /// downstream client. If not set, Envoy sends ``403 Forbidden`` HTTP status code by default.
+    /// downstream client. If not set, Envoy sends `403 Forbidden` HTTP status code by default.
     #[prost(message, optional, tag = "1")]
     pub status: ::core::option::Option<super::super::super::r#type::v3::HttpStatus>,
     /// This field allows the authorization service to send HTTP response headers
@@ -225,39 +230,37 @@ pub struct DeniedHttpResponse {
     pub body: ::prost::alloc::string::String,
 }
 /// HTTP attributes for an OK response.
-/// \[#next-free-field: 9\]
+/// \[\#next-free-field: 9\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OkHttpResponse {
     /// HTTP entity headers in addition to the original request headers. This allows the authorization
     /// service to append, to add or to override headers from the original request before
     /// dispatching it to the upstream. Note that the :ref:`append field in HeaderValueOption <envoy_v3_api_field_config.core.v3.HeaderValueOption.append>` defaults to
-    /// false when used in this message. By setting the ``append`` field to ``true``,
+    /// false when used in this message. By setting the `append` field to `true`,
     /// the filter will append the correspondent header value to the matched request header.
-    /// By leaving ``append`` as false, the filter will either add a new header, or override an existing
+    /// By leaving `append` as false, the filter will either add a new header, or override an existing
     /// one if there is a match.
     #[prost(message, repeated, tag = "2")]
     pub headers: ::prost::alloc::vec::Vec<super::super::super::config::core::v3::HeaderValueOption>,
     /// HTTP entity headers to remove from the original request before dispatching
     /// it to the upstream. This allows the authorization service to act on auth
-    /// related headers (like ``Authorization``), process them, and consume them.
+    /// related headers (like `Authorization`), process them, and consume them.
     /// Under this model, the upstream will either receive the request (if it's
     /// authorized) or not receive it (if it's not), but will not see headers
     /// containing authorization credentials.
     ///
-    /// Pseudo headers (such as ``:authority``, ``:method``, ``:path`` etc), as well as
-    /// the header ``Host``, may not be removed as that would make the request
-    /// malformed. If mentioned in ``headers_to_remove`` these special headers will
+    /// Pseudo headers (such as `:authority`, `:method`, `:path` etc), as well as
+    /// the header `Host`, may not be removed as that would make the request
+    /// malformed. If mentioned in `headers_to_remove` these special headers will
     /// be ignored.
     ///
     /// When using the HTTP service this must instead be set by the HTTP
     /// authorization service as a comma separated list like so:
-    /// ``x-envoy-auth-headers-to-remove: one-auth-header, another-auth-header``.
+    /// `x-envoy-auth-headers-to-remove: one-auth-header, another-auth-header`.
     #[prost(string, repeated, tag = "5")]
     pub headers_to_remove: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// This field has been deprecated in favor of :ref:`CheckResponse.dynamic_metadata
-    /// <envoy_v3_api_field_service.auth.v3.CheckResponse.dynamic_metadata>`. Until it is removed,
-    /// setting this field overrides :ref:`CheckResponse.dynamic_metadata
-    /// <envoy_v3_api_field_service.auth.v3.CheckResponse.dynamic_metadata>`.
+    /// This field has been deprecated in favor of :ref:`CheckResponse.dynamic_metadata  <envoy_v3_api_field_service.auth.v3.CheckResponse.dynamic_metadata>`. Until it is removed,
+    /// setting this field overrides :ref:`CheckResponse.dynamic_metadata  <envoy_v3_api_field_service.auth.v3.CheckResponse.dynamic_metadata>`.
     #[deprecated]
     #[prost(message, optional, tag = "3")]
     pub dynamic_metadata: ::core::option::Option<::prost_types::Struct>,
@@ -278,21 +281,21 @@ pub struct OkHttpResponse {
     #[prost(string, repeated, tag = "8")]
     pub query_parameters_to_remove: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-/// Intended for gRPC and Network Authorization servers ``only``.
-/// \[#next-free-field: 6\]
+/// Intended for gRPC and Network Authorization servers `only`.
+/// \[\#next-free-field: 6\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CheckResponse {
-    /// Status ``OK`` allows the request. Any other status indicates the request should be denied, and
+    /// Status `OK` allows the request. Any other status indicates the request should be denied, and
     /// for HTTP filter, if not overridden by :ref:`denied HTTP response status <envoy_v3_api_field_service.auth.v3.DeniedHttpResponse.status>`
-    /// Envoy sends ``403 Forbidden`` HTTP status code by default.
+    /// Envoy sends `403 Forbidden` HTTP status code by default.
     #[prost(message, optional, tag = "1")]
     pub status: ::core::option::Option<super::super::super::super::google::rpc::Status>,
     /// Optional response metadata that will be emitted as dynamic metadata to be consumed by the next
     /// filter. This metadata lives in a namespace specified by the canonical name of extension filter
     /// that requires it:
     ///
-    /// - :ref:`envoy.filters.http.ext_authz <config_http_filters_ext_authz_dynamic_metadata>` for HTTP filter.
-    /// - :ref:`envoy.filters.network.ext_authz <config_network_filters_ext_authz_dynamic_metadata>` for network filter.
+    /// * :ref:`envoy.filters.http.ext_authz <config_http_filters_ext_authz_dynamic_metadata>` for HTTP filter.
+    /// * :ref:`envoy.filters.network.ext_authz <config_network_filters_ext_authz_dynamic_metadata>` for network filter.
     #[prost(message, optional, tag = "4")]
     pub dynamic_metadata: ::core::option::Option<::prost_types::Struct>,
     /// An message that contains HTTP response attributes. This message is
@@ -314,16 +317,16 @@ pub mod check_response {
         /// Supplies http attributes for an ok response.
         #[prost(message, tag = "3")]
         OkResponse(super::OkHttpResponse),
+        ///
         /// Supplies http attributes for an error response. This is used when the authorization
         /// service encounters an internal error and wants to return custom headers and body to the
-        /// downstream client. When ``error_response`` is set, the ext_authz filter increments the
-        /// ``ext_authz_error`` stat and respects the :ref:`failure_mode_allow
-        /// <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.failure_mode_allow>`
+        /// downstream client. When `error_response` is set, the ext_authz filter increments the
+        /// `ext_authz_error` stat and respects the :ref:`failure_mode_allow  <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.failure_mode_allow>`
         /// configuration. The HTTP status code, headers, and body are taken from the
-        /// :ref:`DeniedHttpResponse <envoy_v3_api_msg_service.auth.v3.DeniedHttpResponse>` message.
-        /// If the status field is not set, Envoy sends the status code configured via
-        /// :ref:`status_on_error <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.status_on_error>`,
-        /// which defaults to ``403 Forbidden``.
+        /// : ref:`DeniedHttpResponse <envoy_v3_api_msg_service.auth.v3.DeniedHttpResponse>` message.
+        ///   If the status field is not set, Envoy sends the status code configured via
+        /// : ref:`status_on_error <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.status_on_error>`,
+        ///   which defaults to `403 Forbidden`.
         #[prost(message, tag = "5")]
         ErrorResponse(super::DeniedHttpResponse),
     }
@@ -418,7 +421,7 @@ pub mod authorization_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path =
                 http::uri::PathAndQuery::from_static("/envoy.service.auth.v3.Authorization/Check");
             let mut req = request.into_request();
@@ -548,7 +551,7 @@ pub mod authorization_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = CheckSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,

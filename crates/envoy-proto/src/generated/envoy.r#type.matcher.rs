@@ -10,7 +10,7 @@ pub mod double_matcher {
     #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
     pub enum MatchPattern {
         /// If specified, the input double value must be in the range specified here.
-        /// Note: The range is using half-open interval semantics [start, end).
+        /// Note: The range is using half-open interval semantics \[start, end).
         #[prost(message, tag = "1")]
         Range(super::super::DoubleRange),
         /// If specified, the input double value must be equal to the value specified here.
@@ -19,7 +19,7 @@ pub mod double_matcher {
     }
 }
 /// A regex matcher designed for safety when used with untrusted input.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RegexMatcher {
     /// The regex match string. The string must be supported by the configured engine.
     #[prost(string, tag = "2")]
@@ -29,20 +29,20 @@ pub struct RegexMatcher {
 }
 /// Nested message and enum types in `RegexMatcher`.
 pub mod regex_matcher {
-    /// Google's `RE2 <<https://github.com/google/re2>`_> regex engine. The regex string must adhere to
-    /// the documented `syntax <<https://github.com/google/re2/wiki/Syntax>`_.> The engine is designed
+    /// Google's `RE2 <<https://github.com/google/re2>`\_> regex engine. The regex string must adhere to
+    /// the documented `syntax <<https://github.com/google/re2/wiki/Syntax>`\_.> The engine is designed
     /// to complete execution in linear time as well as limit the amount of memory used.
     ///
-    /// Envoy supports program size checking via runtime. The runtime keys ``re2.max_program_size.error_level``
-    /// and ``re2.max_program_size.warn_level`` can be set to integers as the maximum program size or
+    /// Envoy supports program size checking via runtime. The runtime keys `re2.max_program_size.error_level`
+    /// and `re2.max_program_size.warn_level` can be set to integers as the maximum program size or
     /// complexity that a compiled regex can have before an exception is thrown or a warning is
-    /// logged, respectively. ``re2.max_program_size.error_level`` defaults to 100, and
-    /// ``re2.max_program_size.warn_level`` has no default if unset (will not check/log a warning).
+    /// logged, respectively. `re2.max_program_size.error_level` defaults to 100, and
+    /// `re2.max_program_size.warn_level` has no default if unset (will not check/log a warning).
     ///
     /// Envoy emits two stats for tracking the program size of regexes: the histogram `re2.program_size`,
     /// which records the program size, and the counter `re2.exceeded_warn_level`, which is incremented
     /// each time the program size exceeds the warn level threshold.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct GoogleRe2 {
         /// This field controls the RE2 "program size" which is a rough estimate of how complex a
         /// compiled regex is to evaluate. A regex that has a program size greater than the configured
@@ -55,7 +55,7 @@ pub mod regex_matcher {
         #[prost(message, optional, tag = "1")]
         pub max_program_size: ::core::option::Option<u32>,
     }
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum EngineType {
         /// Google's RE2 regex engine.
         #[prost(message, tag = "1")]
@@ -64,7 +64,7 @@ pub mod regex_matcher {
 }
 /// Describes how to match a string and then produce a new string using a regular
 /// expression and a substitution string.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RegexMatchAndSubstitute {
     /// The regular expression used to find portions of a string (hereafter called
     /// the "subject string") that should be replaced. When a new string is
@@ -81,17 +81,16 @@ pub struct RegexMatchAndSubstitute {
     /// subject string during a substitution operation to produce a new string.
     /// Capture groups in the pattern can be referenced in the substitution
     /// string. Note, however, that the syntax for referring to capture groups is
-    /// defined by the chosen regular expression engine. Google's `RE2
-    /// <<https://github.com/google/re2>`_> regular expression engine uses a
+    /// defined by the chosen regular expression engine. Google's `RE2  <<https://github.com/google/re2>`\_> regular expression engine uses a
     /// backslash followed by the capture group number to denote a numbered
-    /// capture group. E.g., ``\1`` refers to capture group 1, and ``\2`` refers
+    /// capture group. E.g., `\1` refers to capture group 1, and `\2` refers
     /// to capture group 2.
     #[prost(string, tag = "2")]
     pub substitution: ::prost::alloc::string::String,
 }
 /// Specifies the way to match a string.
-/// \[#next-free-field: 7\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// \[\#next-free-field: 7\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct StringMatcher {
     /// If true, indicates the exact/prefix/suffix matching should be case insensitive. This has no
     /// effect for the safe_regex match.
@@ -103,7 +102,7 @@ pub struct StringMatcher {
 }
 /// Nested message and enum types in `StringMatcher`.
 pub mod string_matcher {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum MatchPattern {
         /// The input string must match exactly the string specified here.
         ///
@@ -129,18 +128,18 @@ pub mod string_matcher {
         #[prost(string, tag = "3")]
         Suffix(::prost::alloc::string::String),
         /// The input string must match the regular expression specified here.
-        /// The regex grammar is defined `here
-        /// <<https://en.cppreference.com/w/cpp/regex/ecmascript>`_.>
+        /// The regex grammar is defined `here  <<https://en.cppreference.com/w/cpp/regex/ecmascript>`\_.>
         ///
         /// Examples:
         ///
-        /// * The regex ``\d{3}`` matches the value *123*
-        /// * The regex ``\d{3}`` does not match the value *1234*
-        /// * The regex ``\d{3}`` does not match the value *123.456*
+        /// * The regex `\d{3}` matches the value *123*
+        /// * The regex `\d{3}` does not match the value *1234*
+        /// * The regex `\d{3}` does not match the value *123.456*
         ///
         /// .. attention::
-        ///    This field has been deprecated in favor of `safe_regex` as it is not safe for use with
-        ///    untrusted input in all cases.
+        /// This field has been deprecated in favor of `safe_regex` as it is not safe for use with
+        /// untrusted input in all cases.
+        #[deprecated]
         #[prost(string, tag = "4")]
         Regex(::prost::alloc::string::String),
         /// The input string must match the regular expression specified here.
@@ -156,7 +155,7 @@ pub struct ListStringMatcher {
 }
 /// Specifies the way to match a Protobuf::Value. Primitive values and ListValue are supported.
 /// StructValue is not supported and is always not matched.
-/// \[#next-free-field: 7\]
+/// \[\#next-free-field: 7\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ValueMatcher {
     /// Specifies how to match a value.
@@ -166,7 +165,7 @@ pub struct ValueMatcher {
 /// Nested message and enum types in `ValueMatcher`.
 pub mod value_matcher {
     /// NullMatch is an empty message to specify a null value.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct NullMatch {}
     /// Specifies how to match a value.
     #[derive(Clone, PartialEq, ::prost::Oneof)]
@@ -212,7 +211,7 @@ pub mod list_matcher {
         OneOf(::prost::alloc::boxed::Box<super::ValueMatcher>),
     }
 }
-/// \[#next-major-version: MetadataMatcher should use StructMatcher\]
+/// \[\#next-major-version: MetadataMatcher should use StructMatcher\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MetadataMatcher {
     /// The filter name to retrieve the Struct from the Metadata.
@@ -230,14 +229,14 @@ pub mod metadata_matcher {
     /// Specifies the segment in a path to retrieve value from Metadata.
     /// Note: Currently it's not supported to retrieve a value from a list in Metadata. This means that
     /// if the segment key refers to a list, it has to be the last segment in a path.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct PathSegment {
         #[prost(oneof = "path_segment::Segment", tags = "1")]
         pub segment: ::core::option::Option<path_segment::Segment>,
     }
     /// Nested message and enum types in `PathSegment`.
     pub mod path_segment {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum Segment {
             /// If specified, use the key to retrieve the value in a Struct.
             #[prost(string, tag = "1")]
@@ -253,49 +252,55 @@ pub mod metadata_matcher {
 ///
 /// .. code-block:: yaml
 ///
-///         fields:
-///           a:
-///             struct_value:
-///               fields:
-///                 b:
-///                   struct_value:
-///                     fields:
-///                       c:
-///                         string_value: pro
-///                 t:
-///                   list_value:
-///                     values:
-///                       - string_value: m
-///                       - string_value: n
+/// ```text
+///     fields:
+///       a:
+///         struct_value:
+///           fields:
+///             b:
+///               struct_value:
+///                 fields:
+///                   c:
+///                     string_value: pro
+///             t:
+///               list_value:
+///                 values:
+///                   - string_value: m
+///                   - string_value: n
+/// ```
 ///
 /// The following MetadataMatcher is matched as the path \[a, b, c\] will retrieve a string value "pro"
 /// from the Metadata which is matched to the specified prefix match.
 ///
 /// .. code-block:: yaml
 ///
-///     path:
-///     - key: a
-///     - key: b
-///     - key: c
-///     value:
-///       string_match:
-///         prefix: pr
+/// ```text
+/// path:
+/// - key: a
+/// - key: b
+/// - key: c
+/// value:
+///   string_match:
+///     prefix: pr
+/// ```
 ///
 /// The following StructMatcher is matched as the code will match one of the string values in the
 /// list at the path \[a, t\].
 ///
 /// .. code-block:: yaml
 ///
-///     path:
-///     - key: a
-///     - key: t
-///     value:
-///       list_match:
-///         one_of:
-///           string_match:
-///             exact: m
+/// ```text
+/// path:
+/// - key: a
+/// - key: t
+/// value:
+///   list_match:
+///     one_of:
+///       string_match:
+///         exact: m
+/// ```
 ///
-/// An example use of StructMatcher is to match metadata in envoy.v*.core.Node.
+/// An example use of StructMatcher is to match metadata in envoy.v\*.core.Node.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StructMatcher {
     /// The path to retrieve the Value from the Struct.
@@ -308,14 +313,14 @@ pub struct StructMatcher {
 /// Nested message and enum types in `StructMatcher`.
 pub mod struct_matcher {
     /// Specifies the segment in a path to retrieve value from Struct.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct PathSegment {
         #[prost(oneof = "path_segment::Segment", tags = "1")]
         pub segment: ::core::option::Option<path_segment::Segment>,
     }
     /// Nested message and enum types in `PathSegment`.
     pub mod path_segment {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum Segment {
             /// If specified, use the key to retrieve the value in a Struct.
             #[prost(string, tag = "1")]
@@ -335,14 +340,14 @@ pub struct NodeMatcher {
     pub node_metadatas: ::prost::alloc::vec::Vec<StructMatcher>,
 }
 /// Specifies the way to match a path on HTTP request.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PathMatcher {
     #[prost(oneof = "path_matcher::Rule", tags = "1")]
     pub rule: ::core::option::Option<path_matcher::Rule>,
 }
 /// Nested message and enum types in `PathMatcher`.
 pub mod path_matcher {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum Rule {
         /// The `path` must match the URL path portion of the :path header. The query and fragment
         /// string (if present) are removed in the URL path portion.

@@ -11,7 +11,7 @@ pub struct JsonToMetadata {
 }
 /// Nested message and enum types in `JsonToMetadata`.
 pub mod json_to_metadata {
-    /// \[#next-free-field: 6\]
+    /// \[\#next-free-field: 6\]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct KeyValuePair {
         /// The namespace — if this is empty, the filter's namespace will be used.
@@ -47,14 +47,14 @@ pub mod json_to_metadata {
             Value(::prost_types::Value),
         }
     }
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Selector {
         #[prost(oneof = "selector::Selector", tags = "1")]
         pub selector: ::core::option::Option<selector::Selector>,
     }
     /// Nested message and enum types in `Selector`.
     pub mod selector {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum Selector {
             /// key to match
             #[prost(string, tag = "1")]
@@ -69,8 +69,9 @@ pub mod json_to_metadata {
         /// Here's an example to match on 1 in {"foo": {"bar": 1}, "bar": 2}
         ///
         /// selectors:
-        /// - key: foo
-        /// - key: bar
+        ///
+        /// * key: foo
+        /// * key: bar
         #[prost(message, repeated, tag = "1")]
         pub selectors: ::prost::alloc::vec::Vec<Selector>,
         /// If the attribute is present, apply this metadata KeyValuePair.
@@ -93,9 +94,9 @@ pub mod json_to_metadata {
         #[prost(message, repeated, tag = "1")]
         pub rules: ::prost::alloc::vec::Vec<Rule>,
         /// Allowed content-type for json to metadata transformation.
-        /// Default to ``{"application/json"}``.
+        /// Default to `{"application/json"}`.
         ///
-        /// Set ``allow_empty_content_type`` if empty/missing content-type header
+        /// Set `allow_empty_content_type` if empty/missing content-type header
         /// is allowed.
         #[prost(string, repeated, tag = "2")]
         pub allow_content_types: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
@@ -104,7 +105,7 @@ pub mod json_to_metadata {
         #[prost(bool, tag = "3")]
         pub allow_empty_content_type: bool,
         /// Allowed content-type by regex match for json to metadata transformation.
-        /// This can be used in parallel with ``allow_content_types``.
+        /// This can be used in parallel with `allow_content_types`.
         #[prost(message, optional, tag = "4")]
         pub allow_content_types_regex: ::core::option::Option<
             super::super::super::super::super::super::r#type::matcher::v3::RegexMatcher,
@@ -113,8 +114,7 @@ pub mod json_to_metadata {
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
     #[repr(i32)]
     pub enum ValueType {
-        /// The value is a serialized `protobuf.Value
-        /// <<https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto#L62>`_.>
+        /// The value is a serialized `protobuf.Value  <<https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto#L62>`\_.>
         ProtobufValue = 0,
         String = 1,
         Number = 2,

@@ -6,7 +6,7 @@
 ///
 /// .. code-block:: cpp
 ///
-///    ("<descriptor_key>", "<expression_value>")
+/// ("\<descriptor_key>", "\<expression_value>")
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Descriptor {
     /// The key to use in the descriptor entry.

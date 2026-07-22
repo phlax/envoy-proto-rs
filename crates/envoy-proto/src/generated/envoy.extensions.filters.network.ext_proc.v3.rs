@@ -6,12 +6,12 @@
 /// The filter communicates with an external gRPC service that can:
 ///
 /// 1. Inspect traffic in both directions
-/// 2. Modify the network traffic
-/// 3. Control connection lifecycle (continue, close, or reset)
+/// 1. Modify the network traffic
+/// 1. Control connection lifecycle (continue, close, or reset)
 ///
 /// By using the filter's processing mode, you can selectively choose which data
 /// directions to process (read, write or both), allowing for efficient processing.
-/// \[#next-free-field: 7\]
+/// \[\#next-free-field: 7\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NetworkExternalProcessor {
     /// The gRPC service that will process network traffic.
@@ -44,7 +44,7 @@ pub struct NetworkExternalProcessor {
 }
 /// Options for controlling processing behavior.
 /// Filter will reject the config if both read and write are SKIP mode.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ProcessingMode {
     /// Controls whether inbound (read) data from the client is sent to the external processor.
     /// Default: STREAMED
@@ -89,7 +89,7 @@ pub mod processing_mode {
 }
 /// The MetadataOptions structure defines options for sending dynamic metadata. Specifically,
 /// which namespaces to send to the server.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct MetadataOptions {
     /// Describes which typed or untyped dynamic metadata namespaces to forward to
     /// the external processing server.
@@ -98,7 +98,7 @@ pub struct MetadataOptions {
 }
 /// Nested message and enum types in `MetadataOptions`.
 pub mod metadata_options {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct MetadataNamespaces {
         /// Specifies a list of metadata namespaces whose values, if present,
         /// will be passed to the ext_proc service as an opaque *protobuf::Struct*.

@@ -2,8 +2,8 @@
 /// OAuth2 extension can be used to retrieve an OAuth2 access token from an authorization server and inject it into the
 /// proxied requests.
 /// Currently, only the Client Credentials Grant flow is supported.
-/// The access token will be injected into the request headers using the ``Authorization`` header as a bearer token.
-/// \[#next-free-field: 6\]
+/// The access token will be injected into the request headers using the `Authorization` header as a bearer token.
+/// \[\#next-free-field: 6\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OAuth2 {
     /// Endpoint on the authorization server to retrieve the access token from.
@@ -50,7 +50,7 @@ pub mod o_auth2 {
     /// Optional additional parameters to include in the token endpoint request body.
     /// These parameters will be URL-encoded and added to the request body along with the standard OAuth2 parameters.
     /// Refer to your authorization server's documentation for supported parameters.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct EndpointParameter {
         /// Parameter name.
         #[prost(string, tag = "1")]
@@ -62,9 +62,9 @@ pub mod o_auth2 {
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
     #[repr(i32)]
     pub enum AuthType {
-        /// The ``client_id`` and ``client_secret`` will be sent using HTTP Basic authentication scheme.
+        /// The `client_id` and `client_secret` will be sent using HTTP Basic authentication scheme.
         BasicAuth = 0,
-        /// The ``client_id`` and ``client_secret`` will be sent in the URL encoded request body.
+        /// The `client_id` and `client_secret` will be sent in the URL encoded request body.
         /// This type should only be used when Auth server does not support Basic authentication.
         UrlEncodedBody = 1,
     }

@@ -2,7 +2,7 @@
 /// Monitor which counts consecutive errors.
 /// If number of consecutive errors exceeds the threshold, monitor will report that the host
 /// is unhealthy.
-/// \[#not-implemented-hide:\]
+/// \[\#not-implemented-hide:\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ConsecutiveErrors {
     /// Monitor name.

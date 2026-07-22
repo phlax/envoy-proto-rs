@@ -9,11 +9,11 @@ pub struct DownstreamReverseConnectionSocketInterface {
     pub stat_prefix: ::prost::alloc::string::String,
     /// Enable detailed per-host and per-cluster statistics.
     /// When enabled, emits hidden statistics for individual hosts and clusters.
-    /// Defaults to ``false``.
+    /// Defaults to `false`.
     #[prost(bool, tag = "2")]
     pub enable_detailed_stats: bool,
     /// Optional HTTP handshake configuration. When unset, the initiator envoy uses the defaults
-    /// provided by ``HttpHandshakeConfig``.
+    /// provided by `HttpHandshakeConfig`.
     #[prost(message, optional, tag = "3")]
     pub http_handshake:
         ::core::option::Option<downstream_reverse_connection_socket_interface::HttpHandshakeConfig>,

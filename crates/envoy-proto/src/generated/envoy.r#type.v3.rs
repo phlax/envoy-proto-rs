@@ -11,7 +11,7 @@ pub struct Percent {
 ///
 /// * **Example**: 1/100 = 1%.
 /// * **Example**: 3/10000 = 0.03%.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct FractionalPercent {
     /// Specifies the numerator. Defaults to 0.
     #[prost(uint32, tag = "1")]
@@ -66,7 +66,7 @@ pub mod fractional_percent {
 /// Envoy uses SemVer (<https://semver.org/>). Major/minor versions indicate
 /// expected behaviors and APIs, the patch version field is used only
 /// for security fixes and can be generally ignored.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SemanticVersion {
     #[prost(uint32, tag = "1")]
     pub major_number: u32,
@@ -75,9 +75,9 @@ pub struct SemanticVersion {
     #[prost(uint32, tag = "3")]
     pub patch: u32,
 }
-/// Specifies the int64 start and end of the range using half-open interval semantics [start,
+/// Specifies the int64 start and end of the range using half-open interval semantics \[start,
 /// end).
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Int64Range {
     /// start of the range (inclusive)
     #[prost(int64, tag = "1")]
@@ -86,9 +86,9 @@ pub struct Int64Range {
     #[prost(int64, tag = "2")]
     pub end: i64,
 }
-/// Specifies the int32 start and end of the range using half-open interval semantics [start,
+/// Specifies the int32 start and end of the range using half-open interval semantics \[start,
 /// end).
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Int32Range {
     /// start of the range (inclusive)
     #[prost(int32, tag = "1")]
@@ -97,7 +97,7 @@ pub struct Int32Range {
     #[prost(int32, tag = "2")]
     pub end: i32,
 }
-/// Specifies the double start and end of the range using half-open interval semantics [start,
+/// Specifies the double start and end of the range using half-open interval semantics \[start,
 /// end).
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct DoubleRange {
@@ -113,7 +113,7 @@ pub struct DoubleRange {
 pub enum CodecClientType {
     Http1 = 0,
     Http2 = 1,
-    /// \[#not-implemented-hide:\] QUIC implementation is not production ready yet. Use this enum with
+    /// \[\#not-implemented-hide:\] QUIC implementation is not production ready yet. Use this enum with
     /// caution to prevent accidental execution of QUIC code. I.e. `!= HTTP2` is no longer sufficient
     /// to distinguish HTTP1 and HTTP2 traffic.
     Http3 = 2,
@@ -190,7 +190,7 @@ impl RateLimitUnit {
     }
 }
 /// Configures a token bucket, typically used for rate limiting.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct TokenBucket {
     /// The maximum tokens that the bucket can hold. This is also the number of tokens that the bucket
     /// initially contains.
@@ -201,13 +201,13 @@ pub struct TokenBucket {
     #[prost(message, optional, tag = "2")]
     pub tokens_per_fill: ::core::option::Option<u32>,
     /// The fill interval that tokens are added to the bucket. During each fill interval
-    /// ``tokens_per_fill`` are added to the bucket. The bucket will never contain more than
-    /// ``max_tokens`` tokens.
+    /// `tokens_per_fill` are added to the bucket. The bucket will never contain more than
+    /// `max_tokens` tokens.
     #[prost(message, optional, tag = "3")]
     pub fill_interval: ::core::option::Option<::prost_types::Duration>,
 }
 /// HTTP status.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HttpStatus {
     /// Supplies HTTP response code.
     #[prost(enumeration = "StatusCode", tag = "1")]
@@ -221,117 +221,117 @@ pub enum StatusCode {
     /// Empty - This code not part of the HTTP status code specification, but it is needed for proto
     /// `enum` type.
     Empty = 0,
-    /// Continue - ``100`` status code.
+    /// Continue - `100` status code.
     Continue = 100,
-    /// OK - ``200`` status code.
+    /// OK - `200` status code.
     Ok = 200,
-    /// Created - ``201`` status code.
+    /// Created - `201` status code.
     Created = 201,
-    /// Accepted - ``202`` status code.
+    /// Accepted - `202` status code.
     Accepted = 202,
-    /// NonAuthoritativeInformation - ``203`` status code.
+    /// NonAuthoritativeInformation - `203` status code.
     NonAuthoritativeInformation = 203,
-    /// NoContent - ``204`` status code.
+    /// NoContent - `204` status code.
     NoContent = 204,
-    /// ResetContent - ``205`` status code.
+    /// ResetContent - `205` status code.
     ResetContent = 205,
-    /// PartialContent - ``206`` status code.
+    /// PartialContent - `206` status code.
     PartialContent = 206,
-    /// MultiStatus - ``207`` status code.
+    /// MultiStatus - `207` status code.
     MultiStatus = 207,
-    /// AlreadyReported - ``208`` status code.
+    /// AlreadyReported - `208` status code.
     AlreadyReported = 208,
-    /// IMUsed - ``226`` status code.
+    /// IMUsed - `226` status code.
     ImUsed = 226,
-    /// MultipleChoices - ``300`` status code.
+    /// MultipleChoices - `300` status code.
     MultipleChoices = 300,
-    /// MovedPermanently - ``301`` status code.
+    /// MovedPermanently - `301` status code.
     MovedPermanently = 301,
-    /// Found - ``302`` status code.
+    /// Found - `302` status code.
     Found = 302,
-    /// SeeOther - ``303`` status code.
+    /// SeeOther - `303` status code.
     SeeOther = 303,
-    /// NotModified - ``304`` status code.
+    /// NotModified - `304` status code.
     NotModified = 304,
-    /// UseProxy - ``305`` status code.
+    /// UseProxy - `305` status code.
     UseProxy = 305,
-    /// TemporaryRedirect - ``307`` status code.
+    /// TemporaryRedirect - `307` status code.
     TemporaryRedirect = 307,
-    /// PermanentRedirect - ``308`` status code.
+    /// PermanentRedirect - `308` status code.
     PermanentRedirect = 308,
-    /// BadRequest - ``400`` status code.
+    /// BadRequest - `400` status code.
     BadRequest = 400,
-    /// Unauthorized - ``401`` status code.
+    /// Unauthorized - `401` status code.
     Unauthorized = 401,
-    /// PaymentRequired - ``402`` status code.
+    /// PaymentRequired - `402` status code.
     PaymentRequired = 402,
-    /// Forbidden - ``403`` status code.
+    /// Forbidden - `403` status code.
     Forbidden = 403,
-    /// NotFound - ``404`` status code.
+    /// NotFound - `404` status code.
     NotFound = 404,
-    /// MethodNotAllowed - ``405`` status code.
+    /// MethodNotAllowed - `405` status code.
     MethodNotAllowed = 405,
-    /// NotAcceptable - ``406`` status code.
+    /// NotAcceptable - `406` status code.
     NotAcceptable = 406,
-    /// ProxyAuthenticationRequired - ``407`` status code.
+    /// ProxyAuthenticationRequired - `407` status code.
     ProxyAuthenticationRequired = 407,
-    /// RequestTimeout - ``408`` status code.
+    /// RequestTimeout - `408` status code.
     RequestTimeout = 408,
-    /// Conflict - ``409`` status code.
+    /// Conflict - `409` status code.
     Conflict = 409,
-    /// Gone - ``410`` status code.
+    /// Gone - `410` status code.
     Gone = 410,
-    /// LengthRequired - ``411`` status code.
+    /// LengthRequired - `411` status code.
     LengthRequired = 411,
-    /// PreconditionFailed - ``412`` status code.
+    /// PreconditionFailed - `412` status code.
     PreconditionFailed = 412,
-    /// PayloadTooLarge - ``413`` status code.
+    /// PayloadTooLarge - `413` status code.
     PayloadTooLarge = 413,
-    /// URITooLong - ``414`` status code.
+    /// URITooLong - `414` status code.
     UriTooLong = 414,
-    /// UnsupportedMediaType - ``415`` status code.
+    /// UnsupportedMediaType - `415` status code.
     UnsupportedMediaType = 415,
-    /// RangeNotSatisfiable - ``416`` status code.
+    /// RangeNotSatisfiable - `416` status code.
     RangeNotSatisfiable = 416,
-    /// ExpectationFailed - ``417`` status code.
+    /// ExpectationFailed - `417` status code.
     ExpectationFailed = 417,
-    /// MisdirectedRequest - ``421`` status code.
+    /// MisdirectedRequest - `421` status code.
     MisdirectedRequest = 421,
-    /// UnprocessableEntity - ``422`` status code.
+    /// UnprocessableEntity - `422` status code.
     UnprocessableEntity = 422,
-    /// Locked - ``423`` status code.
+    /// Locked - `423` status code.
     Locked = 423,
-    /// FailedDependency - ``424`` status code.
+    /// FailedDependency - `424` status code.
     FailedDependency = 424,
-    /// UpgradeRequired - ``426`` status code.
+    /// UpgradeRequired - `426` status code.
     UpgradeRequired = 426,
-    /// PreconditionRequired - ``428`` status code.
+    /// PreconditionRequired - `428` status code.
     PreconditionRequired = 428,
-    /// TooManyRequests - ``429`` status code.
+    /// TooManyRequests - `429` status code.
     TooManyRequests = 429,
-    /// RequestHeaderFieldsTooLarge - ``431`` status code.
+    /// RequestHeaderFieldsTooLarge - `431` status code.
     RequestHeaderFieldsTooLarge = 431,
-    /// InternalServerError - ``500`` status code.
+    /// InternalServerError - `500` status code.
     InternalServerError = 500,
-    /// NotImplemented - ``501`` status code.
+    /// NotImplemented - `501` status code.
     NotImplemented = 501,
-    /// BadGateway - ``502`` status code.
+    /// BadGateway - `502` status code.
     BadGateway = 502,
-    /// ServiceUnavailable - ``503`` status code.
+    /// ServiceUnavailable - `503` status code.
     ServiceUnavailable = 503,
-    /// GatewayTimeout - ``504`` status code.
+    /// GatewayTimeout - `504` status code.
     GatewayTimeout = 504,
-    /// HTTPVersionNotSupported - ``505`` status code.
+    /// HTTPVersionNotSupported - `505` status code.
     HttpVersionNotSupported = 505,
-    /// VariantAlsoNegotiates - ``506`` status code.
+    /// VariantAlsoNegotiates - `506` status code.
     VariantAlsoNegotiates = 506,
-    /// InsufficientStorage - ``507`` status code.
+    /// InsufficientStorage - `507` status code.
     InsufficientStorage = 507,
-    /// LoopDetected - ``508`` status code.
+    /// LoopDetected - `508` status code.
     LoopDetected = 508,
-    /// NotExtended - ``510`` status code.
+    /// NotExtended - `510` status code.
     NotExtended = 510,
-    /// NetworkAuthenticationRequired - ``511`` status code.
+    /// NetworkAuthenticationRequired - `511` status code.
     NetworkAuthenticationRequired = 511,
 }
 impl StatusCode {
@@ -464,7 +464,7 @@ impl StatusCode {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RateLimitStrategy {
     #[prost(oneof = "rate_limit_strategy::Strategy", tags = "1, 2, 3")]
     pub strategy: ::core::option::Option<rate_limit_strategy::Strategy>,
@@ -476,32 +476,29 @@ pub mod rate_limit_strategy {
     /// Allows to specify the desired requests per second (RPS, QPS), requests per minute (QPM, RPM),
     /// etc., without specifying a rate limiting algorithm implementation.
     ///
-    /// ``RequestsPerTimeUnit`` strategy does not demand any specific rate limiting algorithm to be
+    /// `RequestsPerTimeUnit` strategy does not demand any specific rate limiting algorithm to be
     /// used (in contrast to the :ref:`TokenBucket <envoy_v3_api_msg_type.v3.TokenBucket>`,
     /// for example). It implies that the implementation details of rate limiting algorithm are
     /// irrelevant as long as the configured number of "requests per time unit" is achieved.
     ///
-    /// Note that the ``TokenBucket`` is still a valid implementation of the ``RequestsPerTimeUnit``
+    /// Note that the `TokenBucket` is still a valid implementation of the `RequestsPerTimeUnit`
     /// strategy, and may be chosen to enforce the rate limit. However, there's no guarantee it will be
-    /// the ``TokenBucket`` in particular, and not the Leaky Bucket, the Sliding Window, or any other
+    /// the `TokenBucket` in particular, and not the Leaky Bucket, the Sliding Window, or any other
     /// rate limiting algorithm that fulfills the requirements.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct RequestsPerTimeUnit {
-        /// The desired number of requests per :ref:`time_unit
-        /// <envoy_v3_api_field_type.v3.RateLimitStrategy.RequestsPerTimeUnit.time_unit>` to allow.
-        /// If set to ``0``, deny all (equivalent to ``BlanketRule.DENY_ALL``).
+        /// The desired number of requests per :ref:`time_unit  <envoy_v3_api_field_type.v3.RateLimitStrategy.RequestsPerTimeUnit.time_unit>` to allow.
+        /// If set to `0`, deny all (equivalent to `BlanketRule.DENY_ALL`).
         ///
         /// .. note::
-        ///    Note that the algorithm implementation determines the course of action for the requests
-        ///    over the limit. As long as the ``requests_per_time_unit`` converges on the desired value,
-        ///    it's allowed to treat this field as a soft-limit: allow bursts, redistribute the allowance
-        ///    over time, etc.
-        ///
+        /// Note that the algorithm implementation determines the course of action for the requests
+        /// over the limit. As long as the `requests_per_time_unit` converges on the desired value,
+        /// it's allowed to treat this field as a soft-limit: allow bursts, redistribute the allowance
+        /// over time, etc.
         #[prost(uint64, tag = "1")]
         pub requests_per_time_unit: u64,
-        /// The unit of time. Ignored when :ref:`requests_per_time_unit
-        /// <envoy_v3_api_field_type.v3.RateLimitStrategy.RequestsPerTimeUnit.requests_per_time_unit>`
-        /// is ``0`` (deny all).
+        /// The unit of time. Ignored when :ref:`requests_per_time_unit  <envoy_v3_api_field_type.v3.RateLimitStrategy.RequestsPerTimeUnit.requests_per_time_unit>`
+        /// is `0` (deny all).
         #[prost(enumeration = "super::RateLimitUnit", tag = "2")]
         pub time_unit: i32,
     }
@@ -532,15 +529,14 @@ pub mod rate_limit_strategy {
             }
         }
     }
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum Strategy {
         /// Allow or Deny the requests.
         /// If unset, allow all.
         #[prost(enumeration = "BlanketRule", tag = "1")]
         BlanketRule(i32),
         /// Best-effort limit of the number of requests per time unit, f.e. requests per second.
-        /// Does not prescribe any specific rate limiting algorithm, see :ref:`RequestsPerTimeUnit
-        /// <envoy_v3_api_msg_type.v3.RateLimitStrategy.RequestsPerTimeUnit>` for details.
+        /// Does not prescribe any specific rate limiting algorithm, see :ref:`RequestsPerTimeUnit  <envoy_v3_api_msg_type.v3.RateLimitStrategy.RequestsPerTimeUnit>` for details.
         #[prost(message, tag = "2")]
         RequestsPerTimeUnit(RequestsPerTimeUnit),
         /// Limit the requests by consuming tokens from the Token Bucket.
@@ -551,7 +547,7 @@ pub mod rate_limit_strategy {
     }
 }
 /// Specifies the hash policy
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HashPolicy {
     #[prost(oneof = "hash_policy::PolicySpecifier", tags = "1, 2")]
     pub policy_specifier: ::core::option::Option<hash_policy::PolicySpecifier>,
@@ -560,11 +556,11 @@ pub struct HashPolicy {
 pub mod hash_policy {
     /// The source IP will be used to compute the hash used by hash-based load balancing
     /// algorithms.
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct SourceIp {}
     /// An Object in the :ref:`filterState <arch_overview_data_sharing_between_filters>` will be used
     /// to compute the hash used by hash-based load balancing algorithms.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct FilterState {
         /// The name of the Object in the filterState, which is an Envoy::Hashable object. If there is no
         /// data associated with the key, or the stored object is not Envoy::Hashable, no hash will be
@@ -572,7 +568,7 @@ pub mod hash_policy {
         #[prost(string, tag = "1")]
         pub key: ::prost::alloc::string::String,
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum PolicySpecifier {
         #[prost(message, tag = "1")]
         SourceIp(SourceIp),

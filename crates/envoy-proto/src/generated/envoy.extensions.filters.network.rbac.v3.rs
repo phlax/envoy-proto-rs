@@ -3,7 +3,7 @@
 ///
 /// Header should not be used in rules/shadow_rules in RBAC network filter as
 /// this information is only available in :ref:`RBAC http filter <config_http_filters_rbac>`.
-/// \[#next-free-field: 9\]
+/// \[\#next-free-field: 9\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Rbac {
     /// Specify the RBAC rules to be applied globally.
@@ -50,7 +50,7 @@ pub struct Rbac {
     #[prost(enumeration = "rbac::EnforcementType", tag = "4")]
     pub enforcement_type: i32,
     /// Delay the specified duration before closing the connection when the policy evaluation
-    /// result is ``DENY``. If this is not present, the connection will be closed immediately.
+    /// result is `DENY`. If this is not present, the connection will be closed immediately.
     /// This is useful to provide a better protection for Envoy against clients that retries
     /// aggressively when the connection is rejected by the RBAC filter.
     #[prost(message, optional, tag = "8")]

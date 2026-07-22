@@ -154,7 +154,7 @@ fn regen(root: &Path, generated_dir: &Path, lib_rs: &Path) -> Result<()> {
         prometheus_client_model_dir,
     ];
 
-    tonic_build::configure()
+    tonic_prost_build::configure()
         .build_server(true)
         .build_client(true)
         .build_transport(false)

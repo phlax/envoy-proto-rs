@@ -8,18 +8,19 @@ pub struct VirtualHost {
     /// the suffix or prefix form.
     ///
     /// Host search order:
-    ///   1. Exact names: ``www.foo.com``.
-    ///   2. Suffix wildcards: ``*.foo.com`` or ``*-bar.foo.com``.
-    ///   3. Prefix wildcards: ``foo.*`` or ``foo-*``.
-    ///   4. Special wildcard ``*`` matching any host and will be the default virtual host.
+    ///
+    /// 1. Exact names: `www.foo.com`.
+    /// 1. Suffix wildcards: `*.foo.com` or `*-bar.foo.com`.
+    /// 1. Prefix wildcards: `foo.*` or `foo-*`.
+    /// 1. Special wildcard `*` matching any host and will be the default virtual host.
     ///
     /// .. note::
     ///
-    ///    The wildcard will not match the empty string.
-    ///    e.g. ``*-bar.foo.com`` will match ``baz-bar.foo.com`` but not ``-bar.foo.com``.
-    ///    The longest wildcards match first.
-    ///    Only a single virtual host in the entire route configuration can match on ``*``. A domain
-    ///    must be unique across all virtual hosts or the config will fail to load.
+    /// The wildcard will not match the empty string.
+    /// e.g. `*-bar.foo.com` will match `baz-bar.foo.com` but not `-bar.foo.com`.
+    /// The longest wildcards match first.
+    /// Only a single virtual host in the entire route configuration can match on `*`. A domain
+    /// must be unique across all virtual hosts or the config will fail to load.
     #[prost(string, repeated, tag = "2")]
     pub hosts: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// The match tree to use when resolving route actions for incoming requests.
@@ -35,44 +36,44 @@ pub struct VirtualHost {
 ///
 /// .. code-block:: yaml
 ///
-///    name: example
-///    routes:
-///      matcher_tree:
-///        input:
-///          name: request-service
-///          typed_config:
-///            "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.matcher.v3.ServiceMatchInput
-///        exact_match_map:
-///          map:
-///            service_name_0:
-///              matcher:
-///                matcher_list:
-///                  matchers:
-///                  - predicate:
-///                      and_matcher:
-///                        predicate:
-///                        - single_predicate:
-///                            input:
-///                              name: request-properties
-///                              typed_config:
-///                                "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.matcher.v3.PropertyMatchInput
-///                                property_name: version
-///                            value_match:
-///                              exact: v1
-///                        - single_predicate:
-///                            input:
-///                              name: request-properties
-///                              typed_config:
-///                                "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.matcher.v3.PropertyMatchInput
-///                                property_name: user
-///                            value_match:
-///                              exact: john
-///                    on_match:
-///                      action:
-///                        name: route
-///                        typed_config:
-///                          "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.action.v3.routeAction
-///                          cluster: cluster_0
+/// name: example
+/// routes:
+/// matcher_tree:
+/// input:
+/// name: request-service
+/// typed_config:
+/// "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.matcher.v3.ServiceMatchInput
+/// exact_match_map:
+/// map:
+/// service_name_0:
+/// matcher:
+/// matcher_list:
+/// matchers:
+/// - predicate:
+/// and_matcher:
+/// predicate:
+/// - single_predicate:
+/// input:
+/// name: request-properties
+/// typed_config:
+/// "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.matcher.v3.PropertyMatchInput
+/// property_name: version
+/// value_match:
+/// exact: v1
+/// - single_predicate:
+/// input:
+/// name: request-properties
+/// typed_config:
+/// "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.matcher.v3.PropertyMatchInput
+/// property_name: user
+/// value_match:
+/// exact: john
+/// on_match:
+/// action:
+/// name: route
+/// typed_config:
+/// "@type": type.googleapis.com/envoy.extensions.filters.network.generic_proxy.action.v3.routeAction
+/// cluster: cluster_0
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RouteConfiguration {
     /// The name of the route configuration. For example, it might match route_config_name in
@@ -80,9 +81,9 @@ pub struct RouteConfiguration {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// The match tree to use when resolving route actions for incoming requests.
-    /// If no any virtual host is configured in the ``virtual_hosts`` field or no special wildcard
-    /// virtual host is configured, the ``routes`` field will be used as the default route table.
-    /// If both the wildcard virtual host and ``routes`` are configured, the configuration will fail
+    /// If no any virtual host is configured in the `virtual_hosts` field or no special wildcard
+    /// virtual host is configured, the `routes` field will be used as the default route table.
+    /// If both the wildcard virtual host and `routes` are configured, the configuration will fail
     /// to load.
     #[prost(message, optional, tag = "2")]
     pub routes: ::core::option::Option<
@@ -92,14 +93,14 @@ pub struct RouteConfiguration {
     #[prost(message, repeated, tag = "3")]
     pub virtual_hosts: ::prost::alloc::vec::Vec<VirtualHost>,
 }
-/// \[#next-free-field: 8\]
+/// \[\#next-free-field: 8\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenericProxy {
     /// The human readable prefix to use when emitting statistics.
     #[prost(string, tag = "1")]
     pub stat_prefix: ::prost::alloc::string::String,
     /// The codec which encodes and decodes the application protocol.
-    /// \[#extension-category: envoy.generic_proxy.codecs\]
+    /// \[\#extension-category: envoy.generic_proxy.codecs\]
     #[prost(message, optional, tag = "2")]
     pub codec_config: ::core::option::Option<
         super::super::super::super::super::config::core::v3::TypedExtensionConfig,
@@ -107,7 +108,7 @@ pub struct GenericProxy {
     /// A list of individual Layer-7 filters that make up the filter chain for requests made to the
     /// proxy. Order matters as the filters are processed sequentially as request events
     /// happen.
-    /// \[#extension-category: envoy.generic_proxy.filters\]
+    /// \[\#extension-category: envoy.generic_proxy.filters\]
     #[prost(message, repeated, tag = "5")]
     pub filters: ::prost::alloc::vec::Vec<
         super::super::super::super::super::config::core::v3::TypedExtensionConfig,

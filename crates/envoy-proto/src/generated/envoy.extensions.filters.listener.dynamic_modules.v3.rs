@@ -14,7 +14,6 @@
 /// * Modify connection addresses (original destination restoration).
 /// * Set dynamic metadata and filter state for downstream filters.
 /// * Rate limit incoming connections.
-///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DynamicModuleListenerFilter {
     /// Specifies the shared-object level configuration.
@@ -25,35 +24,36 @@ pub struct DynamicModuleListenerFilter {
     /// The name for this filter configuration. This can be used to distinguish between different
     /// filter implementations inside a dynamic module. For example, a module can have completely
     /// different filter implementations (TLS inspector, rate limiter, proxy protocol parser).
-    /// When Envoy receives this configuration, it passes the ``filter_name`` to the dynamic module's
-    /// listener filter config init function together with the ``filter_config``. That way a module
+    /// When Envoy receives this configuration, it passes the `filter_name` to the dynamic module's
+    /// listener filter config init function together with the `filter_config`. That way a module
     /// can decide which in-module filter implementation to use based on the name at load time.
     #[prost(string, tag = "2")]
     pub filter_name: ::prost::alloc::string::String,
-    /// The configuration for the filter chosen by ``filter_name``. This is passed to the module's
-    /// listener filter initialization function. Together with the ``filter_name``, the module can
+    /// The configuration for the filter chosen by `filter_name`. This is passed to the module's
+    /// listener filter initialization function. Together with the `filter_name`, the module can
     /// decide which in-module filter implementation to use and fine-tune the behavior of the filter.
     ///
     /// For example, if a module has two filter implementations, one for TLS inspection and one for
-    /// rate limiting, ``filter_name`` is used to choose either TLS or rate limiting. The ``filter_config``
+    /// rate limiting, `filter_name` is used to choose either TLS or rate limiting. The `filter_config`
     /// can be used to configure the TLS inspection options or the rate limiting parameters.
     ///
-    /// ``google.protobuf.Struct`` is serialized as JSON before passing it to the module.
-    /// ``google.protobuf.BytesValue`` and ``google.protobuf.StringValue`` are passed directly
+    /// `google.protobuf.Struct` is serialized as JSON before passing it to the module.
+    /// `google.protobuf.BytesValue` and `google.protobuf.StringValue` are passed directly
     /// without the wrapper.
     ///
     /// .. code-block:: yaml
     ///
-    ///   # Passing a string value
-    ///   filter_config:
-    ///     "@type": "type.googleapis.com/google.protobuf.StringValue"
-    ///     value: hello
+    /// # Passing a string value
     ///
-    ///   # Passing raw bytes
-    ///   filter_config:
-    ///     "@type": "type.googleapis.com/google.protobuf.BytesValue"
-    ///     value: aGVsbG8=  # echo -n "hello" | base64
+    /// filter_config:
+    /// "@type": "type.googleapis.com/google.protobuf.StringValue"
+    /// value: hello
     ///
+    /// # Passing raw bytes
+    ///
+    /// filter_config:
+    /// "@type": "type.googleapis.com/google.protobuf.BytesValue"
+    /// value: aGVsbG8=  # echo -n "hello" | base64
     #[prost(message, optional, tag = "3")]
     pub filter_config: ::core::option::Option<::prost_types::Any>,
 }

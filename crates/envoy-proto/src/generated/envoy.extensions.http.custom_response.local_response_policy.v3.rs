@@ -4,12 +4,12 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocalResponsePolicy {
     /// Optional new local reply body text. It will be used
-    /// in the ``%LOCAL_REPLY_BODY%`` command operator in the ``body_format``.
+    /// in the `%LOCAL_REPLY_BODY%` command operator in the `body_format`.
     #[prost(message, optional, tag = "1")]
     pub body:
         ::core::option::Option<super::super::super::super::super::config::core::v3::DataSource>,
-    /// Optional body format to be used for this response. If ``body_format`` is  not
-    /// provided, and ``body`` is, the contents of ``body`` will be used to populate
+    /// Optional body format to be used for this response. If `body_format` is  not
+    /// provided, and `body` is, the contents of `body` will be used to populate
     /// the body of the local reply without formatting.
     #[prost(message, optional, tag = "2")]
     pub body_format: ::core::option::Option<

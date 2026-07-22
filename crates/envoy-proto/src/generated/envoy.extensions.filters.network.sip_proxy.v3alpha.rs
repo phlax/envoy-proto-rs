@@ -9,7 +9,7 @@ pub struct RouteConfiguration {
     #[prost(message, repeated, tag = "2")]
     pub routes: ::prost::alloc::vec::Vec<Route>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Route {
     /// Route matching parameters.
     #[prost(message, optional, tag = "1")]
@@ -18,7 +18,7 @@ pub struct Route {
     #[prost(message, optional, tag = "2")]
     pub route: ::core::option::Option<RouteAction>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RouteMatch {
     /// The header to get match parameter, default is "Route".
     #[prost(string, tag = "2")]
@@ -31,21 +31,21 @@ pub struct RouteMatch {
 }
 /// Nested message and enum types in `RouteMatch`.
 pub mod route_match {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum MatchSpecifier {
         /// The domain from Request URI or Route Header.
         #[prost(string, tag = "1")]
         Domain(::prost::alloc::string::String),
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RouteAction {
     #[prost(oneof = "route_action::ClusterSpecifier", tags = "1")]
     pub cluster_specifier: ::core::option::Option<route_action::ClusterSpecifier>,
 }
 /// Nested message and enum types in `RouteAction`.
 pub mod route_action {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum ClusterSpecifier {
         /// Indicates a single upstream cluster to which the request should be routed
         /// to.
@@ -64,8 +64,8 @@ pub struct SipProxy {
     /// A list of individual Sip filters that make up the filter chain for requests made to the
     /// Sip proxy. Order matters as the filters are processed sequentially. For backwards
     /// compatibility, if no sip_filters are specified, a default Sip router filter
-    /// (``envoy.filters.sip.router``) is used.
-    /// \[#extension-category: envoy.sip_proxy.filters\]
+    /// (`envoy.filters.sip.router`) is used.
+    /// \[\#extension-category: envoy.sip_proxy.filters\]
     #[prost(message, repeated, tag = "3")]
     pub sip_filters: ::prost::alloc::vec::Vec<SipFilter>,
     #[prost(message, optional, tag = "4")]
@@ -75,42 +75,42 @@ pub struct SipProxy {
 pub mod sip_proxy {
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct SipSettings {
-        /// transaction timeout timer \[Timer B\] unit is milliseconds, default value 64*T1.
+        /// transaction timeout timer \[Timer B\] unit is milliseconds, default value 64\*T1.
         ///
         /// Session Initiation Protocol (SIP) timer summary
         ///
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer   | Default value           | Section  | Meaning                                                                      |
+        /// \| Timer   | Default value           | Section  | Meaning                                                                      |
         /// +=========+=========================+==========+==============================================================================+
-        /// | T1      | 500 ms                  | 17.1.1.1 | Round-trip time (RTT) estimate                                               |
+        /// \| T1      | 500 ms                  | 17.1.1.1 | Round-trip time (RTT) estimate                                               |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | T2      | 4 sec                   | 17.1.2.2 | Maximum re-transmission interval for non-INVITE requests and INVITE responses|
+        /// \| T2      | 4 sec                   | 17.1.2.2 | Maximum re-transmission interval for non-INVITE requests and INVITE responses|
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | T4      | 5 sec                   | 17.1.2.2 | Maximum duration that a message can remain in the network                    |
+        /// \| T4      | 5 sec                   | 17.1.2.2 | Maximum duration that a message can remain in the network                    |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer A | initially T1            | 17.1.1.2 | INVITE request re-transmission interval, for UDP only                        |
+        /// \| Timer A | initially T1            | 17.1.1.2 | INVITE request re-transmission interval, for UDP only                        |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer B | 64*T1                   | 17.1.1.2 | INVITE transaction timeout timer                                             |
+        /// \| Timer B | 64*T1                   | 17.1.1.2 | INVITE transaction timeout timer                                             |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer D | > 32 sec. for UDP       | 17.1.1.2 | Wait time for response re-transmissions                                      |
-        /// |         | 0 sec. for TCP and SCTP |          |                                                                              |
+        /// \| Timer D | > 32 sec. for UDP       | 17.1.1.2 | Wait time for response re-transmissions                                      |
+        /// \|         | 0 sec. for TCP and SCTP |          |                                                                              |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer E | initially T1            | 17.1.2.2 | Non-INVITE request re-transmission interval, UDP only                        |
+        /// \| Timer E | initially T1            | 17.1.2.2 | Non-INVITE request re-transmission interval, UDP only                        |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer F | 64*T1                   | 17.1.2.2 | Non-INVITE transaction timeout timer                                         |
+        /// \| Timer F | 64*T1                   | 17.1.2.2 | Non-INVITE transaction timeout timer                                         |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer G | initially T1            | 17.2.1   | INVITE response re-transmission interval                                     |
+        /// \| Timer G | initially T1            | 17.2.1   | INVITE response re-transmission interval                                     |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer H | 64*T1                   | 17.2.1   | Wait time for ACK receipt                                                    |
+        /// \| Timer H | 64*T1                   | 17.2.1   | Wait time for ACK receipt                                                    |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer I | T4 for UDP              | 17.2.1   | Wait time for ACK re-transmissions                                           |
-        /// |         | 0 sec. for TCP and SCTP |          |                                                                              |
+        /// \| Timer I | T4 for UDP              | 17.2.1   | Wait time for ACK re-transmissions                                           |
+        /// \|         | 0 sec. for TCP and SCTP |          |                                                                              |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer J | 64*T1 for UDP           | 17.2.2   | Wait time for re-transmissions of non-INVITE requests                        |
-        /// |         | 0 sec. for TCP and SCTP |          |                                                                              |
+        /// \| Timer J | 64*T1 for UDP           | 17.2.2   | Wait time for re-transmissions of non-INVITE requests                        |
+        /// \|         | 0 sec. for TCP and SCTP |          |                                                                              |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
-        /// | Timer K | T4 for UDP              | 17.1.2.2 | Wait time for response re-transmissions                                      |
-        /// |         | 0 sec. for TCP and SCTP |          |                                                                              |
+        /// \| Timer K | T4 for UDP              | 17.1.2.2 | Wait time for response re-transmissions                                      |
+        /// \|         | 0 sec. for TCP and SCTP |          |                                                                              |
         /// +---------+-------------------------+----------+------------------------------------------------------------------------------+
         #[prost(message, optional, tag = "1")]
         pub transaction_timeout: ::core::option::Option<::prost_types::Duration>,
@@ -128,11 +128,10 @@ pub mod sip_proxy {
     }
 }
 /// SipFilter configures a Sip filter.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SipFilter {
     /// The name of the filter to instantiate. The name must match a supported
     /// filter. The built-in filters are:
-    ///
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// Filter specific configuration which depends on the filter being instantiated. See the supported
@@ -144,15 +143,16 @@ pub struct SipFilter {
 pub mod sip_filter {
     /// Filter specific configuration which depends on the filter being instantiated. See the supported
     /// filters for further documentation.
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum ConfigType {
         #[prost(message, tag = "3")]
         TypedConfig(::prost_types::Any),
     }
 }
+///
 /// SipProtocolOptions specifies Sip upstream protocol options. This object is used in
-/// :ref:`typed_extension_protocol_options<envoy_v3_api_field_config.cluster.v3.Cluster.typed_extension_protocol_options>`,
-/// keyed by the name ``envoy.filters.network.sip_proxy``.
+/// : ref:`typed_extension_protocol_options<envoy_v3_api_field_config.cluster.v3.Cluster.typed_extension_protocol_options>`,
+///   keyed by the name `envoy.filters.network.sip_proxy`.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SipProtocolOptions {
     /// All sip messages in one dialog should go to the same endpoint.
@@ -175,8 +175,8 @@ pub struct CustomizedAffinity {
     #[prost(bool, tag = "2")]
     pub stop_load_balance: bool,
 }
-/// \[#next-free-field: 6\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// \[\#next-free-field: 6\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CustomizedAffinityEntry {
     /// The header name to match, e.g. "From", if not specified, default is "Route"
     #[prost(string, tag = "1")]
@@ -194,7 +194,7 @@ pub struct CustomizedAffinityEntry {
     #[prost(message, optional, tag = "5")]
     pub cache: ::core::option::Option<Cache>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Cache {
     /// Affinity local cache item max number
     #[prost(int32, tag = "1")]
@@ -204,7 +204,7 @@ pub struct Cache {
     pub add_query_to_cache: bool,
 }
 /// Local Service
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LocalService {
     /// The domain need to matched
     #[prost(string, tag = "1")]

@@ -2,11 +2,13 @@
 /// Configuration for the TCP Stats transport socket wrapper, which wraps another transport socket for
 /// all communication, but emits stats about the underlying TCP connection.
 ///
+///
 /// The stats are documented :ref:`here <config_listener_stats_tcp>` for listeners and
-/// :ref:`here <config_cluster_manager_cluster_stats_tcp>` for clusters.
+/// : ref:`here <config_cluster_manager_cluster_stats_tcp>` for clusters.
+///
 ///
 /// This transport socket is currently only supported on Linux.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Config {
     /// The underlying transport socket being wrapped.
     #[prost(message, optional, tag = "1")]
