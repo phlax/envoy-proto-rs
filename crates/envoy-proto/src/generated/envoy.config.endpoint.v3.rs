@@ -6,11 +6,11 @@ pub struct Endpoint {
     ///
     /// .. attention::
     ///
-    ///    The form of host address depends on the given cluster type. For STATIC or EDS,
-    ///    it is expected to be a direct IP address (or something resolvable by the
-    ///    specified :ref:`resolver <envoy_v3_api_field_config.core.v3.SocketAddress.resolver_name>`
-    ///    in the Address). For LOGICAL or STRICT DNS, it is expected to be hostname,
-    ///    and will be resolved via DNS.
+    /// The form of host address depends on the given cluster type. For STATIC or EDS,
+    /// it is expected to be a direct IP address (or something resolvable by the
+    /// specified :ref:`resolver <envoy_v3_api_field_config.core.v3.SocketAddress.resolver_name>`
+    /// in the Address). For LOGICAL or STRICT DNS, it is expected to be hostname,
+    /// and will be resolved via DNS.
     #[prost(message, optional, tag = "1")]
     pub address: ::core::option::Option<super::super::core::v3::Address>,
     /// The optional health check configuration is used as configuration for the
@@ -18,18 +18,20 @@ pub struct Endpoint {
     ///
     /// .. attention::
     ///
-    ///    This takes into effect only for upstream clusters with
-    ///    :ref:`active health checking <arch_overview_health_checking>` enabled.
+    ///
+    /// This takes into effect only for upstream clusters with
+    /// : ref:`active health checking <arch_overview_health_checking>` enabled.
     #[prost(message, optional, tag = "2")]
     pub health_check_config: ::core::option::Option<endpoint::HealthCheckConfig>,
+    ///
     /// The hostname associated with this endpoint. This hostname is not used for routing or address
     /// resolution. If provided, it will be associated with the endpoint, and can be used for features
     /// that require a hostname, like
-    /// :ref:`auto_host_rewrite <envoy_v3_api_field_config.route.v3.RouteAction.auto_host_rewrite>`.
+    /// : ref:`auto_host_rewrite <envoy_v3_api_field_config.route.v3.RouteAction.auto_host_rewrite>`.
     #[prost(string, tag = "3")]
     pub hostname: ::prost::alloc::string::String,
-    /// An ordered list of addresses that together with ``address`` comprise the
-    /// list of addresses for an endpoint. The address given in the ``address`` is
+    /// An ordered list of addresses that together with `address` comprise the
+    /// list of addresses for an endpoint. The address given in the `address` is
     /// prepended to this list. It is assumed that the list must already be
     /// sorted by preference order of the addresses. This will only be supported
     /// for STATIC and EDS clusters.
@@ -39,7 +41,7 @@ pub struct Endpoint {
 /// Nested message and enum types in `Endpoint`.
 pub mod endpoint {
     /// The optional health check configuration.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct HealthCheckConfig {
         /// Optional alternative health check port value.
         ///
@@ -49,18 +51,19 @@ pub mod endpoint {
         /// to have different health check address port.
         #[prost(uint32, tag = "1")]
         pub port_value: u32,
+        ///
         /// By default, the host header for L7 health checks is controlled by cluster level configuration
         /// (see: :ref:`host <envoy_v3_api_field_config.core.v3.HealthCheck.HttpHealthCheck.host>` and
-        /// :ref:`authority <envoy_v3_api_field_config.core.v3.HealthCheck.GrpcHealthCheck.authority>`). Setting this
-        /// to a non-empty value allows overriding the cluster level configuration for a specific
-        /// endpoint.
+        /// : ref:`authority <envoy_v3_api_field_config.core.v3.HealthCheck.GrpcHealthCheck.authority>`). Setting this
+        ///   to a non-empty value allows overriding the cluster level configuration for a specific
+        ///   endpoint.
         #[prost(string, tag = "2")]
         pub hostname: ::prost::alloc::string::String,
         /// Optional alternative health check host address.
         ///
         /// .. attention::
         ///
-        ///    The form of the health check host address is expected to be a direct IP address.
+        /// The form of the health check host address is expected to be a direct IP address.
         #[prost(message, optional, tag = "3")]
         pub address: ::core::option::Option<super::super::super::core::v3::Address>,
         /// Optional flag to control if perform active health check for this endpoint.
@@ -68,7 +71,7 @@ pub mod endpoint {
         #[prost(bool, tag = "4")]
         pub disable_active_health_check: bool,
     }
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct AdditionalAddress {
         /// Additional address that is associated with the endpoint.
         #[prost(message, optional, tag = "1")]
@@ -76,19 +79,20 @@ pub mod endpoint {
     }
 }
 /// An Endpoint that Envoy can route traffic to.
-/// \[#next-free-field: 6\]
+/// \[\#next-free-field: 6\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LbEndpoint {
     /// Optional health status when known and supplied by EDS server.
     #[prost(enumeration = "super::super::core::v3::HealthStatus", tag = "2")]
     pub health_status: i32,
+    ///
     /// The endpoint metadata specifies values that may be used by the load
     /// balancer to select endpoints in a cluster for a given request. The filter
-    /// name should be specified as ``envoy.lb``. An example boolean key-value pair
-    /// is ``canary``, providing the optional canary status of the upstream host.
+    /// name should be specified as `envoy.lb`. An example boolean key-value pair
+    /// is `canary`, providing the optional canary status of the upstream host.
     /// This may be matched against in a route's
-    /// :ref:`RouteAction <envoy_v3_api_msg_config.route.v3.RouteAction>` metadata_match field
-    /// to subset the endpoints considered in cluster load balancing.
+    /// : ref:`RouteAction <envoy_v3_api_msg_config.route.v3.RouteAction>` metadata_match field
+    ///   to subset the endpoints considered in cluster load balancing.
     #[prost(message, optional, tag = "3")]
     pub metadata: ::core::option::Option<super::super::core::v3::Metadata>,
     /// The optional load balancing weight of the upstream host; at least 1.
@@ -113,13 +117,13 @@ pub mod lb_endpoint {
     pub enum HostIdentifier {
         #[prost(message, tag = "1")]
         Endpoint(super::Endpoint),
-        /// \[#not-implemented-hide:\]
+        /// \[\#not-implemented-hide:\]
         #[prost(string, tag = "5")]
         EndpointName(::prost::alloc::string::String),
     }
 }
 /// LbEndpoint list collection. Entries are `LbEndpoint` resources or references.
-/// \[#not-implemented-hide:\]
+/// \[\#not-implemented-hide:\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LbEndpointCollection {
     #[prost(message, optional, tag = "1")]
@@ -133,7 +137,7 @@ pub struct LedsClusterLocalityConfig {
     pub leds_config: ::core::option::Option<super::super::core::v3::ConfigSource>,
     /// The name of the LbEndpoint collection resource.
     ///
-    /// If the name ends in ``/*``, it indicates an LbEndpoint glob collection,
+    /// If the name ends in `/*`, it indicates an LbEndpoint glob collection,
     /// which is supported only in the xDS incremental protocol variants.
     /// Otherwise, it indicates an LbEndpointCollection list collection.
     ///
@@ -144,7 +148,7 @@ pub struct LedsClusterLocalityConfig {
 /// A group of endpoints belonging to a Locality.
 /// One can have multiple LocalityLbEndpoints for a locality, but only if
 /// they have different priorities.
-/// \[#next-free-field: 10\]
+/// \[\#next-free-field: 10\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocalityLbEndpoints {
     /// Identifies location of where the upstream hosts run.
@@ -154,8 +158,7 @@ pub struct LocalityLbEndpoints {
     #[prost(message, optional, tag = "9")]
     pub metadata: ::core::option::Option<super::super::core::v3::Metadata>,
     /// The group of endpoints belonging to the locality specified.
-    /// This is ignored if :ref:`leds_cluster_locality_config
-    /// <envoy_v3_api_field_config.endpoint.v3.LocalityLbEndpoints.leds_cluster_locality_config>` is set.
+    /// This is ignored if :ref:`leds_cluster_locality_config  <envoy_v3_api_field_config.endpoint.v3.LocalityLbEndpoints.leds_cluster_locality_config>` is set.
     #[prost(message, repeated, tag = "2")]
     pub lb_endpoints: ::prost::alloc::vec::Vec<LbEndpoint>,
     /// Optional: Per priority/region/zone/sub_zone weight; at least 1. The load
@@ -164,8 +167,7 @@ pub struct LocalityLbEndpoints {
     /// of traffic for the locality. The sum of the weights of all localities at
     /// the same priority level must not exceed uint32_t maximal value (4294967295).
     ///
-    /// Locality weights are only considered when :ref:`locality weighted load
-    /// balancing <arch_overview_load_balancing_locality_weighted_lb>` is
+    /// Locality weights are only considered when :ref:`locality weighted load  balancing <arch_overview_load_balancing_locality_weighted_lb>` is
     /// configured. These weights are ignored otherwise. If no weights are
     /// specified when locality weighted load balancing is enabled, the locality is
     /// assigned no load.
@@ -187,7 +189,7 @@ pub struct LocalityLbEndpoints {
     /// information (lower the value, closer it is to the source locality).
     /// This will be consumed by load balancing schemes that need proximity order
     /// to determine where to route the requests.
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     #[prost(message, optional, tag = "6")]
     pub proximity: ::core::option::Option<u32>,
     #[prost(oneof = "locality_lb_endpoints::LbConfig", tags = "7, 8")]
@@ -195,7 +197,7 @@ pub struct LocalityLbEndpoints {
 }
 /// Nested message and enum types in `LocalityLbEndpoints`.
 pub mod locality_lb_endpoints {
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     /// A list of endpoints of a specific locality.
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct LbEndpointList {
@@ -204,13 +206,13 @@ pub mod locality_lb_endpoints {
     }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum LbConfig {
-        /// \[#not-implemented-hide:\]
+        /// \[\#not-implemented-hide:\]
         /// Not implemented and deprecated.
+        #[deprecated]
         #[prost(message, tag = "7")]
         LoadBalancerEndpoints(LbEndpointList),
         /// LEDS Configuration for the current locality.
-        /// If this is set, the :ref:`lb_endpoints
-        /// <envoy_v3_api_field_config.endpoint.v3.LocalityLbEndpoints.lb_endpoints>`
+        /// If this is set, the :ref:`lb_endpoints  <envoy_v3_api_field_config.endpoint.v3.LocalityLbEndpoints.lb_endpoints>`
         /// field is ignored.
         #[prost(message, tag = "8")]
         LedsClusterLocalityConfig(super::LedsClusterLocalityConfig),
@@ -225,20 +227,18 @@ pub mod locality_lb_endpoints {
 /// for each endpoint is determined by both its load_balancing_weight, and the
 /// load_balancing_weight of its locality. First, a locality will be selected,
 /// then an endpoint within that locality will be chose based on its weight.
-/// \[#next-free-field: 6\]
+/// \[\#next-free-field: 6\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClusterLoadAssignment {
-    /// Name of the cluster. This will be the :ref:`service_name
-    /// <envoy_v3_api_field_config.cluster.v3.Cluster.EdsClusterConfig.service_name>` value if specified
-    /// in the cluster :ref:`EdsClusterConfig
-    /// <envoy_v3_api_msg_config.cluster.v3.Cluster.EdsClusterConfig>`.
+    /// Name of the cluster. This will be the :ref:`service_name  <envoy_v3_api_field_config.cluster.v3.Cluster.EdsClusterConfig.service_name>` value if specified
+    /// in the cluster :ref:`EdsClusterConfig  <envoy_v3_api_msg_config.cluster.v3.Cluster.EdsClusterConfig>`.
     #[prost(string, tag = "1")]
     pub cluster_name: ::prost::alloc::string::String,
     /// List of endpoints to load balance to.
     #[prost(message, repeated, tag = "2")]
     pub endpoints: ::prost::alloc::vec::Vec<LocalityLbEndpoints>,
     /// Map of named endpoints that can be referenced in LocalityLbEndpoints.
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     #[prost(map = "string, message", tag = "5")]
     pub named_endpoints: ::std::collections::HashMap<::prost::alloc::string::String, Endpoint>,
     /// Load balancing policy settings.
@@ -248,7 +248,7 @@ pub struct ClusterLoadAssignment {
 /// Nested message and enum types in `ClusterLoadAssignment`.
 pub mod cluster_load_assignment {
     /// Load balancing policy settings.
-    /// \[#next-free-field: 7\]
+    /// \[\#next-free-field: 7\]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Policy {
         /// Action to trim the overall incoming traffic to protect the upstream
@@ -261,23 +261,23 @@ pub mod cluster_load_assignment {
         ///
         /// .. code-block:: json
         ///
-        ///   { "drop_overloads": [
-        ///       { "category": "throttle", "drop_percentage": 60 }
-        ///       { "category": "lb", "drop_percentage": 50 }
-        ///   ]}
+        /// { "drop_overloads": \[
+        /// { "category": "throttle", "drop_percentage": 60 }
+        /// { "category": "lb", "drop_percentage": 50 }
+        /// \]}
         ///
         /// The actual drop percentages applied to the traffic at the clients will be
-        ///     "throttle"_drop = 60%
-        ///     "lb"_drop = 20%  // 50% of the remaining 'actual' load, which is 40%.
-        ///     actual_outgoing_load = 20% // remaining after applying all categories.
+        /// "throttle"\_drop = 60%
+        /// "lb"\_drop = 20%  // 50% of the remaining 'actual' load, which is 40%.
+        /// actual_outgoing_load = 20% // remaining after applying all categories.
         ///
         /// Envoy supports only one element and will NACK if more than one element is present.
         /// Other xDS-capable data planes will not necessarily have this limitation.
         ///
-        /// In Envoy, this ``drop_overloads`` config can be overridden by a runtime key
+        /// In Envoy, this `drop_overloads` config can be overridden by a runtime key
         /// "load_balancing_policy.drop_overload_limit" setting. This runtime key can be set to
         /// any integer number between 0 and 100. 0 means drop 0%. 100 means drop 100%.
-        /// When both ``drop_overloads`` config and "load_balancing_policy.drop_overload_limit"
+        /// When both `drop_overloads` config and "load_balancing_policy.drop_overload_limit"
         /// setting are in place, the min of these two wins.
         #[prost(message, repeated, tag = "2")]
         pub drop_overloads: ::prost::alloc::vec::Vec<policy::DropOverload>,
@@ -291,10 +291,11 @@ pub mod cluster_load_assignment {
         ///
         /// .. code-block:: json
         ///
-        ///   { "overprovisioning_factor": 100 }
+        /// { "overprovisioning_factor": 100 }
+        ///
         ///
         /// Read more at :ref:`priority levels <arch_overview_load_balancing_priority_levels>` and
-        /// :ref:`localities <arch_overview_load_balancing_locality_weighted_lb>`.
+        /// : ref:`localities <arch_overview_load_balancing_locality_weighted_lb>`.
         #[prost(message, optional, tag = "3")]
         pub overprovisioning_factor: ::core::option::Option<u32>,
         /// The max time until which the endpoints from this assignment can be used.
@@ -303,21 +304,21 @@ pub mod cluster_load_assignment {
         /// Defaults to 0 which means endpoints never go stale.
         #[prost(message, optional, tag = "4")]
         pub endpoint_stale_after: ::core::option::Option<::prost_types::Duration>,
-        /// If true, use the :ref:`load balancing weight
-        /// <envoy_v3_api_field_config.endpoint.v3.LbEndpoint.load_balancing_weight>` of healthy and unhealthy
+        /// If true, use the :ref:`load balancing weight  <envoy_v3_api_field_config.endpoint.v3.LbEndpoint.load_balancing_weight>` of healthy and unhealthy
         /// hosts to determine the health of the priority level. If false, use the number of healthy and unhealthy hosts
         /// to determine the health of the priority level, or in other words assume each host has a weight of 1 for
         /// this calculation.
         ///
+        ///
         /// .. note::
-        ///    This is not currently implemented for
-        ///    :ref:`locality weighted load balancing <arch_overview_load_balancing_locality_weighted_lb>`.
+        /// This is not currently implemented for
+        /// : ref:`locality weighted load balancing <arch_overview_load_balancing_locality_weighted_lb>`.
         #[prost(bool, tag = "6")]
         pub weighted_priority_health: bool,
     }
     /// Nested message and enum types in `Policy`.
     pub mod policy {
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
         pub struct DropOverload {
             /// Identifier for the policy specifying the drop.
             #[prost(string, tag = "1")]
@@ -330,10 +331,11 @@ pub mod cluster_load_assignment {
         }
     }
 }
+///
 /// These are stats Envoy reports to the management server at a frequency defined by
-/// :ref:`LoadStatsResponse.load_reporting_interval<envoy_v3_api_field_service.load_stats.v3.LoadStatsResponse.load_reporting_interval>`.
-/// Stats per upstream region/zone and optionally per subzone.
-/// \[#next-free-field: 15\]
+/// : ref:`LoadStatsResponse.load_reporting_interval<envoy_v3_api_field_service.load_stats.v3.LoadStatsResponse.load_reporting_interval>`.
+///   Stats per upstream region/zone and optionally per subzone.
+///   \[\#next-free-field: 15\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpstreamLocalityStats {
     /// Name of zone, region and optionally endpoint group these metrics were
@@ -361,26 +363,26 @@ pub struct UpstreamLocalityStats {
     /// The total number of connections in an established state at the time of the
     /// report. This field is aggregated over all the upstream endpoints in the
     /// locality.
-    /// In Envoy, this information may be based on ``upstream_cx_active metric``.
-    /// \[#not-implemented-hide:\]
+    /// In Envoy, this information may be based on `upstream_cx_active metric`.
+    /// \[\#not-implemented-hide:\]
     #[prost(uint64, tag = "9")]
     pub total_active_connections: u64,
     /// The total number of connections opened since the last report.
     /// This field is aggregated over all the upstream endpoints in the locality.
-    /// In Envoy, this information may be based on ``upstream_cx_total`` metric
+    /// In Envoy, this information may be based on `upstream_cx_total` metric
     /// compared to itself between start and end of an interval, i.e.
-    /// ``upstream_cx_total``(now) - ``upstream_cx_total``(now -
+    /// `upstream_cx_total`(now) - `upstream_cx_total`(now -
     /// load_report_interval).
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     #[prost(uint64, tag = "10")]
     pub total_new_connections: u64,
     /// The total number of connection failures since the last report.
     /// This field is aggregated over all the upstream endpoints in the locality.
-    /// In Envoy, this information may be based on ``upstream_cx_connect_fail``
+    /// In Envoy, this information may be based on `upstream_cx_connect_fail`
     /// metric compared to itself between start and end of an interval, i.e.
-    /// ``upstream_cx_connect_fail``(now) - ``upstream_cx_connect_fail``(now -
+    /// `upstream_cx_connect_fail`(now) - `upstream_cx_connect_fail`(now -
     /// load_report_interval).
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     #[prost(uint64, tag = "11")]
     pub total_fail_connections: u64,
     /// CPU utilization stats for multi-dimensional load balancing.
@@ -399,17 +401,18 @@ pub struct UpstreamLocalityStats {
     /// These typically come from endpoint metrics reported via ORCA.
     #[prost(message, repeated, tag = "5")]
     pub load_metric_stats: ::prost::alloc::vec::Vec<EndpointLoadMetricStats>,
+    ///
     /// Endpoint granularity stats information for this locality. This information
     /// is populated if the Server requests it by setting
-    /// :ref:`LoadStatsResponse.report_endpoint_granularity<envoy_v3_api_field_service.load_stats.v3.LoadStatsResponse.report_endpoint_granularity>`.
+    /// : ref:`LoadStatsResponse.report_endpoint_granularity<envoy_v3_api_field_service.load_stats.v3.LoadStatsResponse.report_endpoint_granularity>`.
     #[prost(message, repeated, tag = "7")]
     pub upstream_endpoint_stats: ::prost::alloc::vec::Vec<UpstreamEndpointStats>,
-    /// \[#not-implemented-hide:\] The priority of the endpoint group these metrics
+    /// \[\#not-implemented-hide:\] The priority of the endpoint group these metrics
     /// were collected from.
     #[prost(uint32, tag = "6")]
     pub priority: u32,
 }
-/// \[#next-free-field: 8\]
+/// \[\#next-free-field: 8\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpstreamEndpointStats {
     /// Upstream host address.
@@ -432,12 +435,12 @@ pub struct UpstreamEndpointStats {
     /// For HTTP these are responses with 5xx status codes and for gRPC the
     /// grpc-status values:
     ///
-    ///    - DeadlineExceeded
-    ///    - Unimplemented
-    ///    - Internal
-    ///    - Unavailable
-    ///    - Unknown
-    ///    - DataLoss
+    /// * DeadlineExceeded
+    /// * Unimplemented
+    /// * Internal
+    /// * Unavailable
+    /// * Unknown
+    /// * DataLoss
     #[prost(uint64, tag = "4")]
     pub total_error_requests: u64,
     /// The total number of requests that were issued to this endpoint
@@ -473,10 +476,11 @@ pub struct UnnamedEndpointLoadMetricStats {
     #[prost(double, tag = "2")]
     pub total_metric_value: f64,
 }
+///
 /// Per cluster load stats. Envoy reports these stats a management server in a
-/// :ref:`LoadStatsRequest<envoy_v3_api_msg_service.load_stats.v3.LoadStatsRequest>`
-/// Next ID: 7
-/// \[#next-free-field: 7\]
+/// : ref:`LoadStatsRequest<envoy_v3_api_msg_service.load_stats.v3.LoadStatsRequest>`
+///   Next ID: 7
+///   \[\#next-free-field: 7\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClusterStats {
     /// The name of the cluster.
@@ -503,15 +507,15 @@ pub struct ClusterStats {
     #[prost(message, repeated, tag = "5")]
     pub dropped_requests: ::prost::alloc::vec::Vec<cluster_stats::DroppedRequests>,
     /// Period over which the actual load report occurred. This will be guaranteed to include every
-    /// request reported. Due to system load and delays between the ``LoadStatsRequest`` sent from Envoy
-    /// and the ``LoadStatsResponse`` message sent from the management server, this may be longer than
-    /// the requested load reporting interval in the ``LoadStatsResponse``.
+    /// request reported. Due to system load and delays between the `LoadStatsRequest` sent from Envoy
+    /// and the `LoadStatsResponse` message sent from the management server, this may be longer than
+    /// the requested load reporting interval in the `LoadStatsResponse`.
     #[prost(message, optional, tag = "4")]
     pub load_report_interval: ::core::option::Option<::prost_types::Duration>,
 }
 /// Nested message and enum types in `ClusterStats`.
 pub mod cluster_stats {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct DroppedRequests {
         /// Identifier for the policy specifying the drop.
         #[prost(string, tag = "1")]

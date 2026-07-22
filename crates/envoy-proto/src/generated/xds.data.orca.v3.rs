@@ -13,7 +13,7 @@ pub struct OrcaLoadReport {
     pub mem_utilization: f64,
     /// Total RPS being served by an endpoint. This should cover all services that an endpoint is
     /// responsible for.
-    /// Deprecated -- use ``rps_fractional`` field instead.
+    /// Deprecated -- use `rps_fractional` field instead.
     #[deprecated]
     #[prost(uint64, tag = "3")]
     pub rps: u64,

@@ -8,7 +8,7 @@ pub struct FilterConfig {
 }
 /// Nested message and enum types in `FilterConfig`.
 pub mod filter_config {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct AlpnOverride {
         /// Upstream protocol
         #[prost(enumeration = "Protocol", tag = "1")]

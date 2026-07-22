@@ -3,12 +3,10 @@
 pub struct ClientSslAuth {
     /// The :ref:`cluster manager <arch_overview_cluster_manager>` cluster that runs
     /// the authentication service. The filter will connect to the service every 60s to fetch the list
-    /// of principals. The service must support the expected :ref:`REST API
-    /// <config_network_filters_client_ssl_auth_rest_api>`.
+    /// of principals. The service must support the expected :ref:`REST API  <config_network_filters_client_ssl_auth_rest_api>`.
     #[prost(string, tag = "1")]
     pub auth_api_cluster: ::prost::alloc::string::String,
-    /// The prefix to use when emitting :ref:`statistics
-    /// <config_network_filters_client_ssl_auth_stats>`.
+    /// The prefix to use when emitting :ref:`statistics  <config_network_filters_client_ssl_auth_stats>`.
     #[prost(string, tag = "2")]
     pub stat_prefix: ::prost::alloc::string::String,
     /// Time in milliseconds between principal refreshes from the

@@ -9,18 +9,20 @@
 /// When packing an opaque extension config, packing the expected type into Any is preferred
 /// wherever possible for its efficiency. TypedStruct should be used only if a proto descriptor
 /// is not available, for example if:
-/// - A control plane sends opaque message that is originally from external source in human readable
-///    format such as JSON or YAML.
-/// - The control plane doesn't have the knowledge of the protocol buffer schema hence it cannot
-///    serialize the message in protocol buffer binary format.
-/// - The DPLB doesn't have have the knowledge of the protocol buffer schema its plugin or extension
-///    uses. This has to be indicated in the DPLB capability negotiation.
+///
+/// * A control plane sends opaque message that is originally from external source in human readable
+///   format such as JSON or YAML.
+/// * The control plane doesn't have the knowledge of the protocol buffer schema hence it cannot
+///   serialize the message in protocol buffer binary format.
+/// * The DPLB doesn't have have the knowledge of the protocol buffer schema its plugin or extension
+///   uses. This has to be indicated in the DPLB capability negotiation.
 ///
 /// When a DPLB receives a TypedStruct in Any, it should:
-/// - Check if the type_url of the TypedStruct matches the type the extension expects.
-/// - Convert value to the type described in type_url and perform validation.
-/// TODO(lizan): Figure out how TypeStruct should be used with DPLB extensions that doesn't link
-/// protobuf descriptor with DPLB itself, (e.g. gRPC LB Plugin, Envoy WASM extensions).
+///
+/// * Check if the type_url of the TypedStruct matches the type the extension expects.
+/// * Convert value to the type described in type_url and perform validation.
+///   TODO(lizan): Figure out how TypeStruct should be used with DPLB extensions that doesn't link
+///   protobuf descriptor with DPLB itself, (e.g. gRPC LB Plugin, Envoy WASM extensions).
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TypedStruct {
     /// A URL that uniquely identifies the type of the serialize protocol buffer message.

@@ -21,13 +21,13 @@ pub struct RateLimitRequest {
     >,
     /// Rate limit requests can optionally specify the number of hits a request adds to the matched
     /// limit. If the value is not set in the message, a request increases the matched limit by 1.
-    /// This value can be overridden by setting filter state value ``envoy.ratelimit.hits_addend``
-    /// to the desired number. Invalid number (< 0) or number will be ignored.
+    /// This value can be overridden by setting filter state value `envoy.ratelimit.hits_addend`
+    /// to the desired number. Invalid number (\< 0) or number will be ignored.
     #[prost(uint32, tag = "3")]
     pub hits_addend: u32,
 }
 /// A response from a ShouldRateLimit call.
-/// \[#next-free-field: 8\]
+/// \[\#next-free-field: 8\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RateLimitResponse {
     /// The overall response code which takes into account all of the descriptors that were passed
@@ -54,29 +54,31 @@ pub struct RateLimitResponse {
     /// filter. This metadata lives in a namespace specified by the canonical name of extension filter
     /// that requires it:
     ///
-    /// - :ref:`envoy.filters.http.ratelimit <config_http_filters_ratelimit_dynamic_metadata>` for HTTP filter.
-    /// - :ref:`envoy.filters.network.ratelimit <config_network_filters_ratelimit_dynamic_metadata>` for network filter.
-    /// - :ref:`envoy.filters.thrift.rate_limit <config_thrift_filters_rate_limit_dynamic_metadata>` for Thrift filter.
+    /// * :ref:`envoy.filters.http.ratelimit <config_http_filters_ratelimit_dynamic_metadata>` for HTTP filter.
+    /// * :ref:`envoy.filters.network.ratelimit <config_network_filters_ratelimit_dynamic_metadata>` for network filter.
+    /// * :ref:`envoy.filters.thrift.rate_limit <config_thrift_filters_rate_limit_dynamic_metadata>` for Thrift filter.
     #[prost(message, optional, tag = "6")]
     pub dynamic_metadata: ::core::option::Option<::prost_types::Struct>,
     /// Quota is available for a request if its entire descriptor set has cached quota available.
     /// This is a union of all descriptors in the descriptor set. Clients can use the quota for future matches if and only if the descriptor set matches what was sent in the request that originated this response.
     ///
+    ///
     /// If quota is available, a RLS request will not be made and the quota will be reduced by 1.
     /// If quota is not available (i.e., a cached entry doesn't exist for a RLS descriptor set), a RLS request will be triggered.
     /// If the server did not provide a quota, such as the quota message is empty then the request admission is determined by the
-    /// :ref:`overall_code <envoy_v3_api_field_service.ratelimit.v3.RateLimitResponse.overall_code>`.
+    /// : ref:`overall_code <envoy_v3_api_field_service.ratelimit.v3.RateLimitResponse.overall_code>`.
+    ///
     ///
     /// If there is not sufficient quota and the cached entry exists for a RLS descriptor set is out-of-quota but not expired,
     /// the request will be treated as OVER_LIMIT.
-    /// \[#not-implemented-hide:\]
+    /// \[\#not-implemented-hide:\]
     #[prost(message, optional, tag = "7")]
     pub quota: ::core::option::Option<rate_limit_response::Quota>,
 }
 /// Nested message and enum types in `RateLimitResponse`.
 pub mod rate_limit_response {
     /// Defines an actual rate limit in terms of requests per unit of time and the unit itself.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct RateLimit {
         /// A name or description of this limit.
         #[prost(string, tag = "3")]
@@ -91,7 +93,7 @@ pub mod rate_limit_response {
     /// Nested message and enum types in `RateLimit`.
     pub mod rate_limit {
         /// Identifies the unit of of time for rate limit.
-        /// \[#comment: replace by envoy/type/v3/ratelimit_unit.proto in v4\]
+        /// \[\#comment: replace by envoy/type/v3/ratelimit_unit.proto in v4\]
         #[derive(
             Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration,
         )]
@@ -156,8 +158,8 @@ pub mod rate_limit_response {
     /// When quota expires due to timeout, a new RLS request will also be made.
     /// The implementation may choose to preemptively query the rate limit server for more quota on or
     /// before expiration or before the available quota runs out.
-    /// \[#not-implemented-hide:\]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    /// \[\#not-implemented-hide:\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Quota {
         /// Number of matching requests granted in quota. Must be 1 or more.
         #[prost(uint32, tag = "1")]
@@ -176,15 +178,15 @@ pub mod rate_limit_response {
     }
     /// Nested message and enum types in `Quota`.
     pub mod quota {
-        #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum ExpirationSpecifier {
             /// Point in time at which the quota expires.
             #[prost(message, tag = "2")]
             ValidUntil(::prost_types::Timestamp),
         }
     }
-    /// \[#next-free-field: 6\]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    /// \[\#next-free-field: 6\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct DescriptorStatus {
         /// The response code for an individual descriptor.
         #[prost(enumeration = "Code", tag = "1")]
@@ -206,22 +208,28 @@ pub mod rate_limit_response {
         /// all matching descriptors.
         ///
         /// If there is not sufficient quota, there are three cases:
+        ///
         /// 1. A cached entry exists for a RLS descriptor that is out-of-quota, but not expired.
-        ///     In this case, the request will be treated as OVER_LIMIT.
-        /// 2. Some RLS descriptors have a cached entry that has valid quota but some RLS descriptors
-        ///     have no cached entry. This will trigger a new RLS request.
-        ///     When the result is returned, a single unit will be consumed from the quota for all
-        ///     matching descriptors.
-        ///     If the server did not provide a quota, such as the quota message is empty for some of
-        ///     the descriptors, then the request admission is determined by the
-        ///     :ref:`overall_code <envoy_v3_api_field_service.ratelimit.v3.RateLimitResponse.overall_code>`.
-        /// 3. All RLS descriptors lack a cached entry, this will trigger a new RLS request,
-        ///     When the result is returned, a single unit will be consumed from the quota for all
-        ///     matching descriptors.
-        ///     If the server did not provide a quota, such as the quota message is empty for some of
-        ///     the descriptors, then the request admission is determined by the
-        ///     :ref:`overall_code <envoy_v3_api_field_service.ratelimit.v3.RateLimitResponse.overall_code>`.
-        /// \[#not-implemented-hide:\]
+        ///    In this case, the request will be treated as OVER_LIMIT.
+        /// 1.
+        ///    Some RLS descriptors have a cached entry that has valid quota but some RLS descriptors
+        ///    have no cached entry. This will trigger a new RLS request.
+        ///    When the result is returned, a single unit will be consumed from the quota for all
+        ///    matching descriptors.
+        ///    If the server did not provide a quota, such as the quota message is empty for some of
+        ///    the descriptors, then the request admission is determined by the
+        ///    : ref:`overall_code <envoy_v3_api_field_service.ratelimit.v3.RateLimitResponse.overall_code>`.
+        ///
+        ///
+        /// 1.
+        ///    All RLS descriptors lack a cached entry, this will trigger a new RLS request,
+        ///    When the result is returned, a single unit will be consumed from the quota for all
+        ///    matching descriptors.
+        ///    If the server did not provide a quota, such as the quota message is empty for some of
+        ///    the descriptors, then the request admission is determined by the
+        ///    : ref:`overall_code <envoy_v3_api_field_service.ratelimit.v3.RateLimitResponse.overall_code>`.
+        ///      \[\#not-implemented-hide:\]
+        ///
         #[prost(message, optional, tag = "5")]
         pub quota: ::core::option::Option<Quota>,
     }
@@ -345,7 +353,7 @@ pub mod rate_limit_service_client {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::unknown(format!("Service was not ready: {}", e.into()))
             })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/envoy.service.ratelimit.v3.RateLimitService/ShouldRateLimit",
             );
@@ -476,7 +484,7 @@ pub mod rate_limit_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = ShouldRateLimitSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,

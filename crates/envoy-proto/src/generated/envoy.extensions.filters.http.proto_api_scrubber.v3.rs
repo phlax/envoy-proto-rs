@@ -44,10 +44,10 @@ pub mod proto_api_scrubber_config {
     }
 }
 /// Specifies the descriptor set for proto services.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DescriptorSet {
-    /// It could be passed by a local file through ``Datasource.filename`` or
-    /// embedded in the ``Datasource.inline_bytes``.
+    /// It could be passed by a local file through `Datasource.filename` or
+    /// embedded in the `Datasource.inline_bytes`.
     #[prost(message, optional, tag = "1")]
     pub data_source:
         ::core::option::Option<super::super::super::super::super::config::core::v3::DataSource>,
@@ -56,13 +56,13 @@ pub struct DescriptorSet {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Restrictions {
     /// Specifies the method restrictions.
-    /// Key - Fully qualified method name e.g., ``endpoints.examples.bookstore.BookStore/GetShelf``.
+    /// Key - Fully qualified method name e.g., `endpoints.examples.bookstore.BookStore/GetShelf`.
     /// Value - Method restrictions.
     #[prost(map = "string, message", tag = "1")]
     pub method_restrictions:
         ::std::collections::HashMap<::prost::alloc::string::String, MethodRestrictions>,
     /// Specifies the message restrictions.
-    /// Key - Fully qualified message name e.g., ``endpoints.examples.bookstore.Book``.
+    /// Key - Fully qualified message name e.g., `endpoints.examples.bookstore.Book`.
     /// Value - Message restrictions.
     #[prost(map = "string, message", tag = "2")]
     pub message_restrictions:
@@ -91,9 +91,9 @@ pub struct MethodRestrictions {
     /// message-level rules. The 'matcher' within RestrictionConfig will determine
     /// if the method is denied/scrubbed. If the matcher evaluates to true:
     ///
-    /// - The request is **denied**, and further processing is stopped.
-    /// - The implementation should generate an immediate error response
-    ///    (e.g., an HTTP 403 Forbidden status) and send it to the client.
+    /// * The request is **denied**, and further processing is stopped.
+    /// * The implementation should generate an immediate error response
+    ///   (e.g., an HTTP 403 Forbidden status) and send it to the client.
     #[prost(message, optional, tag = "3")]
     pub method_restriction: ::core::option::Option<RestrictionConfig>,
 }
@@ -123,5 +123,5 @@ pub struct RestrictionConfig {
 }
 /// Specifies an :ref:`Unified Matcher API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>` action to remove a field.
 /// This actual action needs to be implemented by the filter using it.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RemoveFieldAction {}

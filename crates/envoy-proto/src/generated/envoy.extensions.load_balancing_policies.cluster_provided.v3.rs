@@ -4,7 +4,7 @@
 /// is created.
 ///
 /// .. note::
-///    Cluster provided load balancing policy could not be used as sub-policy of other hierarchical
-///    load balancing policies, such as subset load balancing policy.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+/// Cluster provided load balancing policy could not be used as sub-policy of other hierarchical
+/// load balancing policies, such as subset load balancing policy.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ClusterProvided {}

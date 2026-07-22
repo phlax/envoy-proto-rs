@@ -3,7 +3,6 @@
 /// into the proxied requests.
 /// The credential will be injected into the specified HTTP request header.
 /// Refer to [RFC 6750: The OAuth 2.0 Authorization Framework: Bearer Token Usage](<https://www.rfc-editor.org/rfc/rfc6750>) for details.
-///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Generic {
     /// The SDS configuration for the credential that will be injected to the specified HTTP request header.
@@ -13,13 +12,13 @@ pub struct Generic {
         super::super::super::super::transport_sockets::tls::v3::SdsSecretConfig,
     >,
     /// The header that will be injected to the HTTP request with the provided credential.
-    /// If not set, filter will default to: ``Authorization``
+    /// If not set, filter will default to: `Authorization`
     #[prost(string, tag = "2")]
     pub header: ::prost::alloc::string::String,
     /// The prefix to prepend to the credential value before injecting it into the header.
-    /// This is useful for adding a scheme such as ``Bearer `` or ``Basic `` to the credential.
-    /// For example, if the credential is ``xyz123`` and the prefix is ``Bearer ``, the
-    /// final header value will be ``Bearer xyz123``.
+    /// This is useful for adding a scheme such as `Bearer ` or `Basic ` to the credential.
+    /// For example, if the credential is `xyz123` and the prefix is `Bearer `, the
+    /// final header value will be `Bearer xyz123`.
     /// If not set, the raw credential value will be injected without any prefix.
     #[prost(string, tag = "3")]
     pub header_value_prefix: ::prost::alloc::string::String,

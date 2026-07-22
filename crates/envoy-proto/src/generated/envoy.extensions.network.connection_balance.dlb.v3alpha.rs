@@ -3,15 +3,15 @@
 /// in the CPU package. It interacts with software running on cores and potentially other devices. The Dlb implements the
 /// following balancing features:
 ///
-/// -  Lock-free multi-producer/multi-consumer operation.
-/// -  Multiple priorities for varying traffic types.
-/// -  Various distribution schemes.
+/// * Lock-free multi-producer/multi-consumer operation.
+/// * Multiple priorities for varying traffic types.
+/// * Various distribution schemes.
 ///
 /// Dlb connection balancer uses Dlb hardware to balance connections, and can significantly reduce latency.
 ///
 /// As the Dlb connection balancer provides assistance from dedicated Dlb hardware, it can be used for a proxy with a large number of connections
 /// (e.g., a gateway).
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Dlb {
     /// The ID of the Dlb hardware, start from 0.
     /// If not specified, use the first available device as default.

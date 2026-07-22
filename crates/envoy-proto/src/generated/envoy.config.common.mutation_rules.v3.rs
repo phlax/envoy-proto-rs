@@ -8,52 +8,53 @@
 /// denoted by an x-envoy prefix) or specific headers that may affect
 /// further filter processing:
 ///
-/// * ``host``
-/// * ``:authority``
-/// * ``:scheme``
-/// * ``:method``
+/// * `host`
+/// * `:authority`
+/// * `:scheme`
+/// * `:method`
 ///
 /// Every attempt to add, change, append, or remove a header will be
 /// tested against the rules here. Disallowed header mutations will be
-/// ignored unless ``disallow_is_error`` is set to true.
+/// ignored unless `disallow_is_error` is set to true.
 ///
 /// Attempts to remove headers are further constrained -- regardless of the
-/// settings, system-defined headers (that start with ``:``) and the ``host``
+/// settings, system-defined headers (that start with `:`) and the `host`
 /// header may never be removed.
 ///
 /// In addition, a counter will be incremented whenever a mutation is
 /// rejected. In the ext_proc filter, that counter is named
-/// ``rejected_header_mutations``.
-/// \[#next-free-field: 8\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// `rejected_header_mutations`.
+/// \[\#next-free-field: 8\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HeaderMutationRules {
     /// By default, certain headers that could affect processing of subsequent
     /// filters or request routing cannot be modified. These headers are
-    /// ``host``, ``:authority``, ``:scheme``, and ``:method``. Setting this parameter
+    /// `host`, `:authority`, `:scheme`, and `:method`. Setting this parameter
     /// to true allows these headers to be modified as well.
     #[prost(message, optional, tag = "1")]
     pub allow_all_routing: ::core::option::Option<bool>,
+    ///
     /// If true, allow modification of envoy internal headers. By default, these
-    /// start with ``x-envoy`` but this may be overridden in the ``Bootstrap``
+    /// start with `x-envoy` but this may be overridden in the `Bootstrap`
     /// configuration using the
-    /// :ref:`header_prefix <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.header_prefix>`
-    /// field. Default is false.
+    /// : ref:`header_prefix <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.header_prefix>`
+    ///   field. Default is false.
     #[prost(message, optional, tag = "2")]
     pub allow_envoy: ::core::option::Option<bool>,
     /// If true, prevent modification of any system header, defined as a header
-    /// that starts with a ``:`` character, regardless of any other settings.
-    /// A processing server may still override the ``:status`` of an HTTP response
-    /// using an ``ImmediateResponse`` message. Default is false.
+    /// that starts with a `:` character, regardless of any other settings.
+    /// A processing server may still override the `:status` of an HTTP response
+    /// using an `ImmediateResponse` message. Default is false.
     #[prost(message, optional, tag = "3")]
     pub disallow_system: ::core::option::Option<bool>,
     /// If true, prevent modifications of all header values, regardless of any
-    /// other settings. A processing server may still override the ``:status``
-    /// of an HTTP response using an ``ImmediateResponse`` message. Default is false.
+    /// other settings. A processing server may still override the `:status`
+    /// of an HTTP response using an `ImmediateResponse` message. Default is false.
     #[prost(message, optional, tag = "4")]
     pub disallow_all: ::core::option::Option<bool>,
     /// If set, specifically allow any header that matches this regular
     /// expression. This overrides all other settings except for
-    /// ``disallow_expression``.
+    /// `disallow_expression`.
     #[prost(message, optional, tag = "5")]
     pub allow_expression:
         ::core::option::Option<super::super::super::super::r#type::matcher::v3::RegexMatcher>,
@@ -66,21 +67,21 @@ pub struct HeaderMutationRules {
     /// disallowed, then the filter using this configuration will terminate the
     /// request with a 500 error. In addition, regardless of the setting of this
     /// parameter, any attempt to set, add, or modify a disallowed header will
-    /// cause the ``rejected_header_mutations`` counter to be incremented.
+    /// cause the `rejected_header_mutations` counter to be incremented.
     /// Default is false.
     #[prost(message, optional, tag = "7")]
     pub disallow_is_error: ::core::option::Option<bool>,
 }
 /// The HeaderMutation structure specifies an action that may be taken on HTTP
 /// headers.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HeaderMutation {
     #[prost(oneof = "header_mutation::Action", tags = "1, 2, 3")]
     pub action: ::core::option::Option<header_mutation::Action>,
 }
 /// Nested message and enum types in `HeaderMutation`.
 pub mod header_mutation {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct RemoveOnMatch {
         /// A string matcher that will be applied to the header key. If the header key
         /// matches, the header will be removed.
@@ -89,7 +90,7 @@ pub mod header_mutation {
             super::super::super::super::super::r#type::matcher::v3::StringMatcher,
         >,
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum Action {
         /// Remove the specified header if it exists.
         #[prost(string, tag = "1")]

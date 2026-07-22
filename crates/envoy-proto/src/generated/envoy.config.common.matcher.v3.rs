@@ -6,11 +6,11 @@
 /// might repeat several times until the final OnMatch (or no match) is decided.
 ///
 /// .. note::
-///    Please use the syntactically equivalent :ref:`matching API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>`
+/// Please use the syntactically equivalent :ref:`matching API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>`
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Matcher {
-    /// Optional ``OnMatch`` to use if the matcher failed.
-    /// If specified, the ``OnMatch`` is used, and the matcher is considered
+    /// Optional `OnMatch` to use if the matcher failed.
+    /// If specified, the `OnMatch` is used, and the matcher is considered
     /// to have matched.
     /// If not specified, the matcher is considered not to have matched.
     #[prost(message, optional, boxed, tag = "3")]
@@ -73,10 +73,10 @@ pub mod matcher {
         /// Nested message and enum types in `Predicate`.
         pub mod predicate {
             /// Predicate for a single input field.
-            #[derive(Clone, PartialEq, ::prost::Message)]
+            #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
             pub struct SinglePredicate {
                 /// Protocol-specific specification of input field to match on.
-                /// \[#extension-category: envoy.matching.common_inputs\]
+                /// \[\#extension-category: envoy.matching.common_inputs\]
                 #[prost(message, optional, tag = "1")]
                 pub input: ::core::option::Option<
                     super::super::super::super::super::super::core::v3::TypedExtensionConfig,
@@ -86,7 +86,7 @@ pub mod matcher {
             }
             /// Nested message and enum types in `SinglePredicate`.
             pub mod single_predicate {
-                #[derive(Clone, PartialEq, ::prost::Oneof)]
+                #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
                 pub enum Matcher {
                     /// Built-in string matcher.
                     #[prost(message, tag = "2")]
@@ -94,7 +94,7 @@ pub mod matcher {
                         super::super::super::super::super::super::super::super::r#type::matcher::v3::StringMatcher,
                     ),
                     /// Extension for custom matching logic.
-                    /// \[#extension-category: envoy.matching.input_matchers\]
+                    /// \[\#extension-category: envoy.matching.input_matchers\]
                     #[prost(message, tag = "3")]
                     CustomMatch(
                         super::super::super::super::super::super::super::core::v3::TypedExtensionConfig,
@@ -181,7 +181,7 @@ pub mod matcher {
 }
 /// Match configuration. This is a recursive structure which allows complex nested match
 /// configurations to be built using various logical operators.
-/// \[#next-free-field: 11\]
+/// \[\#next-free-field: 11\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MatchPredicate {
     #[prost(
@@ -249,9 +249,9 @@ pub struct HttpHeadersMatch {
 ///
 /// .. attention::
 ///
-///    Searching for patterns in HTTP body is potentially CPU-intensive. For each specified pattern, HTTP body is scanned byte by byte to find a match.
-///    If multiple patterns are specified, the process is repeated for each pattern. If location of a pattern is known, ``bytes_limit`` should be specified
-///    to scan only part of the HTTP body.
+/// Searching for patterns in HTTP body is potentially CPU-intensive. For each specified pattern, HTTP body is scanned byte by byte to find a match.
+/// If multiple patterns are specified, the process is repeated for each pattern. If location of a pattern is known, `bytes_limit` should be specified
+/// to scan only part of the HTTP body.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HttpGenericBodyMatch {
     /// Limits search to specified number of bytes - default zero (no limit - match entire captured buffer).
@@ -263,14 +263,14 @@ pub struct HttpGenericBodyMatch {
 }
 /// Nested message and enum types in `HttpGenericBodyMatch`.
 pub mod http_generic_body_match {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct GenericTextMatch {
         #[prost(oneof = "generic_text_match::Rule", tags = "1, 2")]
         pub rule: ::core::option::Option<generic_text_match::Rule>,
     }
     /// Nested message and enum types in `GenericTextMatch`.
     pub mod generic_text_match {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum Rule {
             /// Text string to be located in HTTP body.
             #[prost(string, tag = "1")]

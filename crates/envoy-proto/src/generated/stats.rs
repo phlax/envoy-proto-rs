@@ -5,7 +5,7 @@
 /// The standard metrics are optimized and reported through a "fast-path".
 /// The customizations allow full configurability, at the cost of a "slower"
 /// path.
-/// \[#next-free-field: 6\]
+/// \[\#next-free-field: 6\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MetricConfig {
     /// (Optional) Collection of tag names and tag expressions to include in the
@@ -29,7 +29,7 @@ pub struct MetricConfig {
     #[prost(bool, tag = "5")]
     pub drop: bool,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct MetricDefinition {
     /// Metric name.
     #[prost(string, tag = "1")]
@@ -41,7 +41,7 @@ pub struct MetricDefinition {
     #[prost(enumeration = "MetricType", tag = "3")]
     pub r#type: i32,
 }
-/// \[#next-free-field: 13\]
+/// \[\#next-free-field: 13\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PluginConfig {
     /// Optional: Disable using host header as a fallback if destination service is
@@ -50,7 +50,7 @@ pub struct PluginConfig {
     #[prost(bool, tag = "6")]
     pub disable_host_header_fallback: bool,
     /// Optional. Allows configuration of the time between calls out to for TCP
-    /// metrics reporting. The default duration is ``5s``.
+    /// metrics reporting. The default duration is `5s`.
     #[prost(message, optional, tag = "7")]
     pub tcp_reporting_duration: ::core::option::Option<::prost_types::Duration>,
     /// Metric overrides.

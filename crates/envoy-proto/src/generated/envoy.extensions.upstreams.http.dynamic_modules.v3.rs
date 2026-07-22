@@ -5,7 +5,7 @@
 /// transforms HTTP request headers and body into raw TCP data for the upstream connection, and
 /// converts raw TCP response data back into HTTP responses for the downstream client.
 ///
-/// \[#extension: envoy.upstreams.http.dynamic_modules\]
+/// \[\#extension: envoy.upstreams.http.dynamic_modules\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Config {
     /// The dynamic module configuration.
@@ -14,14 +14,14 @@ pub struct Config {
         super::super::super::super::dynamic_modules::v3::DynamicModuleConfig,
     >,
     /// The name to identify the bridge implementation within the module.
-    /// This is passed to the module's ``envoy_dynamic_module_on_upstream_http_tcp_bridge_config_new``
+    /// This is passed to the module's `envoy_dynamic_module_on_upstream_http_tcp_bridge_config_new`
     /// function.
     #[prost(string, tag = "2")]
     pub bridge_name: ::prost::alloc::string::String,
     /// The configuration for the module's bridge implementation.
-    /// This is passed to the module's ``envoy_dynamic_module_on_upstream_http_tcp_bridge_config_new``
+    /// This is passed to the module's `envoy_dynamic_module_on_upstream_http_tcp_bridge_config_new`
     /// function. The configuration can be any protobuf message. However, it is recommended to use
-    /// ``google.protobuf.Struct``, ``google.protobuf.StringValue``, or ``google.protobuf.BytesValue``.
+    /// `google.protobuf.Struct`, `google.protobuf.StringValue`, or `google.protobuf.BytesValue`.
     /// These types are passed directly as bytes to the module, so the module does not need to have
     /// knowledge of protobuf encoding. Otherwise, the serialized bytes of the type are passed.
     /// If not specified, an empty configuration is passed.

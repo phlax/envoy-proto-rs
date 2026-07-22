@@ -8,21 +8,21 @@ pub struct AccessLog {
     #[prost(message, optional, tag = "2")]
     pub filter: ::core::option::Option<AccessLogFilter>,
     /// Custom configuration that must be set according to the access logger extension being instantiated.
-    /// \[#extension-category: envoy.access_loggers\]
+    /// \[\#extension-category: envoy.access_loggers\]
     #[prost(oneof = "access_log::ConfigType", tags = "4")]
     pub config_type: ::core::option::Option<access_log::ConfigType>,
 }
 /// Nested message and enum types in `AccessLog`.
 pub mod access_log {
     /// Custom configuration that must be set according to the access logger extension being instantiated.
-    /// \[#extension-category: envoy.access_loggers\]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    /// \[\#extension-category: envoy.access_loggers\]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum ConfigType {
         #[prost(message, tag = "4")]
         TypedConfig(::prost_types::Any),
     }
 }
-/// \[#next-free-field: 14\]
+/// \[\#next-free-field: 14\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AccessLogFilter {
     #[prost(
@@ -66,7 +66,7 @@ pub mod access_log_filter {
         #[prost(message, tag = "10")]
         GrpcStatusFilter(super::GrpcStatusFilter),
         /// Extension filter.
-        /// \[#extension-category: envoy.access_loggers.extension_filters\]
+        /// \[\#extension-category: envoy.access_loggers.extension_filters\]
         #[prost(message, tag = "11")]
         ExtensionFilter(super::ExtensionFilter),
         /// Metadata Filter
@@ -78,7 +78,7 @@ pub mod access_log_filter {
     }
 }
 /// Filter on an integer comparison.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ComparisonFilter {
     /// Comparison operator.
     #[prost(enumeration = "comparison_filter::Op", tag = "1")]
@@ -94,9 +94,11 @@ pub mod comparison_filter {
     pub enum Op {
         /// =
         Eq = 0,
-        /// >=
+        ///
+        /// >
+        /// > =
         Ge = 1,
-        /// <=
+        /// \<=
         Le = 2,
         /// !=
         Ne = 3,
@@ -127,7 +129,7 @@ pub mod comparison_filter {
     }
 }
 /// Filters on HTTP response/status code.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct StatusCodeFilter {
     /// Comparison.
     #[prost(message, optional, tag = "1")]
@@ -137,7 +139,7 @@ pub struct StatusCodeFilter {
 /// For end of stream access logs, the total duration of the stream will be used.
 /// For :ref:`periodic access logs<arch_overview_access_log_periodic>`,
 /// the duration of the stream at the time of log recording will be used.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DurationFilter {
     /// Comparison.
     #[prost(message, optional, tag = "1")]
@@ -145,17 +147,17 @@ pub struct DurationFilter {
 }
 /// Filters for requests that are not health check requests. A health check
 /// request is marked by the health check filter.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct NotHealthCheckFilter {}
 /// Filters for requests that are traceable. See the tracing overview for more
 /// information on how a request becomes traceable.
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct TraceableFilter {}
 /// Filters requests based on runtime-configurable sampling rates.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RuntimeFilter {
     /// Specifies a key used to look up a custom sampling rate from the runtime configuration. If a value is found for this
-    /// key, it will override the default sampling rate specified in ``percent_sampled``.
+    /// key, it will override the default sampling rate specified in `percent_sampled`.
     #[prost(string, tag = "1")]
     pub runtime_key: ::prost::alloc::string::String,
     /// Defines the default sampling percentage when no runtime override is present. If not specified, the default is
@@ -164,23 +166,27 @@ pub struct RuntimeFilter {
     pub percent_sampled: ::core::option::Option<super::super::super::r#type::v3::FractionalPercent>,
     /// Controls how sampling decisions are made.
     ///
-    /// - Default behavior (``false``):
+    /// * Default behavior (`false`):
     ///
-    ///    * Uses the :ref:`x-request-id<config_http_conn_man_headers_x-request-id>` as a consistent sampling pivot.
-    ///    * When :ref:`x-request-id<config_http_conn_man_headers_x-request-id>` is present, sampling will be consistent
-    ///      across multiple hosts based on both the ``runtime_key`` and
-    ///      :ref:`x-request-id<config_http_conn_man_headers_x-request-id>`.
-    ///    * Useful for tracking related requests across a distributed system.
+    ///   * Uses the :ref:`x-request-id<config_http_conn_man_headers_x-request-id>` as a consistent sampling pivot.
+    ///   *
+    ///     When :ref:`x-request-id<config_http_conn_man_headers_x-request-id>` is present, sampling will be consistent
+    ///     across multiple hosts based on both the `runtime_key` and
+    ///     : ref:`x-request-id<config_http_conn_man_headers_x-request-id>`.
     ///
-    /// - When set to ``true`` or :ref:`x-request-id<config_http_conn_man_headers_x-request-id>` is missing:
     ///
-    ///    * Sampling decisions are made randomly based only on the ``runtime_key``.
-    ///    * Useful in complex filter configurations (like nested
-    ///      :ref:`AndFilter<envoy_v3_api_msg_config.accesslog.v3.AndFilter>`/
-    ///      :ref:`OrFilter<envoy_v3_api_msg_config.accesslog.v3.OrFilter>` blocks) where independent probability
-    ///      calculations are desired.
-    ///    * Can be used to implement logging kill switches with predictable probability distributions.
+    ///   * Useful for tracking related requests across a distributed system.
+    /// * When set to `true` or :ref:`x-request-id<config_http_conn_man_headers_x-request-id>` is missing:
     ///
+    ///   * Sampling decisions are made randomly based only on the `runtime_key`.
+    ///   *
+    ///     Useful in complex filter configurations (like nested
+    ///     : ref:`AndFilter<envoy_v3_api_msg_config.accesslog.v3.AndFilter>`/
+    ///         : ref:`OrFilter<envoy_v3_api_msg_config.accesslog.v3.OrFilter>` blocks) where independent probability
+    ///       calculations are desired.
+    ///
+    ///
+    ///   * Can be used to implement logging kill switches with predictable probability distributions.
     #[prost(bool, tag = "3")]
     pub use_independent_randomness: bool,
 }
@@ -201,18 +207,19 @@ pub struct OrFilter {
     pub filters: ::prost::alloc::vec::Vec<AccessLogFilter>,
 }
 /// Filters requests based on the presence or value of a request header.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HeaderFilter {
     /// Only requests with a header which matches the specified HeaderMatcher will
     /// pass the filter check.
     #[prost(message, optional, tag = "1")]
     pub header: ::core::option::Option<super::super::route::v3::HeaderMatcher>,
 }
+///
 /// Filters requests that received responses with an Envoy response flag set.
 /// A list of the response flags can be found
 /// in the access log formatter
-/// :ref:`documentation<config_access_log_format_response_flags>`.
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// : ref:`documentation<config_access_log_format_response_flags>`.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ResponseFlagFilter {
     /// Only responses with the any of the flags listed in this field will be
     /// logged. This field is optional. If it is not specified, then any response
@@ -222,7 +229,7 @@ pub struct ResponseFlagFilter {
 }
 /// Filters gRPC requests based on their response status. If a gRPC status is not
 /// provided, the filter will infer the status from the HTTP status code.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GrpcStatusFilter {
     /// Logs only responses that have any one of the gRPC statuses in this field.
     #[prost(
@@ -331,7 +338,7 @@ pub struct MetadataFilter {
     pub match_if_key_not_found: ::core::option::Option<bool>,
 }
 /// Filters based on access log type.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LogTypeFilter {
     /// Logs only records which their type is one of the types defined in this field.
     #[prost(
@@ -347,7 +354,7 @@ pub struct LogTypeFilter {
     pub exclude: bool,
 }
 /// Extension filter is statically registered at runtime.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ExtensionFilter {
     /// The name of the filter implementation to instantiate. The name must
     /// match a statically registered filter.
@@ -360,7 +367,7 @@ pub struct ExtensionFilter {
 /// Nested message and enum types in `ExtensionFilter`.
 pub mod extension_filter {
     /// Custom configuration that depends on the filter being instantiated.
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum ConfigType {
         #[prost(message, tag = "3")]
         TypedConfig(::prost_types::Any),

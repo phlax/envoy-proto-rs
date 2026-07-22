@@ -12,8 +12,8 @@
 /// session context. If the request contains the session context, Envoy will strip the
 /// upstream host from the session context.
 ///
-/// \[#extension: envoy.http.stateful_session.envelope\]
-#[derive(Clone, PartialEq, ::prost::Message)]
+/// \[\#extension: envoy.http.stateful_session.envelope\]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EnvelopeSessionState {
     /// Set the header config to track the session state.
     #[prost(message, optional, tag = "1")]
@@ -21,23 +21,23 @@ pub struct EnvelopeSessionState {
 }
 /// Nested message and enum types in `EnvelopeSessionState`.
 pub mod envelope_session_state {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Header {
-        /// Iff the header specified by the ``name`` field is present in the response (assume the ``name``
-        /// is set to ``session-header`` and original header value is ``xxxxxx``), then the upstream host
-        /// address and value of ``name`` field specified header will be encoded in following format and
-        /// the output will be used to update the ``name`` field specified header in the response:
+        /// Iff the header specified by the `name` field is present in the response (assume the `name`
+        /// is set to `session-header` and original header value is `xxxxxx`), then the upstream host
+        /// address and value of `name` field specified header will be encoded in following format and
+        /// the output will be used to update the `name` field specified header in the response:
         ///
         /// .. code-block:: none
         ///
-        ///    session-header: "MS4yLjMuNDo4MAo=;UV:eHh4eHh4Cg==" # base64(1.2.3.4:80);UV:base64(xxxxxx)
+        /// session-header: "MS4yLjMuNDo4MAo=;UV:eHh4eHh4Cg==" # base64(1.2.3.4:80);UV:base64(xxxxxx)
         ///
-        /// The ``UV`` (upstream value) part is used to store the original upstream header value of
-        /// ``name`` field specified header.
+        /// The `UV` (upstream value) part is used to store the original upstream header value of
+        /// `name` field specified header.
         ///
         /// If this mode is used then Envoy will assume that the header in the request will also be in the
-        /// same format and will contain the ``UV`` part. This extension will parse the upstream host
-        /// address and update the ``name`` field specified header in the request to the ``UV`` part.
+        /// same format and will contain the `UV` part. This extension will parse the upstream host
+        /// address and update the `name` field specified header in the request to the `UV` part.
         #[prost(string, tag = "1")]
         pub name: ::prost::alloc::string::String,
     }

@@ -17,14 +17,14 @@ pub struct ParsedExpr {
 /// calls. This makes it easy to represent new operators into the existing AST.
 ///
 /// All references within expressions must resolve to a
-/// [Decl][cel.expr.Decl] provided at type-check for an expression to be
+/// \[Decl\]\[cel.expr.Decl\] provided at type-check for an expression to be
 /// valid. A reference may either be a bare identifier `name` or a qualified
 /// identifier `google.api.name`. References may either refer to a value or a
 /// function declaration.
 ///
 /// For example, the expression `google.api.name.startsWith('expr')` references
 /// the declaration `google.api.name` within a
-/// [Expr.Select][cel.expr.Expr.Select] expression, and the function
+/// \[Expr.Select\]\[cel.expr.Expr.Select\] expression, and the function
 /// declaration `startsWith`.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Expr {
@@ -40,13 +40,13 @@ pub struct Expr {
 /// Nested message and enum types in `Expr`.
 pub mod expr {
     /// An identifier expression. e.g. `request`.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Ident {
         /// Required. Holds a single, unqualified identifier, possibly preceded by a
         /// '.'.
         ///
         /// Qualified names are represented by the
-        /// [Expr.Select][cel.expr.Expr.Select] expression.
+        /// \[Expr.Select\]\[cel.expr.Expr.Select\] expression.
         #[prost(string, tag = "1")]
         pub name: ::prost::alloc::string::String,
     }
@@ -170,31 +170,29 @@ pub mod expr {
     /// Aggregate type macros may be applied to all elements in a list or all keys
     /// in a map:
     ///
-    /// *  `all`, `exists`, `exists_one` -  test a predicate expression against
-    ///     the inputs and return `true` if the predicate is satisfied for all,
-    ///     any, or only one value `list.all(x, x < 10)`.
-    /// *  `filter` - test a predicate expression against the inputs and return
-    ///     the subset of elements which satisfy the predicate:
-    ///     `payments.filter(p, p > 1000)`.
-    /// *  `map` - apply an expression to all elements in the input and return the
-    ///     output aggregate type: `\[1, 2, 3\].map(i, i * i)`.
+    /// * `all`, `exists`, `exists_one` -  test a predicate expression against
+    ///   the inputs and return `true` if the predicate is satisfied for all,
+    ///   any, or only one value `list.all(x, x < 10)`.
+    /// * `filter` - test a predicate expression against the inputs and return
+    ///   the subset of elements which satisfy the predicate:
+    ///   `payments.filter(p, p > 1000)`.
+    /// * `map` - apply an expression to all elements in the input and return the
+    ///   output aggregate type: `\[1, 2, 3\].map(i, i * i)`.
     ///
     /// The `has(m.x)` macro tests whether the property `x` is present in struct
     /// `m`. The semantics of this macro depend on the type of `m`. For proto2
-    /// messages `has(m.x)` is defined as 'defined, but not set`. For proto3, the
-    /// macro tests whether the property is set to its default. For map and struct
-    /// types, the macro tests whether the property `x` is defined on `m`.
+    /// messages `has(m.x)` is defined as 'defined, but not set`. For proto3, the  macro tests whether the property is set to its default. For map and struct  types, the macro tests whether the property `x`is defined on`m\`.
     ///
     /// Comprehensions for the standard environment macros evaluation can be best
     /// visualized as the following pseudocode:
     ///
-    /// ```
+    /// ```text,
     /// let `accu_var` = `accu_init`
     /// for (let `iter_var` in `iter_range`) {
-    ///    if (!`loop_condition`) {
-    ///      break
-    ///    }
-    ///    `accu_var` = `loop_step`
+    ///   if (!`loop_condition`) {
+    ///     break
+    ///   }
+    ///   `accu_var` = `loop_step`
     /// }
     /// return `result`
     /// ```
@@ -204,13 +202,13 @@ pub mod expr {
     /// they expose both the key or index in addition to the value for each list
     /// or map entry:
     ///
-    /// ```
+    /// ```text,
     /// let `accu_var` = `accu_init`
     /// for (let `iter_var`, `iter_var2` in `iter_range`) {
-    ///    if (!`loop_condition`) {
-    ///      break
-    ///    }
-    ///    `accu_var` = `loop_step`
+    ///   if (!`loop_condition`) {
+    ///     break
+    ///   }
+    ///   `accu_var` = `loop_step`
     /// }
     /// return `result`
     /// ```
@@ -287,7 +285,7 @@ pub mod expr {
 /// primitives.
 ///
 /// Lists and structs are not included as constants as these aggregate types may
-/// contain [Expr][cel.expr.Expr] elements which require evaluation and
+/// contain \[Expr\]\[cel.expr.Expr\] elements which require evaluation and
 /// are thus not constant.
 ///
 /// Examples of constants include: `"hello"`, `b'bytes'`, `1u`, `4.2`, `-2`,
@@ -327,11 +325,13 @@ pub mod constant {
         /// protobuf.Duration value.
         ///
         /// Deprecated: duration is no longer considered a builtin cel type.
+        #[deprecated]
         #[prost(message, tag = "8")]
         DurationValue(::prost_types::Duration),
         /// protobuf.Timestamp value.
         ///
         /// Deprecated: timestamp is no longer considered a builtin cel type.
+        #[deprecated]
         #[prost(message, tag = "9")]
         TimestampValue(::prost_types::Timestamp),
     }
@@ -384,7 +384,7 @@ pub struct SourceInfo {
 /// Nested message and enum types in `SourceInfo`.
 pub mod source_info {
     /// An extension that was requested for the source expression.
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Extension {
         /// Identifier for the extension. Example: constant_folding
         #[prost(string, tag = "1")]
@@ -403,7 +403,7 @@ pub mod source_info {
     /// Nested message and enum types in `Extension`.
     pub mod extension {
         /// Version
-        #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
         pub struct Version {
             /// Major version changes indicate different required support level from
             /// the required components.
@@ -464,17 +464,17 @@ pub struct CheckedExpr {
     ///
     /// The following entries are in this table:
     ///
-    /// - An Ident or Select expression is represented here if it resolves to a
-    ///    declaration. For instance, if `a.b.c` is represented by
-    ///    `select(select(id(a), b), c)`, and `a.b` resolves to a declaration,
-    ///    while `c` is a field selection, then the reference is attached to the
-    ///    nested select expression (but not to the id or or the outer select).
-    ///    In turn, if `a` resolves to a declaration and `b.c` are field selections,
-    ///    the reference is attached to the ident expression.
-    /// - Every Call expression has an entry here, identifying the function being
-    ///    called.
-    /// - Every CreateStruct expression for a message has an entry, identifying
-    ///    the message.
+    /// * An Ident or Select expression is represented here if it resolves to a
+    ///   declaration. For instance, if `a.b.c` is represented by
+    ///   `select(select(id(a), b), c)`, and `a.b` resolves to a declaration,
+    ///   while `c` is a field selection, then the reference is attached to the
+    ///   nested select expression (but not to the id or or the outer select).
+    ///   In turn, if `a` resolves to a declaration and `b.c` are field selections,
+    ///   the reference is attached to the ident expression.
+    /// * Every Call expression has an entry here, identifying the function being
+    ///   called.
+    /// * Every CreateStruct expression for a message has an entry, identifying
+    ///   the message.
     #[prost(map = "int64, message", tag = "2")]
     pub reference_map: ::std::collections::HashMap<i64, Reference>,
     /// A map from expression ids to types.
@@ -720,10 +720,10 @@ pub struct Decl {
     /// to the declaration in its container, as in `cel.expr.Decl`.
     ///
     /// Declarations used as
-    /// [FunctionDecl.Overload][cel.expr.Decl.FunctionDecl.Overload]
+    /// \[FunctionDecl.Overload\]\[cel.expr.Decl.FunctionDecl.Overload\]
     /// parameters may or may not have a name depending on whether the overload is
     /// function declaration or a function definition containing a result
-    /// [Expr][cel.expr.Expr].
+    /// \[Expr\]\[cel.expr.Expr\].
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// Required. The declaration kind.
@@ -754,14 +754,16 @@ pub mod decl {
         ///
         /// Examples:
         ///
-        ///     'request.auth.principal' - string which uniquely identifies an
-        ///     authenticated principal. For JSON Web Tokens (JWTs), the principal
-        ///     is the combination of the issuer ('iss') and subject ('sub') token
-        ///     fields concatenated by a forward slash: iss + `/` + sub.
+        /// ```text
+        /// 'request.auth.principal' - string which uniquely identifies an
+        /// authenticated principal. For JSON Web Tokens (JWTs), the principal
+        /// is the combination of the issuer ('iss') and subject ('sub') token
+        /// fields concatenated by a forward slash: iss + `/` + sub.
         ///
-        ///     'min_cpus' - integer value indicates the minimum number of CPUs
-        ///     required for a compute cluster. The 'min_cpus' value must be
-        ///     greater than zero and less than 'max_cpus' or 64 whichever is less.
+        /// 'min_cpus' - integer value indicates the minimum number of CPUs
+        /// required for a compute cluster. The 'min_cpus' value must be
+        /// greater than zero and less than 'max_cpus' or 64 whichever is less.
+        /// ```
         #[prost(string, tag = "3")]
         pub doc: ::prost::alloc::string::String,
     }
@@ -783,9 +785,11 @@ pub mod decl {
         ///
         /// Examples:
         ///
-        ///      The 'in' operator tests whether an item exists in a collection.
+        /// ```text
+        /// The 'in' operator tests whether an item exists in a collection.
         ///
-        ///      The 'substring' function returns a substring of a target string.
+        /// The 'substring' function returns a substring of a target string.
+        /// ```
         #[prost(string, tag = "2")]
         pub doc: ::prost::alloc::string::String,
     }
@@ -793,7 +797,7 @@ pub mod decl {
     pub mod function_decl {
         /// An overload indicates a function's parameter types and return type, and
         /// may optionally include a function body described in terms of
-        /// [Expr][cel.expr.Expr] values.
+        /// \[Expr\]\[cel.expr.Expr\] values.
         ///
         /// Functions overloads are declared in either a function or method
         /// call-style. For methods, the `params\[0\]` is the expected type of the
@@ -806,11 +810,11 @@ pub mod decl {
             /// Required. Globally unique overload name of the function which reflects
             /// the function name and argument types.
             ///
-            /// This will be used by a [Reference][cel.expr.Reference] to
+            /// This will be used by a \[Reference\]\[cel.expr.Reference\] to
             /// indicate the `overload_id` that was resolved for the function `name`.
             #[prost(string, tag = "1")]
             pub overload_id: ::prost::alloc::string::String,
-            /// List of function parameter [Type][cel.expr.Type] values.
+            /// List of function parameter \[Type\]\[cel.expr.Type\] values.
             ///
             /// Param types are disjoint after generic type parameters have been
             /// replaced with the type `DYN`. Since the `DYN` type is compatible with
@@ -846,21 +850,23 @@ pub mod decl {
             ///
             /// Examples:
             ///
-            ///     // Determine whether a value of type <V> exists within a list<V>.
-            ///     2 in \[1, 2, 3\] // returns true
+            /// ```text
+            /// // Determine whether a value of type <V> exists within a list<V>.
+            /// 2 in \[1, 2, 3\] // returns true
             ///
-            ///     // Determine whether a key of type <K> exists within a map<K,V>.
-            ///     'hello' in {'hi': 'you', 'hello': 'there'}  // returns true
-            ///     'help' in {'hi': 'you', 'hello': 'there'}  // returns false
+            /// // Determine whether a key of type <K> exists within a map<K,V>.
+            /// 'hello' in {'hi': 'you', 'hello': 'there'}  // returns true
+            /// 'help' in {'hi': 'you', 'hello': 'there'}  // returns false
             ///
-            ///     // Take the substring of a string starting at a specific character
-            ///     // offset (inclusive).
-            ///     "tacocat".substring(1) // returns "acocat"
-            ///     "tacocat".substring(20) // error
+            /// // Take the substring of a string starting at a specific character
+            /// // offset (inclusive).
+            /// "tacocat".substring(1) // returns "acocat"
+            /// "tacocat".substring(20) // error
             ///
-            ///     // Take the substring of a string starting at a specific character
-            ///     // offset (inclusive) and ending at the given offset (exclusive).
-            ///     "tacocat".substring(1, 6) // returns "acoca"
+            /// // Take the substring of a string starting at a specific character
+            /// // offset (inclusive) and ending at the given offset (exclusive).
+            /// "tacocat".substring(1, 6) // returns "acoca"
+            /// ```
             #[prost(string, tag = "6")]
             pub doc: ::prost::alloc::string::String,
         }
@@ -890,7 +896,7 @@ pub struct Reference {
     /// type checker attempts to narrow down this list as much as possible.
     ///
     /// Empty if this is not a reference to a
-    /// [Decl.FunctionDecl][cel.expr.Decl.FunctionDecl].
+    /// \[Decl.FunctionDecl\]\[cel.expr.Decl.FunctionDecl\].
     #[prost(string, repeated, tag = "3")]
     pub overload_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// For references to constants, this may contain the value of the

@@ -10,32 +10,33 @@ pub struct TransformConfig {
     ///
     /// .. note::
     ///
-    ///    If set then the entire request headers and body will always be buffered on a JSON request
-    ///    even if only headers are transformed.
+    /// If set then the entire request headers and body will always be buffered on a JSON request
+    /// even if only headers are transformed.
     #[prost(message, optional, tag = "1")]
     pub request_transformation: ::core::option::Option<Transformation>,
     /// Configuration for transforming response.
     ///
     /// .. note::
     ///
-    ///    If set then the entire response headers and body will always be buffered on a JSON response
-    ///    even if only headers are transformed.
+    /// If set then the entire response headers and body will always be buffered on a JSON response
+    /// even if only headers are transformed.
     #[prost(message, optional, tag = "2")]
     pub response_transformation: ::core::option::Option<Transformation>,
+    ///
     /// If true and the request headers are transformed, Envoy will re-evaluate the target
     /// cluster in the same route. Please ensure the cluster specifier in the route supports
     /// dynamic evaluation or this flag will have no effect, e.g.
-    /// :ref:`matcher cluster specifier
-    /// <envoy_v3_api_msg_extensions.router.cluster_specifiers.matcher.v3.MatcherClusterSpecifier>`.
+    /// : ref:`matcher cluster specifier  <envoy_v3_api_msg_extensions.router.cluster_specifiers.matcher.v3.MatcherClusterSpecifier>`.
     ///
-    /// Only one of ``clear_cluster_cache`` and ``clear_route_cache`` can be true.
+    ///
+    /// Only one of `clear_cluster_cache` and `clear_route_cache` can be true.
     #[prost(bool, tag = "3")]
     pub clear_cluster_cache: bool,
     /// If true and the request headers are transformed, Envoy will clear the route cache for
     /// the current request and force re-evaluation of the route. This has performance penalty and
     /// should only be used when the route match criteria depends on the transformed headers.
     ///
-    /// Only one of ``clear_cluster_cache`` and ``clear_route_cache`` can be true.
+    /// Only one of `clear_cluster_cache` and `clear_route_cache` can be true.
     #[prost(bool, tag = "4")]
     pub clear_route_cache: bool,
 }
@@ -45,10 +46,10 @@ pub struct Transformation {
     /// The :ref:`substitution format specifier <config_access_log_format>` could be applied here.
     /// In addition to the commonly used format specifiers, this filter introduces additional format specifiers:
     ///
-    /// * ``%REQUEST_BODY(KEY*)%``: the request body. And ``Key`` KEY is an optional
-    ///    lookup key in the namespace with the option of specifying nested keys separated by ':'.
-    /// * ``%RESPONSE_BODY(KEY*)%``: the response body. And ``Key`` KEY is an optional
-    ///    lookup key in the namespace with the option of specifying nested keys separated by ':'.
+    /// * `%REQUEST_BODY(KEY*)%`: the request body. And `Key` KEY is an optional
+    ///   lookup key in the namespace with the option of specifying nested keys separated by ':'.
+    /// * `%RESPONSE_BODY(KEY*)%`: the response body. And `Key` KEY is an optional
+    ///   lookup key in the namespace with the option of specifying nested keys separated by ':'.
     #[prost(message, repeated, tag = "1")]
     pub headers_mutations: ::prost::alloc::vec::Vec<
         super::super::super::super::super::config::common::mutation_rules::v3::HeaderMutation,
@@ -63,16 +64,16 @@ pub struct BodyTransformation {
     /// to generate the transformed new body content.
     /// The :ref:`substitution format specifier <config_access_log_format>` could be applied here.
     /// And except the commonly used format specifiers, the additional format specifiers
-    /// ``%REQUEST_BODY(KEY*)%`` and ``%RESPONSE_BODY(KEY*)%`` could also be used here.
+    /// `%REQUEST_BODY(KEY*)%` and `%RESPONSE_BODY(KEY*)%` could also be used here.
     #[prost(message, optional, tag = "1")]
     pub body_format: ::core::option::Option<
         super::super::super::super::super::config::core::v3::SubstitutionFormatString,
     >,
     /// The action to perform for new body content and original body content.
-    /// For example, if ``MERGE`` is used, then the new body content generated from the ``body_format``
+    /// For example, if `MERGE` is used, then the new body content generated from the `body_format`
     /// will be merged into the original body content.
     ///
-    /// Default is ``MERGE``.
+    /// Default is `MERGE`.
     #[prost(enumeration = "body_transformation::TransformAction", tag = "2")]
     pub action: i32,
 }

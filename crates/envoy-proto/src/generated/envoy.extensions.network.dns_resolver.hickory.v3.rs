@@ -6,29 +6,29 @@ pub struct DnsOverTlsConfig {
     #[prost(message, repeated, tag = "1")]
     pub servers:
         ::prost::alloc::vec::Vec<super::super::super::super::super::config::core::v3::Address>,
-    /// The SNI hostname to use for TLS verification. Required when ``servers`` are specified.
+    /// The SNI hostname to use for TLS verification. Required when `servers` are specified.
     #[prost(string, tag = "2")]
     pub tls_server_name: ::prost::alloc::string::String,
 }
 /// Configuration for DNS-over-HTTPS (DoH) servers.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DnsOverHttpsConfig {
-    /// The list of DNS-over-HTTPS endpoint URLs (e.g., ``<https://dns.google/dns-query``>).
+    /// The list of DNS-over-HTTPS endpoint URLs (e.g., `<https://dns.google/dns-query`>).
     #[prost(string, repeated, tag = "1")]
     pub server_urls: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// Configuration for the Hickory DNS resolver. This resolver uses the Hickory DNS library,
 /// a pure Rust DNS implementation, for DNS resolution. It supports standard DNS (UDP/TCP),
-/// DNS-over-TLS (DoT), DNS-over-HTTPS (DoH), and ``DNSSEC`` validation.
+/// DNS-over-TLS (DoT), DNS-over-HTTPS (DoH), and `DNSSEC` validation.
 ///
-/// The resolver runs asynchronously on its own ``Tokio`` runtime threads, separate from Envoy's
+/// The resolver runs asynchronously on its own `Tokio` runtime threads, separate from Envoy's
 /// event loop threads. Results are delivered back to the calling dispatcher thread.
-/// \[#next-free-field: 10\]
+/// \[\#next-free-field: 10\]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HickoryDnsResolverConfig {
     /// A list of DNS resolver addresses for standard UDP/TCP resolution.
-    /// If not specified and ``use_system_config`` is not explicitly set to ``false``, the system
-    /// configuration (``/etc/resolv.conf`` on Unix) will be used.
+    /// If not specified and `use_system_config` is not explicitly set to `false`, the system
+    /// configuration (`/etc/resolv.conf` on Unix) will be used.
     #[prost(message, repeated, tag = "1")]
     pub resolvers:
         ::prost::alloc::vec::Vec<super::super::super::super::super::config::core::v3::Address>,
@@ -40,41 +40,41 @@ pub struct HickoryDnsResolverConfig {
     /// HTTPS to the configured endpoints.
     #[prost(message, optional, tag = "3")]
     pub dns_over_https: ::core::option::Option<DnsOverHttpsConfig>,
-    /// Enables ``DNSSEC`` validation for DNS responses. When enabled, the resolver will validate
-    /// ``DNSSEC`` signatures and reject responses that fail validation.
+    /// Enables `DNSSEC` validation for DNS responses. When enabled, the resolver will validate
+    /// `DNSSEC` signatures and reject responses that fail validation.
     ///
-    /// Defaults to ``false``.
+    /// Defaults to `false`.
     #[prost(bool, tag = "4")]
     pub enable_dnssec: bool,
     /// Maximum number of entries in the DNS response cache. The cache uses an LRU eviction
-    /// policy and supports negative caching (caching of ``NXDOMAIN``/``NODATA`` responses).
+    /// policy and supports negative caching (caching of `NXDOMAIN`/`NODATA` responses).
     ///
-    /// Defaults to ``1024``.
+    /// Defaults to `1024`.
     #[prost(message, optional, tag = "5")]
     pub cache_size: ::core::option::Option<u32>,
-    /// Number of threads in the ``Tokio`` runtime used for asynchronous DNS resolution.
-    /// Each resolver instance runs its own ``Tokio`` runtime.
+    /// Number of threads in the `Tokio` runtime used for asynchronous DNS resolution.
+    /// Each resolver instance runs its own `Tokio` runtime.
     ///
-    /// Defaults to ``2``. Maximum is ``16``.
+    /// Defaults to `2`. Maximum is `16`.
     #[prost(message, optional, tag = "6")]
     pub num_resolver_threads: ::core::option::Option<u32>,
-    /// If ``true``, read the system DNS configuration (``/etc/resolv.conf`` on Unix) for name server
-    /// addresses and search domains. When ``resolvers`` are also specified, they take precedence
+    /// If `true`, read the system DNS configuration (`/etc/resolv.conf` on Unix) for name server
+    /// addresses and search domains. When `resolvers` are also specified, they take precedence
     /// over the system configuration.
     ///
-    /// If not specified, defaults to ``true`` when no ``resolvers``, ``dns_over_tls``, or
-    /// ``dns_over_https`` are configured.
+    /// If not specified, defaults to `true` when no `resolvers`, `dns_over_tls`, or
+    /// `dns_over_https` are configured.
     #[prost(message, optional, tag = "7")]
     pub use_system_config: ::core::option::Option<bool>,
     /// Timeout for each individual DNS query attempt.
     ///
-    /// Defaults to ``5`` seconds.
+    /// Defaults to `5` seconds.
     #[prost(message, optional, tag = "8")]
     pub query_timeout: ::core::option::Option<::prost_types::Duration>,
     /// Maximum number of query attempts before the resolver gives up. Each attempt may use
     /// a different name server.
     ///
-    /// Defaults to ``3``.
+    /// Defaults to `3`.
     #[prost(message, optional, tag = "9")]
     pub query_tries: ::core::option::Option<u32>,
 }
